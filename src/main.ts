@@ -2,7 +2,6 @@ import type Phaser from "phaser";
 import "./style.css";
 
 const catalog = document.querySelector<HTMLElement>("#catalog");
-const shipGallery = document.querySelector<HTMLElement>("#ship-gallery");
 const gameView = document.querySelector<HTMLElement>("#game-view");
 const gameContainer = document.querySelector<HTMLElement>("#game-container");
 const gameError = document.querySelector<HTMLElement>("#game-error");
@@ -51,7 +50,6 @@ const legacyGameIds: Record<string, GameId> = {
 
 if (
   !catalog ||
-  !shipGallery ||
   !gameView ||
   !gameContainer ||
   !gameError ||
@@ -66,7 +64,6 @@ if (
 }
 
 const catalogElement = catalog;
-const shipGalleryElement = shipGallery;
 const gameViewElement = gameView;
 const gameContainerElement = gameContainer;
 const gameErrorElement = gameError;
@@ -177,21 +174,21 @@ async function loadGame(gameId: GameId, entry: GameEntry): Promise<void> {
 }
 
 function renderRoute(): void {
+  if (window.location.hash === "#/naves") {
+    window.history.replaceState(window.history.state, "", "#/");
+  }
+
   const gameId = getGameIdFromRoute();
   if (gameId && window.location.hash === "#/jogos/passeio-azul") {
     window.history.replaceState(window.history.state, "", `#/jogos/${gameId}`);
   }
   const selectedGame = gameId ? games[gameId] : undefined;
-  const isShipGallery = window.location.hash === "#/naves";
 
-  catalogElement.hidden = Boolean(selectedGame) || isShipGallery;
-  shipGalleryElement.hidden = !isShipGallery;
+  catalogElement.hidden = Boolean(selectedGame);
   gameViewElement.hidden = !selectedGame;
   document.title = selectedGame
     ? `${selectedGame.title} — Jogos de Bolso`
-    : isShipGallery
-      ? "Galeria de naves — Jogos de Bolso"
-      : "Jogos de Bolso — catálogo";
+    : "Jogos de Bolso — catálogo";
 
   if (selectedGame && gameId) {
     gameTitleElement.textContent = selectedGame.title;

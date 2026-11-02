@@ -30,10 +30,6 @@ Nebulosa Carmesim, Abismo de Titã e Coroa Solar. O botão **Catálogo** retorna
 página inicial.
 O protótipo também pode ser aberto diretamente pela rota
 `#/jogos/rastro-estelar`, que pode ser compartilhada ou recarregada.
-Use **Galeria de naves** no catálogo ou abra `#/naves` para ver a Pulsar, nave
-do jogador, e comparar os cinco modelos de inimigos: Cometa, Vanguarda, Vespa,
-Espectro e Bastião. A seleção na galeria é apenas demonstrativa e não altera
-as naves da partida.
 
 ## Comandos
 
