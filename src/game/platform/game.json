@@ -1,0 +1,61 @@
+{
+  "player": {
+    "size": {
+      "width": 32,
+      "height": 44
+    },
+    "walkSpeed": 200,
+    "runSpeed": 330,
+    "jumpSpeed": 680,
+    "lives": 3,
+    "movement": {
+      "groundAccel": 1500,
+      "groundDecel": 1900,
+      "turnAccel": 3600,
+      "airAccel": 1000,
+      "airDecel": 450,
+      "fallGravityMultiplier": 1.6,
+      "apexSpeedThreshold": 90,
+      "apexGravityFactor": 0.5,
+      "jumpCutFactor": 0.45,
+      "maxFallSpeed": 950,
+      "coyoteMs": 100,
+      "jumpBufferMs": 120
+    }
+  },
+  "texts": {
+    "title": "Salto das Nuvens",
+    "start": {
+      "subtitle": "{levelName} · colete moedas e chegue à bandeira",
+      "hint": "Pressione Enter ou Espaço para começar",
+      "controls": "A D ou ← → andar   ·   Shift correr   ·   W, ↑ ou Espaço pular"
+    },
+    "won": {
+      "title": "Fase {level} completa!",
+      "subtitle": "Moedas: {coins} / {total}",
+      "detail": "Vidas: {lives}",
+      "next": "Próxima fase: {nextName}"
+    },
+    "over": {
+      "title": "GAME OVER"
+    },
+    "hud": {
+      "controls": "A D ou ← →  andar   ·   Shift  correr   ·   W ↑ Espaço  pular",
+      "label": "{levelName}"
+    },
+    "finished": {
+      "title": "Aventura concluída!",
+      "subtitle": "Você chegou ao fim das {levelCount} fases",
+      "hint": "Pressione Enter ou Espaço para jogar de novo",
+      "controls": "Vidas restantes: {lives}"
+    },
+    "secret": "Passagem secreta!",
+    "extraLife": "+1 vida",
+    "hundredCoins": "100 moedas! +1 vida"
+  },
+  "coinPlacement": {
+    "edgeMargin": 40,
+    "edgeLift": 26,
+    "maxHeightAbovePlatform": 130
+  }
+}

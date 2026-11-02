@@ -1,0 +1,72 @@
+{
+  "id": 3,
+  "name": "Abismo de Titã",
+  "description": "Atravesse os destroços congelados e silencie o Colosso de Titã.",
+  "background": {
+    "baseColor": "#06121d",
+    "nebulaColors": ["#164e63", "#155e75", "#334155", "#0e7490"],
+    "horizonColor": "#67e8f9",
+    "planet": {
+      "x": 0.79,
+      "y": 0.3,
+      "radius": 0.17,
+      "color": "#31556b",
+      "highlightColor": "#a5f3fc",
+      "shadowColor": "#102c43",
+      "ringColor": "#bae6fd"
+    },
+    "moon": {
+      "x": 0.2,
+      "y": 0.24,
+      "radius": 0.038,
+      "color": "#dbeafe",
+      "shadowColor": "#7c9bb5"
+    }
+  },
+  "initialAsteroids": [
+    { "progress": 0.12, "lane": -0.9, "speed": 0.15 },
+    { "progress": 0.16, "lane": 0.9, "speed": 0.15 },
+    { "progress": 0.24, "lane": -0.58 },
+    { "progress": 0.3, "lane": 0.58 },
+    { "progress": 0.37, "lane": -0.18, "speed": 0.13 },
+    { "progress": 0.42, "lane": 0.36 }
+  ],
+  "initialEnemies": [
+    { "progress": 0.13, "lane": -0.68, "variant": "vanguarda" },
+    { "progress": 0.18, "lane": 0.68, "variant": "bastiao" }
+  ],
+  "ambientVariants": ["vanguarda", "espectro", "bastiao"],
+  "events": [
+    {
+      "atMs": 0,
+      "title": "FASE 3 — ABISMO DE TITÃ",
+      "message": "Campo de gelo à frente. Destroços em rota de colisão.",
+      "wave": [
+        { "variant": "vanguarda", "lane": -0.52 },
+        { "variant": "espectro", "lane": 0.52 }
+      ]
+    },
+    {
+      "atMs": 18000,
+      "title": "SETOR 2 — FRATURA GLACIAL",
+      "message": "A crosta está cedendo. Interceptadores no radar!",
+      "wave": [
+        { "variant": "bastiao", "lane": -0.38, "size": 1.15 },
+        { "variant": "vespa", "lane": 0.38 },
+        { "variant": "vanguarda", "lane": 0.76 }
+      ]
+    },
+    {
+      "atMs": 36000,
+      "title": "SETOR FINAL — COLOSSO",
+      "message": "O Colosso de Titã bloqueia a saída do abismo!",
+      "boss": {
+        "name": "Colosso de Titã",
+        "variant": "bastiao",
+        "lane": 0,
+        "size": 3.35,
+        "health": 20
+      }
+    }
+  ]
+}

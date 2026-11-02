@@ -1,0 +1,639 @@
+{
+  "id": "caverna",
+  "name": "Caverna Sombria",
+  "world": {
+    "width": 4400,
+    "height": 720,
+    "groundY": 640,
+    "deepY": 1500
+  },
+  "spawn": {
+    "x": 120,
+    "y": 618
+  },
+  "goal": {
+    "x": 4220
+  },
+  "platforms": [
+    {
+      "x": 0,
+      "y": 640,
+      "width": 560,
+      "height": 32
+    },
+    {
+      "x": 720,
+      "y": 640,
+      "width": 280,
+      "height": 32
+    },
+    {
+      "x": 1200,
+      "y": 640,
+      "width": 300,
+      "height": 32
+    },
+    {
+      "x": 1700,
+      "y": 640,
+      "width": 400,
+      "height": 32
+    },
+    {
+      "x": 2300,
+      "y": 640,
+      "width": 350,
+      "height": 32
+    },
+    {
+      "x": 2850,
+      "y": 640,
+      "width": 2150,
+      "height": 32
+    },
+    {
+      "x": 1560,
+      "y": 560,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 2160,
+      "y": 560,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 2720,
+      "y": 560,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 260,
+      "y": 520,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 430,
+      "y": 430,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 800,
+      "y": 500,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 1250,
+      "y": 470,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 1760,
+      "y": 500,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 1930,
+      "y": 400,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 2380,
+      "y": 500,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 2540,
+      "y": 410,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 2950,
+      "y": 500,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 3120,
+      "y": 420,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 3300,
+      "y": 340,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 3480,
+      "y": 430,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 3660,
+      "y": 520,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 3850,
+      "y": 430,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 3430,
+      "y": 262,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 3560,
+      "y": 200,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 3700,
+      "y": 150,
+      "width": 140,
+      "height": 32
+    }
+  ],
+  "coins": [
+    {
+      "type": "arc",
+      "centerX": 640.0,
+      "baseY": 590,
+      "count": 5,
+      "step": 30,
+      "height": 85
+    },
+    {
+      "type": "line",
+      "x": 780,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 1100.0,
+      "baseY": 590,
+      "count": 5,
+      "step": 30,
+      "height": 85
+    },
+    {
+      "type": "line",
+      "x": 1260,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 1600.0,
+      "baseY": 525,
+      "count": 5,
+      "step": 30,
+      "height": 50
+    },
+    {
+      "type": "line",
+      "x": 1760,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 1960,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 2200.0,
+      "baseY": 525,
+      "count": 5,
+      "step": 30,
+      "height": 50
+    },
+    {
+      "type": "line",
+      "x": 2360,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 2750.0,
+      "baseY": 525,
+      "count": 5,
+      "step": 30,
+      "height": 50
+    },
+    {
+      "type": "line",
+      "x": 2910,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 1574,
+      "y": 516,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2174,
+      "y": 516,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2734,
+      "y": 516,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 274,
+      "y": 476,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 444,
+      "y": 386,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 814,
+      "y": 456,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1264,
+      "y": 426,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1774,
+      "y": 456,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1944,
+      "y": 356,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2394,
+      "y": 456,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2554,
+      "y": 366,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2964,
+      "y": 456,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3134,
+      "y": 376,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3314,
+      "y": 296,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3494,
+      "y": 386,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3674,
+      "y": 476,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3864,
+      "y": 386,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3444,
+      "y": 218,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3574,
+      "y": 156,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3714,
+      "y": 106,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3445,
+      "y": 218,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3575,
+      "y": 156,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3715,
+      "y": 106,
+      "count": 3,
+      "step": 34
+    }
+  ],
+  "enemies": [
+    {
+      "type": "mushroom",
+      "x": 260,
+      "minX": 200,
+      "maxX": 330,
+      "speed": 40
+    },
+    {
+      "type": "bat",
+      "x": 650,
+      "minX": 540,
+      "maxX": 760,
+      "speed": 75,
+      "altitude": 160
+    },
+    {
+      "type": "spider",
+      "x": 870,
+      "minX": 870,
+      "maxX": 870,
+      "speed": 60,
+      "anchorY": 150,
+      "length": 250
+    },
+    {
+      "type": "bat",
+      "x": 1100,
+      "minX": 980,
+      "maxX": 1220,
+      "speed": 70,
+      "altitude": 170
+    },
+    {
+      "type": "slug",
+      "x": 1440,
+      "minX": 1390,
+      "maxX": 1490,
+      "speed": 22
+    },
+    {
+      "type": "spider",
+      "x": 1630,
+      "minX": 1630,
+      "maxX": 1630,
+      "speed": 60,
+      "anchorY": 100,
+      "length": 260
+    },
+    {
+      "type": "mushroom",
+      "x": 1990,
+      "minX": 1910,
+      "maxX": 2060,
+      "speed": 40
+    },
+    {
+      "type": "bat",
+      "x": 2200,
+      "minX": 2090,
+      "maxX": 2310,
+      "speed": 75,
+      "altitude": 175
+    },
+    {
+      "type": "spider",
+      "x": 2330,
+      "minX": 2330,
+      "maxX": 2330,
+      "speed": 60,
+      "anchorY": 130,
+      "length": 240
+    },
+    {
+      "type": "bat",
+      "x": 2750,
+      "minX": 2640,
+      "maxX": 2860,
+      "speed": 75,
+      "altitude": 175
+    },
+    {
+      "type": "spider",
+      "x": 3040,
+      "minX": 3040,
+      "maxX": 3040,
+      "speed": 60,
+      "anchorY": 110,
+      "length": 230
+    },
+    {
+      "type": "bat",
+      "x": 3830,
+      "minX": 3700,
+      "maxX": 3950,
+      "speed": 70,
+      "altitude": 280
+    },
+    {
+      "type": "slug",
+      "x": 4050,
+      "minX": 3990,
+      "maxX": 4130,
+      "speed": 25
+    }
+  ],
+  "obstacles": [
+    {
+      "type": "thorns",
+      "x": 480,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 940,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 1300,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 1850,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 2480,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 3010,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 3230,
+      "width": 96
+    },
+    {
+      "type": "thorns",
+      "x": 3790,
+      "width": 96
+    },
+    {
+      "type": "thorns",
+      "x": 4150,
+      "width": 48
+    }
+  ],
+  "secrets": [
+    {
+      "id": "musgo",
+      "x": 3410,
+      "y": 100,
+      "width": 470,
+      "height": 240,
+      "trunk": false
+    }
+  ],
+  "extraLives": [
+    {
+      "x": 3815,
+      "y": 108
+    }
+  ],
+  "background": {
+    "skyTop": "#0a0612",
+    "skyBottom": "#241638",
+    "hazeColor": "#150a26",
+    "hazeAlpha": 0.35,
+    "pitColor": "#0b0710",
+    "cameraColor": "#0b0710",
+    "farTreeTint": "#4a3d6b",
+    "sunTint": "#ffffff",
+    "cloudTint": "#3a2d55",
+    "sun": false,
+    "clouds": {
+      "seed": 7,
+      "count": 0
+    },
+    "farTrees": {
+      "seed": 99,
+      "texture": "stalagmite"
+    },
+    "hills": {
+      "far": {
+        "fill": "#2a1f45",
+        "rim": "#3b2d63"
+      },
+      "mid": {
+        "fill": "#1f1635",
+        "rim": "#322458"
+      },
+      "near": {
+        "fill": "#161026",
+        "rim": "#2a1d48"
+      }
+    }
+  },
+  "decoration": {
+    "style": "cave",
+    "seed": 4411,
+    "flowerColors": [
+      "#22d3ee",
+      "#a78bfa",
+      "#34d399",
+      "#f0abfc"
+    ],
+    "signX": 260,
+    "butterflies": {
+      "count": 0,
+      "startX": 350,
+      "spacing": 640
+    }
+  }
+}

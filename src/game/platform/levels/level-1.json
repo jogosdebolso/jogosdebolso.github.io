@@ -1,0 +1,419 @@
+{
+  "id": "campo",
+  "name": "Campo Aberto",
+  "world": {
+    "width": 3200,
+    "height": 720,
+    "groundY": 640,
+    "deepY": 1500
+  },
+  "spawn": {
+    "x": 120,
+    "y": 618
+  },
+  "goal": {
+    "x": 3080
+  },
+  "platforms": [
+    {
+      "x": 0,
+      "y": 640,
+      "width": 900,
+      "height": 80
+    },
+    {
+      "x": 1050,
+      "y": 640,
+      "width": 700,
+      "height": 80
+    },
+    {
+      "x": 1900,
+      "y": 640,
+      "width": 1900,
+      "height": 80
+    },
+    {
+      "x": 520,
+      "y": 530,
+      "width": 180,
+      "height": 32
+    },
+    {
+      "x": 1280,
+      "y": 520,
+      "width": 200,
+      "height": 32
+    },
+    {
+      "x": 2250,
+      "y": 530,
+      "width": 220,
+      "height": 32
+    },
+    {
+      "x": 2490,
+      "y": 450,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 2610,
+      "y": 370,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 2730,
+      "y": 290,
+      "width": 170,
+      "height": 32
+    },
+    {
+      "x": 190,
+      "y": 500,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 800,
+      "y": 410,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 1030,
+      "y": 330,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 1260,
+      "y": 270,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 1500,
+      "y": 340,
+      "width": 90,
+      "height": 32
+    }
+  ],
+  "coins": [
+    {
+      "type": "line",
+      "x": 330,
+      "y": 600,
+      "count": 3,
+      "step": 42
+    },
+    {
+      "type": "line",
+      "x": 550,
+      "y": 484,
+      "count": 4,
+      "step": 46
+    },
+    {
+      "type": "arc",
+      "centerX": 975,
+      "baseY": 590,
+      "count": 5,
+      "step": 36,
+      "height": 80
+    },
+    {
+      "type": "line",
+      "x": 1110,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 1310,
+      "y": 474,
+      "count": 4,
+      "step": 46
+    },
+    {
+      "type": "line",
+      "x": 1560,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 1825,
+      "baseY": 590,
+      "count": 5,
+      "step": 36,
+      "height": 80
+    },
+    {
+      "type": "line",
+      "x": 1980,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 2290,
+      "y": 484,
+      "count": 4,
+      "step": 50
+    },
+    {
+      "type": "line",
+      "x": 2580,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 2830,
+      "baseY": 590,
+      "count": 5,
+      "step": 40,
+      "height": 70
+    },
+    {
+      "type": "line",
+      "x": 2505,
+      "y": 406,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2625,
+      "y": 326,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2745,
+      "y": 246,
+      "count": 2,
+      "step": 34
+    },
+    {
+      "type": "line",
+      "x": 530,
+      "y": 600,
+      "count": 5,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 720,
+      "y": 600,
+      "count": 4,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1390,
+      "y": 600,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2240,
+      "y": 600,
+      "count": 5,
+      "step": 36
+    },
+    {
+      "type": "arc",
+      "centerX": 1230,
+      "baseY": 570,
+      "count": 5,
+      "step": 30,
+      "height": 60
+    },
+    {
+      "type": "arc",
+      "centerX": 430,
+      "baseY": 570,
+      "count": 5,
+      "step": 34,
+      "height": 70
+    },
+    {
+      "type": "line",
+      "x": 205,
+      "y": 456,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3000,
+      "y": 600,
+      "count": 3,
+      "step": 30
+    },
+    {
+      "type": "line",
+      "x": 1100,
+      "y": 455,
+      "count": 3,
+      "step": 30
+    },
+    {
+      "type": "line",
+      "x": 815,
+      "y": 366,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1045,
+      "y": 286,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1275,
+      "y": 226,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1515,
+      "y": 296,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "arc",
+      "centerX": 750,
+      "baseY": 440,
+      "count": 3,
+      "step": 26,
+      "height": 40
+    },
+    {
+      "type": "arc",
+      "centerX": 965,
+      "baseY": 340,
+      "count": 3,
+      "step": 26,
+      "height": 40
+    },
+    {
+      "type": "arc",
+      "centerX": 1190,
+      "baseY": 300,
+      "count": 3,
+      "step": 26,
+      "height": 40
+    },
+    {
+      "type": "arc",
+      "centerX": 1435,
+      "baseY": 280,
+      "count": 3,
+      "step": 26,
+      "height": 40
+    }
+  ],
+  "background": {
+    "skyTop": "#1f86dc",
+    "skyBottom": "#b4e4fb",
+    "hazeColor": "#dcf1e6",
+    "hazeAlpha": 0.34,
+    "pitColor": "#2a1d12",
+    "cameraColor": "#2a1d12",
+    "farTreeTint": "#6fae7e",
+    "clouds": {
+      "seed": 77,
+      "count": 9
+    },
+    "farTrees": {
+      "seed": 404
+    },
+    "sunTint": "#ffffff",
+    "cloudTint": "#ffffff",
+    "hills": {
+      "far": {
+        "fill": "#b4dcc0",
+        "rim": "#d4efdc"
+      },
+      "mid": {
+        "fill": "#86c795",
+        "rim": "#a8dcb4"
+      },
+      "near": {
+        "fill": "#57ab68",
+        "rim": "#7cc88b"
+      }
+    }
+  },
+  "decoration": {
+    "seed": 20261031,
+    "flowerColors": [
+      "#f43f5e",
+      "#facc15",
+      "#f8fafc",
+      "#c084fc"
+    ],
+    "signX": 260,
+    "butterflies": {
+      "count": 5,
+      "startX": 350,
+      "spacing": 560
+    }
+  },
+  "enemies": [
+    {
+      "type": "mushroom",
+      "x": 400,
+      "minX": 330,
+      "maxX": 480,
+      "speed": 35
+    },
+    {
+      "type": "bee",
+      "x": 850,
+      "minX": 760,
+      "maxX": 1140,
+      "speed": 70,
+      "altitude": 125
+    },
+    {
+      "type": "bee",
+      "x": 1800,
+      "minX": 1700,
+      "maxX": 1960,
+      "speed": 75,
+      "altitude": 135
+    }
+  ],
+  "secrets": [
+    {
+      "id": "copa",
+      "x": 2470,
+      "y": 230,
+      "width": 450,
+      "height": 260
+    }
+  ],
+  "extraLives": [
+    {
+      "x": 2850,
+      "y": 258
+    }
+  ],
+  "obstacles": []
+}

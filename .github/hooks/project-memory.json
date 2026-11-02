@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "node .github/hooks/inject-project-memory.mjs",
+        "timeout": 5
+      }
+    ]
+  }
+}

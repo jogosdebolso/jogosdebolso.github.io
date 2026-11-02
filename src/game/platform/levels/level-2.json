@@ -1,0 +1,439 @@
+{
+  "id": "entardecer",
+  "name": "Trilha do Entardecer",
+  "world": {
+    "width": 4200,
+    "height": 720,
+    "groundY": 640,
+    "deepY": 1500
+  },
+  "spawn": {
+    "x": 120,
+    "y": 618
+  },
+  "goal": {
+    "x": 4020
+  },
+  "platforms": [
+    {
+      "x": 0,
+      "y": 640,
+      "width": 700,
+      "height": 80
+    },
+    {
+      "x": 900,
+      "y": 640,
+      "width": 500,
+      "height": 80
+    },
+    {
+      "x": 1560,
+      "y": 640,
+      "width": 300,
+      "height": 80
+    },
+    {
+      "x": 2100,
+      "y": 640,
+      "width": 600,
+      "height": 80
+    },
+    {
+      "x": 2900,
+      "y": 640,
+      "width": 1900,
+      "height": 80
+    },
+    {
+      "x": 380,
+      "y": 520,
+      "width": 160,
+      "height": 32
+    },
+    {
+      "x": 570,
+      "y": 430,
+      "width": 140,
+      "height": 32
+    },
+    {
+      "x": 1000,
+      "y": 520,
+      "width": 180,
+      "height": 32
+    },
+    {
+      "x": 1230,
+      "y": 430,
+      "width": 160,
+      "height": 32
+    },
+    {
+      "x": 1600,
+      "y": 500,
+      "width": 140,
+      "height": 32
+    },
+    {
+      "x": 1930,
+      "y": 560,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 2300,
+      "y": 520,
+      "width": 160,
+      "height": 32
+    },
+    {
+      "x": 2480,
+      "y": 420,
+      "width": 160,
+      "height": 32
+    },
+    {
+      "x": 3150,
+      "y": 520,
+      "width": 180,
+      "height": 32
+    },
+    {
+      "x": 3380,
+      "y": 430,
+      "width": 160,
+      "height": 32
+    },
+    {
+      "x": 3600,
+      "y": 520,
+      "width": 180,
+      "height": 32
+    },
+    {
+      "x": 1760,
+      "y": 420,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 1900,
+      "y": 340,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 2040,
+      "y": 270,
+      "width": 100,
+      "height": 32
+    }
+  ],
+  "coins": [
+    {
+      "type": "line",
+      "x": 250,
+      "y": 600,
+      "count": 3,
+      "step": 42
+    },
+    {
+      "type": "line",
+      "x": 400,
+      "y": 476,
+      "count": 3,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 590,
+      "y": 386,
+      "count": 3,
+      "step": 45
+    },
+    {
+      "type": "arc",
+      "centerX": 800,
+      "baseY": 590,
+      "count": 5,
+      "step": 36,
+      "height": 90
+    },
+    {
+      "type": "line",
+      "x": 950,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 1020,
+      "y": 476,
+      "count": 3,
+      "step": 50
+    },
+    {
+      "type": "line",
+      "x": 1250,
+      "y": 386,
+      "count": 3,
+      "step": 45
+    },
+    {
+      "type": "arc",
+      "centerX": 1480,
+      "baseY": 590,
+      "count": 5,
+      "step": 28,
+      "height": 80
+    },
+    {
+      "type": "line",
+      "x": 1625,
+      "y": 456,
+      "count": 3,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 1950,
+      "y": 516,
+      "count": 2,
+      "step": 40
+    },
+    {
+      "type": "arc",
+      "centerX": 1990,
+      "baseY": 590,
+      "count": 7,
+      "step": 36,
+      "height": 110
+    },
+    {
+      "type": "line",
+      "x": 2130,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 2320,
+      "y": 476,
+      "count": 3,
+      "step": 50
+    },
+    {
+      "type": "line",
+      "x": 2500,
+      "y": 376,
+      "count": 3,
+      "step": 50
+    },
+    {
+      "type": "arc",
+      "centerX": 2800,
+      "baseY": 590,
+      "count": 5,
+      "step": 36,
+      "height": 80
+    },
+    {
+      "type": "line",
+      "x": 2950,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 3170,
+      "y": 476,
+      "count": 3,
+      "step": 50
+    },
+    {
+      "type": "line",
+      "x": 3400,
+      "y": 386,
+      "count": 3,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 3620,
+      "y": 476,
+      "count": 3,
+      "step": 50
+    },
+    {
+      "type": "line",
+      "x": 3780,
+      "y": 600,
+      "count": 5,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 1775,
+      "y": 376,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1915,
+      "y": 296,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2055,
+      "y": 226,
+      "count": 2,
+      "step": 30
+    }
+  ],
+  "background": {
+    "skyTop": "#4a3585",
+    "skyBottom": "#ffb877",
+    "hazeColor": "#ffd9c2",
+    "hazeAlpha": 0.3,
+    "pitColor": "#2a1d12",
+    "cameraColor": "#2a1d12",
+    "farTreeTint": "#b89aa0",
+    "sunTint": "#ff8a50",
+    "cloudTint": "#ffc9b3",
+    "clouds": {
+      "seed": 191,
+      "count": 10
+    },
+    "farTrees": {
+      "seed": 808
+    },
+    "hills": {
+      "far": {
+        "fill": "#d9a7b5",
+        "rim": "#efc7cf"
+      },
+      "mid": {
+        "fill": "#b9808f",
+        "rim": "#d79faa"
+      },
+      "near": {
+        "fill": "#5f8a5a",
+        "rim": "#86b274"
+      }
+    }
+  },
+  "decoration": {
+    "seed": 31102026,
+    "flowerColors": [
+      "#fb923c",
+      "#fde047",
+      "#f9a8d4",
+      "#a78bfa"
+    ],
+    "signX": 260,
+    "butterflies": {
+      "count": 6,
+      "startX": 350,
+      "spacing": 640
+    }
+  },
+  "enemies": [
+    {
+      "type": "mushroom",
+      "x": 260,
+      "minX": 190,
+      "maxX": 340,
+      "speed": 40
+    },
+    {
+      "type": "bee",
+      "x": 800,
+      "minX": 700,
+      "maxX": 950,
+      "speed": 80,
+      "altitude": 140
+    },
+    {
+      "type": "slug",
+      "x": 1790,
+      "minX": 1745,
+      "maxX": 1850,
+      "speed": 20
+    },
+    {
+      "type": "ladybug",
+      "x": 2200,
+      "minX": 2120,
+      "maxX": 2290,
+      "speed": 55,
+      "altitude": 90
+    },
+    {
+      "type": "bee",
+      "x": 2800,
+      "minX": 2640,
+      "maxX": 2960,
+      "speed": 80,
+      "altitude": 150
+    },
+    {
+      "type": "ladybug",
+      "x": 3040,
+      "minX": 2960,
+      "maxX": 3130,
+      "speed": 60,
+      "altitude": 90
+    },
+    {
+      "type": "slug",
+      "x": 3890,
+      "minX": 3830,
+      "maxX": 3960,
+      "speed": 25
+    }
+  ],
+  "secrets": [
+    {
+      "id": "copa-2",
+      "x": 1740,
+      "y": 180,
+      "width": 420,
+      "height": 300
+    }
+  ],
+  "extraLives": [
+    {
+      "x": 2125,
+      "y": 228
+    }
+  ],
+  "obstacles": [
+    {
+      "type": "thorns",
+      "x": 1300,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 2620,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 3190,
+      "width": 96
+    },
+    {
+      "type": "thorns",
+      "x": 3700,
+      "width": 48
+    }
+  ]
+}

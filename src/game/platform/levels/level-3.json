@@ -1,0 +1,538 @@
+{
+  "id": "noite",
+  "name": "Noite Estrelada",
+  "world": {
+    "width": 4800,
+    "height": 720,
+    "groundY": 640,
+    "deepY": 1500
+  },
+  "spawn": {
+    "x": 120,
+    "y": 618
+  },
+  "goal": {
+    "x": 4620
+  },
+  "platforms": [
+    {
+      "x": 0,
+      "y": 640,
+      "width": 600,
+      "height": 80
+    },
+    {
+      "x": 820,
+      "y": 640,
+      "width": 280,
+      "height": 80
+    },
+    {
+      "x": 1280,
+      "y": 640,
+      "width": 220,
+      "height": 80
+    },
+    {
+      "x": 1880,
+      "y": 640,
+      "width": 420,
+      "height": 80
+    },
+    {
+      "x": 2520,
+      "y": 640,
+      "width": 280,
+      "height": 80
+    },
+    {
+      "x": 3040,
+      "y": 640,
+      "width": 2360,
+      "height": 80
+    },
+    {
+      "x": 300,
+      "y": 520,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 470,
+      "y": 430,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 920,
+      "y": 500,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 1570,
+      "y": 560,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 1730,
+      "y": 500,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 1950,
+      "y": 520,
+      "width": 130,
+      "height": 32
+    },
+    {
+      "x": 2120,
+      "y": 420,
+      "width": 130,
+      "height": 32
+    },
+    {
+      "x": 2580,
+      "y": 510,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 2700,
+      "y": 410,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 2880,
+      "y": 560,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 3250,
+      "y": 520,
+      "width": 130,
+      "height": 32
+    },
+    {
+      "x": 3430,
+      "y": 430,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 3610,
+      "y": 340,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 3800,
+      "y": 430,
+      "width": 120,
+      "height": 32
+    },
+    {
+      "x": 3980,
+      "y": 520,
+      "width": 130,
+      "height": 32
+    },
+    {
+      "x": 3750,
+      "y": 260,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 3880,
+      "y": 200,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 4010,
+      "y": 150,
+      "width": 110,
+      "height": 32
+    }
+  ],
+  "coins": [
+    {
+      "type": "line",
+      "x": 220,
+      "y": 600,
+      "count": 3,
+      "step": 42
+    },
+    {
+      "type": "line",
+      "x": 310,
+      "y": 476,
+      "count": 2,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 480,
+      "y": 386,
+      "count": 2,
+      "step": 45
+    },
+    {
+      "type": "arc",
+      "centerX": 710,
+      "baseY": 590,
+      "count": 5,
+      "step": 36,
+      "height": 90
+    },
+    {
+      "type": "line",
+      "x": 860,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 935,
+      "y": 456,
+      "count": 2,
+      "step": 45
+    },
+    {
+      "type": "arc",
+      "centerX": 1190,
+      "baseY": 590,
+      "count": 4,
+      "step": 32,
+      "height": 80
+    },
+    {
+      "type": "line",
+      "x": 1310,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 1585,
+      "y": 516,
+      "count": 2,
+      "step": 40
+    },
+    {
+      "type": "line",
+      "x": 1750,
+      "y": 456,
+      "count": 2,
+      "step": 40
+    },
+    {
+      "type": "line",
+      "x": 1910,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 1965,
+      "y": 476,
+      "count": 3,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 2130,
+      "y": 376,
+      "count": 2,
+      "step": 45
+    },
+    {
+      "type": "arc",
+      "centerX": 2410,
+      "baseY": 590,
+      "count": 5,
+      "step": 36,
+      "height": 90
+    },
+    {
+      "type": "line",
+      "x": 2540,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 2590,
+      "y": 466,
+      "count": 2,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 2710,
+      "y": 366,
+      "count": 2,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 2900,
+      "y": 516,
+      "count": 2,
+      "step": 40
+    },
+    {
+      "type": "line",
+      "x": 3080,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 3270,
+      "y": 476,
+      "count": 3,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 3440,
+      "y": 386,
+      "count": 3,
+      "step": 40
+    },
+    {
+      "type": "line",
+      "x": 3620,
+      "y": 296,
+      "count": 2,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 3810,
+      "y": 386,
+      "count": 2,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 3990,
+      "y": 476,
+      "count": 3,
+      "step": 45
+    },
+    {
+      "type": "line",
+      "x": 4150,
+      "y": 600,
+      "count": 6,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 4440,
+      "y": 600,
+      "count": 4,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 3765,
+      "y": 216,
+      "count": 2,
+      "step": 30
+    },
+    {
+      "type": "line",
+      "x": 3895,
+      "y": 156,
+      "count": 2,
+      "step": 30
+    },
+    {
+      "type": "line",
+      "x": 4025,
+      "y": 106,
+      "count": 2,
+      "step": 30
+    }
+  ],
+  "background": {
+    "skyTop": "#050b24",
+    "skyBottom": "#2b4c7e",
+    "hazeColor": "#0b1d3a",
+    "hazeAlpha": 0.38,
+    "pitColor": "#0f1420",
+    "cameraColor": "#0f1420",
+    "farTreeTint": "#3d5a7a",
+    "sunTint": "#dbe6ff",
+    "cloudTint": "#5d7399",
+    "clouds": {
+      "seed": 512,
+      "count": 8
+    },
+    "farTrees": {
+      "seed": 2718
+    },
+    "hills": {
+      "far": {
+        "fill": "#34507a",
+        "rim": "#5a78a3"
+      },
+      "mid": {
+        "fill": "#274466",
+        "rim": "#47688f"
+      },
+      "near": {
+        "fill": "#1f4d4a",
+        "rim": "#3f7a72"
+      }
+    }
+  },
+  "decoration": {
+    "seed": 77123,
+    "flowerColors": [
+      "#22d3ee",
+      "#e879f9",
+      "#f8fafc",
+      "#facc15"
+    ],
+    "signX": 260,
+    "butterflies": {
+      "count": 7,
+      "startX": 350,
+      "spacing": 640
+    }
+  },
+  "enemies": [
+    {
+      "type": "mushroom",
+      "x": 260,
+      "minX": 200,
+      "maxX": 330,
+      "speed": 45
+    },
+    {
+      "type": "bat",
+      "x": 700,
+      "minX": 580,
+      "maxX": 850,
+      "speed": 75,
+      "altitude": 170
+    },
+    {
+      "type": "ladybug",
+      "x": 1380,
+      "minX": 1300,
+      "maxX": 1480,
+      "speed": 55,
+      "altitude": 85
+    },
+    {
+      "type": "bat",
+      "x": 1700,
+      "minX": 1520,
+      "maxX": 1860,
+      "speed": 70,
+      "altitude": 190
+    },
+    {
+      "type": "bat",
+      "x": 2400,
+      "minX": 2310,
+      "maxX": 2510,
+      "speed": 75,
+      "altitude": 170
+    },
+    {
+      "type": "ladybug",
+      "x": 3120,
+      "minX": 3060,
+      "maxX": 3200,
+      "speed": 60,
+      "altitude": 90
+    },
+    {
+      "type": "mushroom",
+      "x": 4220,
+      "minX": 4150,
+      "maxX": 4300,
+      "speed": 45
+    },
+    {
+      "type": "slug",
+      "x": 4400,
+      "minX": 4330,
+      "maxX": 4480,
+      "speed": 25
+    }
+  ],
+  "secrets": [
+    {
+      "id": "copa-3",
+      "x": 3730,
+      "y": 100,
+      "width": 420,
+      "height": 230
+    }
+  ],
+  "extraLives": [
+    {
+      "x": 4095,
+      "y": 108
+    }
+  ],
+  "obstacles": [
+    {
+      "type": "thorns",
+      "x": 520,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 1020,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 2000,
+      "width": 96
+    },
+    {
+      "type": "thorns",
+      "x": 2640,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 3350,
+      "width": 96
+    },
+    {
+      "type": "thorns",
+      "x": 3700,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 4040,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 4520,
+      "width": 48
+    }
+  ]
+}

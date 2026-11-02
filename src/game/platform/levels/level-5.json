@@ -1,0 +1,791 @@
+{
+  "id": "cume",
+  "name": "Cume das Nuvens",
+  "world": {
+    "width": 5400,
+    "height": 720,
+    "groundY": 640,
+    "deepY": 1500
+  },
+  "spawn": {
+    "x": 120,
+    "y": 618
+  },
+  "goal": {
+    "x": 5200
+  },
+  "platforms": [
+    {
+      "x": 0,
+      "y": 640,
+      "width": 460,
+      "height": 32
+    },
+    {
+      "x": 660,
+      "y": 640,
+      "width": 240,
+      "height": 32
+    },
+    {
+      "x": 1100,
+      "y": 640,
+      "width": 240,
+      "height": 32
+    },
+    {
+      "x": 1560,
+      "y": 640,
+      "width": 200,
+      "height": 32
+    },
+    {
+      "x": 2000,
+      "y": 640,
+      "width": 300,
+      "height": 32
+    },
+    {
+      "x": 2500,
+      "y": 640,
+      "width": 240,
+      "height": 32
+    },
+    {
+      "x": 2940,
+      "y": 640,
+      "width": 260,
+      "height": 32
+    },
+    {
+      "x": 3400,
+      "y": 640,
+      "width": 300,
+      "height": 32
+    },
+    {
+      "x": 3900,
+      "y": 640,
+      "width": 2100,
+      "height": 32
+    },
+    {
+      "x": 980,
+      "y": 550,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 1420,
+      "y": 560,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 1850,
+      "y": 540,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 180,
+      "y": 520,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 330,
+      "y": 430,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 740,
+      "y": 500,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 1620,
+      "y": 470,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 2060,
+      "y": 520,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 2200,
+      "y": 420,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 2540,
+      "y": 500,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 2660,
+      "y": 400,
+      "width": 90,
+      "height": 32
+    },
+    {
+      "x": 3000,
+      "y": 500,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 3140,
+      "y": 400,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 3440,
+      "y": 520,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 3560,
+      "y": 420,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 3960,
+      "y": 500,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 4140,
+      "y": 410,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 4320,
+      "y": 320,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 4500,
+      "y": 410,
+      "width": 100,
+      "height": 32
+    },
+    {
+      "x": 4680,
+      "y": 500,
+      "width": 110,
+      "height": 32
+    },
+    {
+      "x": 470,
+      "y": 350,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 600,
+      "y": 280,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 730,
+      "y": 220,
+      "width": 140,
+      "height": 32
+    },
+    {
+      "x": 4460,
+      "y": 240,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 4590,
+      "y": 180,
+      "width": 80,
+      "height": 32
+    },
+    {
+      "x": 4720,
+      "y": 130,
+      "width": 140,
+      "height": 32
+    }
+  ],
+  "coins": [
+    {
+      "type": "arc",
+      "centerX": 560.0,
+      "baseY": 590,
+      "count": 5,
+      "step": 30,
+      "height": 85
+    },
+    {
+      "type": "line",
+      "x": 720,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 1000.0,
+      "baseY": 525,
+      "count": 5,
+      "step": 30,
+      "height": 50
+    },
+    {
+      "type": "line",
+      "x": 1160,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 1450.0,
+      "baseY": 525,
+      "count": 5,
+      "step": 30,
+      "height": 50
+    },
+    {
+      "type": "line",
+      "x": 1620,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 1880.0,
+      "baseY": 525,
+      "count": 5,
+      "step": 30,
+      "height": 50
+    },
+    {
+      "type": "line",
+      "x": 2060,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 2400.0,
+      "baseY": 590,
+      "count": 5,
+      "step": 30,
+      "height": 85
+    },
+    {
+      "type": "line",
+      "x": 2560,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 2840.0,
+      "baseY": 590,
+      "count": 5,
+      "step": 30,
+      "height": 85
+    },
+    {
+      "type": "line",
+      "x": 3000,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 3300.0,
+      "baseY": 590,
+      "count": 5,
+      "step": 30,
+      "height": 85
+    },
+    {
+      "type": "line",
+      "x": 3460,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "arc",
+      "centerX": 3800.0,
+      "baseY": 590,
+      "count": 5,
+      "step": 30,
+      "height": 85
+    },
+    {
+      "type": "line",
+      "x": 3960,
+      "y": 600,
+      "count": 3,
+      "step": 44
+    },
+    {
+      "type": "line",
+      "x": 994,
+      "y": 506,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1434,
+      "y": 516,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1864,
+      "y": 496,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 194,
+      "y": 476,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 344,
+      "y": 386,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 754,
+      "y": 456,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 1634,
+      "y": 426,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2074,
+      "y": 476,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2214,
+      "y": 376,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2554,
+      "y": 456,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 2674,
+      "y": 356,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3014,
+      "y": 456,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3154,
+      "y": 356,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3454,
+      "y": 476,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3574,
+      "y": 376,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 3974,
+      "y": 456,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 4154,
+      "y": 366,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 4334,
+      "y": 276,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 4514,
+      "y": 366,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 4694,
+      "y": 456,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 484,
+      "y": 306,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 614,
+      "y": 236,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 744,
+      "y": 176,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 4474,
+      "y": 196,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 4604,
+      "y": 136,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 4734,
+      "y": 86,
+      "count": 3,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 485,
+      "y": 306,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 615,
+      "y": 236,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 745,
+      "y": 176,
+      "count": 3,
+      "step": 34
+    },
+    {
+      "type": "line",
+      "x": 4475,
+      "y": 196,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 4605,
+      "y": 136,
+      "count": 2,
+      "step": 36
+    },
+    {
+      "type": "line",
+      "x": 4735,
+      "y": 86,
+      "count": 3,
+      "step": 34
+    }
+  ],
+  "enemies": [
+    {
+      "type": "bee",
+      "x": 575,
+      "minX": 430,
+      "maxX": 720,
+      "speed": 85,
+      "altitude": 150
+    },
+    {
+      "type": "bee",
+      "x": 1000,
+      "minX": 880,
+      "maxX": 1120,
+      "speed": 80,
+      "altitude": 165
+    },
+    {
+      "type": "ladybug",
+      "x": 1220,
+      "minX": 1130,
+      "maxX": 1320,
+      "speed": 60,
+      "altitude": 90
+    },
+    {
+      "type": "bee",
+      "x": 1450,
+      "minX": 1320,
+      "maxX": 1580,
+      "speed": 90,
+      "altitude": 150
+    },
+    {
+      "type": "bee",
+      "x": 1880,
+      "minX": 1740,
+      "maxX": 2020,
+      "speed": 85,
+      "altitude": 170
+    },
+    {
+      "type": "bee",
+      "x": 2400,
+      "minX": 2280,
+      "maxX": 2520,
+      "speed": 85,
+      "altitude": 150
+    },
+    {
+      "type": "bee",
+      "x": 3300,
+      "minX": 3180,
+      "maxX": 3420,
+      "speed": 85,
+      "altitude": 150
+    },
+    {
+      "type": "ladybug",
+      "x": 4260,
+      "minX": 4120,
+      "maxX": 4400,
+      "speed": 65,
+      "altitude": 100
+    },
+    {
+      "type": "bee",
+      "x": 4500,
+      "minX": 4350,
+      "maxX": 4660,
+      "speed": 85,
+      "altitude": 120
+    },
+    {
+      "type": "slug",
+      "x": 4860,
+      "minX": 4820,
+      "maxX": 4900,
+      "speed": 25
+    },
+    {
+      "type": "mushroom",
+      "x": 4985,
+      "minX": 4930,
+      "maxX": 5040,
+      "speed": 45
+    },
+    {
+      "type": "ladybug",
+      "x": 5150,
+      "minX": 5110,
+      "maxX": 5190,
+      "speed": 60,
+      "altitude": 90
+    }
+  ],
+  "obstacles": [
+    {
+      "type": "thorns",
+      "x": 400,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 850,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 1700,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 2120,
+      "width": 96
+    },
+    {
+      "type": "thorns",
+      "x": 2680,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 4020,
+      "width": 96
+    },
+    {
+      "type": "thorns",
+      "x": 4580,
+      "width": 96
+    },
+    {
+      "type": "thorns",
+      "x": 4760,
+      "width": 48
+    },
+    {
+      "type": "thorns",
+      "x": 5060,
+      "width": 48
+    }
+  ],
+  "secrets": [
+    {
+      "id": "copa-5a",
+      "x": 450,
+      "y": 170,
+      "width": 440,
+      "height": 230
+    },
+    {
+      "id": "copa-5b",
+      "x": 4440,
+      "y": 60,
+      "width": 470,
+      "height": 240
+    }
+  ],
+  "extraLives": [
+    {
+      "x": 830,
+      "y": 178
+    },
+    {
+      "x": 4850,
+      "y": 88
+    }
+  ],
+  "background": {
+    "skyTop": "#5b4b9a",
+    "skyBottom": "#ffd29a",
+    "hazeColor": "#ffe3cf",
+    "hazeAlpha": 0.3,
+    "pitColor": "#2a1d12",
+    "cameraColor": "#2a1d12",
+    "farTreeTint": "#b8909f",
+    "sunTint": "#ffc46b",
+    "cloudTint": "#ffd9c9",
+    "clouds": {
+      "seed": 313,
+      "count": 12
+    },
+    "farTrees": {
+      "seed": 1717
+    },
+    "hills": {
+      "far": {
+        "fill": "#e8b4c0",
+        "rim": "#f7d0d6"
+      },
+      "mid": {
+        "fill": "#c98aa3",
+        "rim": "#e2a8bb"
+      },
+      "near": {
+        "fill": "#6f9a62",
+        "rim": "#93bd7e"
+      }
+    }
+  },
+  "decoration": {
+    "seed": 55501,
+    "flowerColors": [
+      "#fb7185",
+      "#fde047",
+      "#fff7ed",
+      "#a78bfa"
+    ],
+    "signX": 260,
+    "butterflies": {
+      "count": 8,
+      "startX": 350,
+      "spacing": 600
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "id": 4,
+  "name": "Coroa Solar",
+  "description": "Voe pela corona da estrela e derrote o Arauto Solar.",
+  "background": {
+    "baseColor": "#180b12",
+    "nebulaColors": ["#7c2d12", "#9a3412", "#7f1d3d", "#c2410c"],
+    "horizonColor": "#fbbf24",
+    "planet": {
+      "x": 0.79,
+      "y": 0.29,
+      "radius": 0.19,
+      "color": "#a94327",
+      "highlightColor": "#fde68a",
+      "shadowColor": "#4c1d2b",
+      "ringColor": "#fdba74"
+    },
+    "moon": {
+      "x": 0.2,
+      "y": 0.23,
+      "radius": 0.032,
+      "color": "#fed7aa",
+      "shadowColor": "#c2410c"
+    }
+  },
+  "initialAsteroids": [
+    { "progress": 0.1, "lane": -0.94, "speed": 0.16 },
+    { "progress": 0.15, "lane": 0.94, "speed": 0.16 },
+    { "progress": 0.22, "lane": -0.62 },
+    { "progress": 0.28, "lane": 0.62 },
+    { "progress": 0.34, "lane": -0.22, "speed": 0.14 },
+    { "progress": 0.4, "lane": 0.3 }
+  ],
+  "initialEnemies": [
+    { "progress": 0.13, "lane": -0.72, "variant": "cometa" },
+    { "progress": 0.17, "lane": 0.72, "variant": "vespa" }
+  ],
+  "ambientVariants": ["cometa", "vespa", "bastiao"],
+  "events": [
+    {
+      "atMs": 0,
+      "title": "FASE 4 — COROA SOLAR",
+      "message": "Calor extremo detectado. Mantenha-se na rota!",
+      "wave": [
+        { "variant": "cometa", "lane": -0.56 },
+        { "variant": "vespa", "lane": 0.56 }
+      ]
+    },
+    {
+      "atMs": 18000,
+      "title": "SETOR 2 — TEMPESTADE DE PLASMA",
+      "message": "A estrela lançou uma onda de energia. Frota hostil à frente!",
+      "wave": [
+        { "variant": "bastiao", "lane": -0.4, "size": 1.2 },
+        { "variant": "cometa", "lane": 0.4 },
+        { "variant": "vespa", "lane": 0.78 }
+      ]
+    },
+    {
+      "atMs": 36000,
+      "title": "SETOR FINAL — ARAUTO SOLAR",
+      "message": "O núcleo inimigo está exposto. Finalize a missão!",
+      "boss": {
+        "name": "Arauto Solar",
+        "variant": "cometa",
+        "lane": 0,
+        "size": 3.5,
+        "health": 24
+      }
+    }
+  ]
+}

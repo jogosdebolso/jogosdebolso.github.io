@@ -1,0 +1,71 @@
+{
+  "id": 2,
+  "name": "Nebulosa Carmesim",
+  "description": "Pilote pela nebulosa vermelha e sobreviva à frota de elite.",
+  "background": {
+    "baseColor": "#100815",
+    "nebulaColors": ["#8b1e3f", "#6d174f", "#c2410c", "#4c1d95"],
+    "horizonColor": "#fb7185",
+    "planet": {
+      "x": 0.2,
+      "y": 0.28,
+      "radius": 0.16,
+      "color": "#7f1d3f",
+      "highlightColor": "#fb7185",
+      "shadowColor": "#3b102d",
+      "ringColor": "#fda4af"
+    },
+    "moon": {
+      "x": 0.79,
+      "y": 0.25,
+      "radius": 0.034,
+      "color": "#fda4af",
+      "shadowColor": "#9f385b"
+    }
+  },
+  "initialAsteroids": [
+    { "progress": 0.1, "lane": -0.82, "speed": 0.14 },
+    { "progress": 0.16, "lane": 0.82, "speed": 0.14 },
+    { "progress": 0.25, "lane": -0.42 },
+    { "progress": 0.31, "lane": 0.42 },
+    { "progress": 0.38, "lane": 0, "speed": 0.12 }
+  ],
+  "initialEnemies": [
+    { "progress": 0.14, "lane": -0.68, "variant": "vanguarda" },
+    { "progress": 0.19, "lane": 0.68, "variant": "espectro" }
+  ],
+  "ambientVariants": ["vanguarda", "espectro", "bastiao"],
+  "events": [
+    {
+      "atMs": 0,
+      "title": "FASE 2 — NEBULOSA CARMESIM",
+      "message": "Visibilidade reduzida. A frota de elite protege o setor.",
+      "wave": [
+        { "variant": "vanguarda", "lane": -0.58 },
+        { "variant": "espectro", "lane": 0.58 }
+      ]
+    },
+    {
+      "atMs": 18000,
+      "title": "SETOR 2 — TEMPESTADE IÔNICA",
+      "message": "Assinaturas rápidas cruzando a nebulosa!",
+      "wave": [
+        { "variant": "vespa", "lane": -0.3 },
+        { "variant": "vespa", "lane": 0.3 },
+        { "variant": "bastiao", "lane": 0.78 }
+      ]
+    },
+    {
+      "atMs": 36000,
+      "title": "SETOR FINAL — ALMIRANTE",
+      "message": "Almirante Espectro detectado. Derrube a nave de comando!",
+      "boss": {
+        "name": "Almirante Espectro",
+        "variant": "espectro",
+        "lane": 0,
+        "size": 3.2,
+        "health": 16
+      }
+    }
+  ]
+}
