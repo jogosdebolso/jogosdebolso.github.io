@@ -1,0 +1,74 @@
+{
+  "id": 5,
+  "name": "Pilares de Carina",
+  "description": "Atravesse as torres de gás da região de formação estelar e derrote a Matriarca.",
+  "background": {
+    "baseColor": "#0b1021",
+    "nebulaColors": ["#b45336", "#7c3f62", "#365b91", "#d28a4f"],
+    "horizonColor": "#f0a879",
+    "planet": {
+      "x": 0.78,
+      "y": 0.31,
+      "radius": 0.16,
+      "color": "#70475a",
+      "highlightColor": "#f0a879",
+      "shadowColor": "#26334f",
+      "ringColor": "#d28a4f"
+    },
+    "moon": {
+      "x": 0.18,
+      "y": 0.25,
+      "radius": 0.03,
+      "color": "#d2a99a",
+      "shadowColor": "#70475a"
+    }
+  },
+  "initialAsteroids": [
+    { "progress": 0.1, "lane": -0.88, "speed": 0.16 },
+    { "progress": 0.14, "lane": 0.88, "speed": 0.16 },
+    { "progress": 0.23, "lane": -0.52, "speed": 0.14 },
+    { "progress": 0.27, "lane": 0.52, "speed": 0.14 },
+    { "progress": 0.34, "lane": -0.14, "speed": 0.13 },
+    { "progress": 0.38, "lane": 0.32 },
+    { "progress": 0.42, "lane": -0.78 }
+  ],
+  "initialEnemies": [
+    { "progress": 0.12, "lane": -0.64, "variant": "vespa" },
+    { "progress": 0.16, "lane": 0.64, "variant": "espectro" }
+  ],
+  "ambientVariants": ["vespa", "espectro", "bastiao"],
+  "events": [
+    {
+      "atMs": 0,
+      "title": "FASE 5 — PILARES DE CARINA",
+      "message": "Paredes de gás ionizado e fragmentos cobrem a rota.",
+      "wave": [
+        { "variant": "vespa", "lane": -0.56 },
+        { "variant": "espectro", "lane": 0.56 }
+      ]
+    },
+    {
+      "atMs": 17000,
+      "title": "SETOR 2 — BERÇÁRIO ESTELAR",
+      "message": "Jatos protostelares detectados. Interceptadores se aproximam!",
+      "wave": [
+        { "variant": "cometa", "lane": -0.72 },
+        { "variant": "bastiao", "lane": -0.22, "size": 1.15 },
+        { "variant": "vespa", "lane": 0.42 },
+        { "variant": "espectro", "lane": 0.78 }
+      ]
+    },
+    {
+      "atMs": 35000,
+      "title": "SETOR FINAL — MATRIARCA",
+      "message": "A Matriarca guarda o coração da nebulosa!",
+      "boss": {
+        "name": "Matriarca de Carina",
+        "variant": "bastiao",
+        "lane": 0,
+        "size": 3.4,
+        "health": 26
+      }
+    }
+  ]
+}

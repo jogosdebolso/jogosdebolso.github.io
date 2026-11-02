@@ -18,7 +18,6 @@ interface RastroGameFile {
     speedRange: number[];
     sizeRange: number[];
     lanes: number[];
-    horizonY: number;
     straightDownChance: number;
     downwardChance: number;
     downwardTravel: number[];
@@ -35,13 +34,13 @@ interface RastroGameFile {
     speedRange: number[];
     sizeRange: number[];
     lanes: number[];
-    horizonY: number;
     verticalHorizonJitter: number;
     destinationXRange: number[];
     destinationYRange: number[];
     bossHoldY: number;
     projectionExponent: number;
     scaleRange: number[];
+    bossScaleRange: number[];
     removeMargin: number;
   };
   weapon: {
@@ -49,10 +48,8 @@ interface RastroGameFile {
     maxShots: number;
     speed: number;
     initialScale: number;
-    scaleLoss: number;
     aimOffset: number;
     rotationInfluence: number;
-    endYFactor: number;
     projectionExponent: number;
     targetWidthFactor: number;
     targetHeightFactor: number;
@@ -62,11 +59,6 @@ interface RastroGameFile {
     obstacleHeightFactor: number;
     playerWidthFactor: number;
     playerHeightFactor: number;
-    playerContactPointOffset: number;
-    asteroidMinimumProgress: number;
-    enemyMinimumProgress: number;
-    asteroidDepthTolerance: number;
-    depthTolerance: number;
     cameraShakeMs: number;
     cameraShakeIntensity: number;
     cameraFlashMs: number;
@@ -74,9 +66,9 @@ interface RastroGameFile {
     invulnerabilityMs: number;
   };
   perspective: {
+    horizonY: number;
     distantTint: string;
     nearTint: string;
-    distantAlpha: number;
   };
   texts: {
     title: string;
@@ -84,7 +76,6 @@ interface RastroGameFile {
     livesLabel: string;
     startControls: string;
     startButton: string;
-    collision: string;
     gameOverTitle: string;
     gameOverDescription: string;
     phaseLabel: string;
@@ -158,24 +149,6 @@ function validateConfig(config: RastroGameFile): void {
   assertPositive(config.weapon.speed, "weapon.speed");
   assertPositive(config.collision.restartDelayMs, "collision.restartDelayMs");
   assertPositive(config.collision.invulnerabilityMs, "collision.invulnerabilityMs");
-  assertUnitInterval(
-    config.collision.playerContactPointOffset,
-    "collision.playerContactPointOffset",
-  );
-  assertUnitInterval(
-    config.collision.asteroidMinimumProgress,
-    "collision.asteroidMinimumProgress",
-  );
-  assertUnitInterval(
-    config.collision.enemyMinimumProgress,
-    "collision.enemyMinimumProgress",
-  );
-  assertUnitInterval(
-    config.collision.asteroidDepthTolerance,
-    "collision.asteroidDepthTolerance",
-  );
-  assertUnitInterval(config.collision.depthTolerance, "collision.depthTolerance");
-  assertUnitInterval(config.perspective.distantAlpha, "perspective.distantAlpha");
   validateRange(config.asteroids.speedRange, "asteroids.speedRange");
   validateRange(config.asteroids.sizeRange, "asteroids.sizeRange");
   validatePair(config.asteroids.downwardTravel, "asteroids.downwardTravel");
@@ -187,8 +160,8 @@ function validateConfig(config: RastroGameFile): void {
   validateRange(config.enemies.destinationXRange, "enemies.destinationXRange");
   validateRange(config.enemies.destinationYRange, "enemies.destinationYRange");
   validateRange(config.enemies.scaleRange, "enemies.scaleRange");
-  assertUnitInterval(config.asteroids.horizonY, "asteroids.horizonY");
-  assertUnitInterval(config.enemies.horizonY, "enemies.horizonY");
+  validateRange(config.enemies.bossScaleRange, "enemies.bossScaleRange");
+  assertUnitInterval(config.perspective.horizonY, "perspective.horizonY");
   assertUnitInterval(config.enemies.bossHoldY, "enemies.bossHoldY");
   assertUnitInterval(config.asteroids.straightDownChance, "asteroids.straightDownChance");
   assertUnitInterval(config.asteroids.downwardChance, "asteroids.downwardChance");

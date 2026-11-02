@@ -1,0 +1,74 @@
+{
+  "id": 6,
+  "name": "Horizonte de Cygnus",
+  "description": "Escape da distorção gravitacional e destrua o Guardião do Horizonte.",
+  "background": {
+    "baseColor": "#050711",
+    "nebulaColors": ["#192343", "#243a55", "#74423c", "#3f2857"],
+    "horizonColor": "#d39a67",
+    "planet": {
+      "x": 0.51,
+      "y": 0.32,
+      "radius": 0.18,
+      "color": "#302a42",
+      "highlightColor": "#d39a67",
+      "shadowColor": "#090b18",
+      "ringColor": "#e9b879"
+    },
+    "moon": {
+      "x": 0.18,
+      "y": 0.2,
+      "radius": 0.022,
+      "color": "#a7b2c8",
+      "shadowColor": "#31394e"
+    }
+  },
+  "initialAsteroids": [
+    { "progress": 0.1, "lane": -0.9, "speed": 0.17 },
+    { "progress": 0.14, "lane": 0.9, "speed": 0.17 },
+    { "progress": 0.2, "lane": -0.56, "speed": 0.16 },
+    { "progress": 0.24, "lane": 0.56, "speed": 0.16 },
+    { "progress": 0.3, "lane": -0.22, "speed": 0.15 },
+    { "progress": 0.34, "lane": 0.22, "speed": 0.15 },
+    { "progress": 0.4, "lane": -0.72 }
+  ],
+  "initialEnemies": [
+    { "progress": 0.11, "lane": -0.68, "variant": "espectro" },
+    { "progress": 0.15, "lane": 0.68, "variant": "bastiao" }
+  ],
+  "ambientVariants": ["espectro", "bastiao", "vanguarda"],
+  "events": [
+    {
+      "atMs": 0,
+      "title": "FASE 6 — HORIZONTE DE CYGNUS",
+      "message": "A lente gravitacional distorce a rota. Mantenha distância do núcleo!",
+      "wave": [
+        { "variant": "espectro", "lane": -0.58 },
+        { "variant": "bastiao", "lane": 0.58 }
+      ]
+    },
+    {
+      "atMs": 16000,
+      "title": "SETOR 2 — DISCO DE ACREÇÃO",
+      "message": "A matéria incandescente acelera ao redor da singularidade!",
+      "wave": [
+        { "variant": "vanguarda", "lane": -0.78 },
+        { "variant": "espectro", "lane": -0.3 },
+        { "variant": "bastiao", "lane": 0.3, "size": 1.2 },
+        { "variant": "vespa", "lane": 0.78 }
+      ]
+    },
+    {
+      "atMs": 33000,
+      "title": "SETOR FINAL — GUARDIÃO",
+      "message": "O Guardião do Horizonte emergiu do disco!",
+      "boss": {
+        "name": "Guardião do Horizonte",
+        "variant": "espectro",
+        "lane": 0,
+        "size": 3.7,
+        "health": 30
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": 7,
+  "name": "Órbita do Horizonte",
+  "description": "Pilote junto ao horizonte de eventos e atravesse o anel de acreção para alcançar o núcleo.",
+  "background": {
+    "baseColor": "#03040a",
+    "nebulaColors": ["#171521", "#382634", "#70433f", "#a46a45"],
+    "horizonColor": "#f0b879",
+    "planet": {
+      "x": 0.5,
+      "y": 0.39,
+      "radius": 0.2,
+      "color": "#08090f",
+      "highlightColor": "#f1b878",
+      "shadowColor": "#03040a",
+      "ringColor": "#f3ca91"
+    },
+    "moon": {
+      "x": 0.19,
+      "y": 0.19,
+      "radius": 0.02,
+      "color": "#9ca6b7",
+      "shadowColor": "#31394e"
+    }
+  },
+  "initialAsteroids": [
+    { "progress": 0.1, "lane": -0.88, "speed": 0.18 },
+    { "progress": 0.13, "lane": 0.88, "speed": 0.18 },
+    { "progress": 0.21, "lane": -0.62, "speed": 0.16 },
+    { "progress": 0.25, "lane": 0.62, "speed": 0.16 },
+    { "progress": 0.32, "lane": -0.34, "speed": 0.15 },
+    { "progress": 0.36, "lane": 0.34, "speed": 0.15 },
+    { "progress": 0.42, "lane": -0.76, "speed": 0.14 },
+    { "progress": 0.44, "lane": 0.76, "speed": 0.14 }
+  ],
+  "initialEnemies": [
+    { "progress": 0.12, "lane": -0.68, "variant": "espectro" },
+    { "progress": 0.15, "lane": 0.68, "variant": "bastiao" }
+  ],
+  "ambientVariants": ["espectro", "bastiao", "vanguarda", "vespa"],
+  "events": [
+    {
+      "atMs": 0,
+      "title": "FASE 7 — ÓRBITA DO HORIZONTE",
+      "message": "A gravidade curva a rota. Mantenha-se no anel luminoso!",
+      "wave": [
+        { "variant": "espectro", "lane": -0.72 },
+        { "variant": "bastiao", "lane": 0.72 },
+        { "variant": "vespa", "lane": -0.32 },
+        { "variant": "vanguarda", "lane": 0.32 }
+      ]
+    },
+    {
+      "atMs": 17000,
+      "title": "SETOR 2 — ANEL DE ACREÇÃO",
+      "message": "Fragmentos incandescentes e caças inimigas convergem para o núcleo!",
+      "wave": [
+        { "variant": "vanguarda", "lane": -0.82, "size": 1.15 },
+        { "variant": "espectro", "lane": -0.42 },
+        { "variant": "bastiao", "lane": 0.12, "size": 1.2 },
+        { "variant": "vespa", "lane": 0.52 },
+        { "variant": "cometa", "lane": 0.84 }
+      ]
+    },
+    {
+      "atMs": 35000,
+      "title": "SETOR FINAL — SINGULARIDADE",
+      "message": "A Sentinela protege o limite do horizonte de eventos!",
+      "boss": {
+        "name": "Sentinela da Singularidade",
+        "variant": "bastiao",
+        "lane": 0,
+        "size": 3.8,
+        "health": 36
+      }
+    }
+  ]
+}

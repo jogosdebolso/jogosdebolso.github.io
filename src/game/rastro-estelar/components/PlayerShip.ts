@@ -4,10 +4,15 @@ import { RASTRO_GAME_CONFIG } from "../gameConfig";
 export interface PlayerShipVisuals {
   player: Phaser.GameObjects.Container;
   shadow: Phaser.GameObjects.Ellipse;
-  propulsionGlow: Phaser.GameObjects.Arc;
-  propulsionCore: Phaser.GameObjects.Arc;
-  leftThruster: Phaser.GameObjects.Arc;
-  rightThruster: Phaser.GameObjects.Arc;
+  centerExhaust: ExhaustLayers;
+  wingExhausts: ExhaustLayers[];
+}
+
+interface ExhaustLayers {
+  plume: Phaser.GameObjects.Graphics;
+  glow: Phaser.GameObjects.Graphics;
+  core: Phaser.GameObjects.Graphics;
+  phase: number;
 }
 
 export function createPlayerShip(
@@ -18,31 +23,21 @@ export function createPlayerShip(
   const shadow = scene.add
     .ellipse(centerX, centerY + 27, 74, 15, 0x020817, 0.62)
     .setDepth(0.85);
-  const propulsionGlow = scene.add
-    .circle(centerX, centerY + 28, 13, 0x2563eb, 0.75)
-    .setDepth(0.9);
-  const propulsionCore = scene.add
-    .circle(centerX, centerY + 28, 6, 0xa5f3fc, 0.95)
-    .setDepth(1);
-  const leftThruster = scene.add
-    .circle(centerX - 36, centerY + 25, 4, 0x38bdf8, 0.9)
-    .setDepth(1.05);
-  const rightThruster = scene.add
-    .circle(centerX + 36, centerY + 25, 4, 0x38bdf8, 0.9)
-    .setDepth(1.05);
   const player = scene.add
     .container(centerX, centerY)
     .setSize(RASTRO_GAME_CONFIG.player.width, RASTRO_GAME_CONFIG.player.height)
     .setDepth(1.2);
   drawPlayerShip(player);
+  const centerExhaust = createExhaust(scene, player, 0, 15, 23, 38);
+  const wingExhausts = [-36.5, 36.5].map((x, index) =>
+    createExhaust(scene, player, x, 14, 9, 19, index * Math.PI),
+  );
 
   return {
     player,
     shadow,
-    propulsionGlow,
-    propulsionCore,
-    leftThruster,
-    rightThruster,
+    centerExhaust,
+    wingExhausts,
   };
 }
 
@@ -50,42 +45,102 @@ export function updatePlayerShipVisuals(
   ship: PlayerShipVisuals,
   perspective: number,
   time: number,
-  isMoving: boolean,
+  verticalDirection: number,
 ): void {
-  const flicker = 0.85 + Math.sin(time * 0.025) * 0.15;
-  const thrust = isMoving ? 1 : 0.65;
-  const enginePulse = 0.8 + flicker * 0.2;
-  const scale = ship.player.scaleX;
-  const rotation = ship.player.rotation;
-  const engineOffsetX = Math.sin(rotation) * 14 * scale;
-  const engineOffsetY = Math.cos(rotation) * 24 * scale;
+  const exhaustWidth = verticalDirection > 0 ? 0.86 : verticalDirection === 0 ? 0.88 : 1;
+  const exhaustLength = verticalDirection > 0 ? 0.52 : verticalDirection === 0 ? 0.76 : 1;
 
   ship.shadow
-    .setPosition(ship.player.x, ship.player.y + 26 * scale)
+    .setPosition(ship.player.x, ship.player.y + 26 * ship.player.scaleX)
     .setScale(0.8 + perspective * 0.35, 0.75 + perspective * 0.25)
     .setAlpha(0.2 + perspective * 0.38);
-  ship.propulsionGlow
-    .setPosition(ship.player.x, ship.player.y + engineOffsetY)
-    .setAlpha((0.2 + flicker * 0.25) * thrust)
-    .setScale((0.75 + flicker * 0.2) * scale);
-  ship.propulsionCore
-    .setPosition(ship.player.x, ship.player.y + engineOffsetY)
-    .setAlpha((0.55 + flicker * 0.35) * thrust)
-    .setScale((0.75 + flicker * 0.2) * scale);
-  ship.leftThruster
-    .setPosition(
-      ship.player.x - 36 * scale + engineOffsetX,
-      ship.player.y + engineOffsetY,
-    )
-    .setAlpha((0.55 + enginePulse * 0.35) * thrust)
-    .setScale((0.65 + enginePulse * 0.3) * scale);
-  ship.rightThruster
-    .setPosition(
-      ship.player.x + 36 * scale + engineOffsetX,
-      ship.player.y + engineOffsetY,
-    )
-    .setAlpha((0.55 + enginePulse * 0.35) * thrust)
-    .setScale((0.65 + enginePulse * 0.3) * scale);
+  animateExhaust(ship.centerExhaust, time * 0.011, exhaustWidth, exhaustLength);
+  ship.wingExhausts.forEach((exhaust, index) => {
+    animateExhaust(
+      exhaust,
+      time * 0.014 + index * Math.PI,
+      exhaustWidth,
+      exhaustLength,
+    );
+  });
+}
+
+function createExhaust(
+  scene: Phaser.Scene,
+  player: Phaser.GameObjects.Container,
+  x: number,
+  y: number,
+  width: number,
+  length: number,
+  phase = 0,
+): ExhaustLayers {
+  const plume = drawExhaustLayer(scene, width, length, 0x2563eb, 0.38);
+  const glow = drawExhaustLayer(
+    scene,
+    width * 0.66,
+    length * 0.78,
+    0x22d3ee,
+    0.72,
+  );
+  const core = drawExhaustLayer(
+    scene,
+    width * 0.32,
+    length * 0.58,
+    0xe0fbff,
+    0.95,
+  );
+
+  player.add([
+    plume.setPosition(x, y).setDepth(1),
+    glow.setPosition(x, y + length * 0.08).setDepth(1.01),
+    core.setPosition(x, y + length * 0.16).setDepth(1.02),
+  ]);
+  return { plume, glow, core, phase };
+}
+
+function drawExhaustLayer(
+  scene: Phaser.Scene,
+  width: number,
+  length: number,
+  color: number,
+  alpha: number,
+): Phaser.GameObjects.Graphics {
+  const graphics = scene.add.graphics();
+  graphics.fillStyle(color, alpha);
+  const halfContour = Array.from({ length: 9 }, (_, index) => {
+    const progress = index / 8;
+    const widthProfile =
+      Math.sin(progress * Math.PI) ** 0.72 * (0.85 + 0.15 * Math.cos(progress * Math.PI));
+    return {
+      x: (width / 2) * widthProfile,
+      y: length * progress,
+    };
+  });
+  graphics.fillPoints(
+    [...halfContour, ...halfContour.slice(1, -1).reverse().map(({ x, y }) => ({ x: -x, y }))],
+    true,
+  );
+  return graphics;
+}
+
+function animateExhaust(
+  exhaust: ExhaustLayers,
+  time: number,
+  width: number,
+  length: number,
+): void {
+  const pulse = Math.sin(time + exhaust.phase);
+  const flutter = Math.sin(time * 2.3 + exhaust.phase * 0.6);
+
+  exhaust.plume
+    .setScale(width * (0.9 + pulse * 0.12), length * (0.82 + flutter * 0.18))
+    .setAlpha(0.78 + flutter * 0.22);
+  exhaust.glow
+    .setScale(width * (0.94 + flutter * 0.12), length * (0.86 + pulse * 0.14))
+    .setAlpha(0.8 + pulse * 0.2);
+  exhaust.core
+    .setScale(width * (0.94 + pulse * 0.1), length * (0.9 + flutter * 0.1))
+    .setAlpha(0.82 + flutter * 0.18);
 }
 
 export function getPlayerShipObjects(
@@ -94,10 +149,6 @@ export function getPlayerShipObjects(
   return [
     ship.player,
     ship.shadow,
-    ship.propulsionGlow,
-    ship.propulsionCore,
-    ship.leftThruster,
-    ship.rightThruster,
   ];
 }
 
@@ -123,17 +174,6 @@ function drawPlayerShip(player: Phaser.GameObjects.Container): void {
     ],
     true,
   );
-  graphics.lineStyle(2, 0x67e8f9, 0.95);
-  graphics.strokePoints(
-    [
-      { x: -52, y: -1 }, { x: -38, y: -16 }, { x: -19, y: -13 },
-      { x: 0, y: -21 }, { x: 19, y: -13 }, { x: 38, y: -16 },
-      { x: 52, y: -1 }, { x: 41, y: 16 }, { x: 22, y: 12 },
-      { x: 0, y: 22 }, { x: -22, y: 12 }, { x: -41, y: 16 },
-    ],
-    true,
-  );
-
   graphics.fillStyle(0x0b4964, 0.95);
   graphics.fillPoints(
     [{ x: 0, y: 0 }, { x: -42, y: 0 }, { x: -17, y: 13 }, { x: -8, y: 8 }],
@@ -143,17 +183,8 @@ function drawPlayerShip(player: Phaser.GameObjects.Container): void {
     [{ x: 0, y: 0 }, { x: 42, y: 0 }, { x: 17, y: 13 }, { x: 8, y: 8 }],
     true,
   );
-
-  graphics.lineStyle(1, 0xa5f3fc, 0.7);
-  graphics.lineBetween(-39, 1, -17, 10);
-  graphics.lineBetween(39, 1, 17, 10);
-  graphics.lineBetween(-25, -6, -13, -2);
-  graphics.lineBetween(25, -6, 13, -2);
-
   graphics.fillStyle(0x155e75, 1);
   graphics.fillRoundedRect(-15, -24, 30, 48, 14);
-  graphics.lineStyle(1.5, 0xbaefff, 0.95);
-  graphics.strokeRoundedRect(-15, -24, 30, 48, 14);
 
   graphics.fillStyle(0x38bdf8, 0.9);
   graphics.fillPoints(
@@ -169,18 +200,11 @@ function drawPlayerShip(player: Phaser.GameObjects.Container): void {
   graphics.fillStyle(0x041b2d, 1);
   graphics.fillRoundedRect(-43, 5, 13, 15, 5);
   graphics.fillRoundedRect(30, 5, 13, 15, 5);
-  graphics.lineStyle(1.5, 0x94a3b8, 0.95);
-  graphics.strokeRoundedRect(-43, 5, 13, 15, 5);
-  graphics.strokeRoundedRect(30, 5, 13, 15, 5);
-  graphics.fillStyle(0x67e8f9, 0.95);
-  graphics.fillCircle(-36.5, 12.5, 3.5);
-  graphics.fillCircle(36.5, 12.5, 3.5);
-
+  graphics.fillRoundedRect(-8, 10, 16, 13, 6);
+  graphics.fillStyle(0x0e7490, 1);
+  graphics.fillRoundedRect(-5, 15, 10, 7, 3);
   graphics.fillStyle(0xfda4af, 0.95);
   graphics.fillCircle(-43, 0, 2);
   graphics.fillCircle(43, 0, 2);
-  graphics.lineStyle(1, 0xe0f2fe, 0.7);
-  graphics.lineBetween(0, -9, 0, -3);
-
   player.add(graphics);
 }

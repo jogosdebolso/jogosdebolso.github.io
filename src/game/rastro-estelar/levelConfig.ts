@@ -2,6 +2,9 @@ import levelOneJson from "./levels/level-1.json";
 import levelTwoJson from "./levels/level-2.json";
 import levelThreeJson from "./levels/level-3.json";
 import levelFourJson from "./levels/level-4.json";
+import levelFiveJson from "./levels/level-5.json";
+import levelSixJson from "./levels/level-6.json";
+import levelSevenJson from "./levels/level-7.json";
 import type { EnemyVariant } from "./types";
 
 type LevelObstacle = {
@@ -110,6 +113,9 @@ const levelFiles: LevelFile[] = [
   levelTwoJson,
   levelThreeJson,
   levelFourJson,
+  levelFiveJson,
+  levelSixJson,
+  levelSevenJson,
 ];
 
 function isEnemyVariant(value: string): value is EnemyVariant {

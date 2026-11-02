@@ -26,6 +26,24 @@ export type Enemy = {
   startY: number;
   endX: number;
   endY: number;
+  movementState: "approaching" | "holding" | "diving" | "side-exit";
+  movementTimeMs: number;
+  holdProgress: number;
+  holdDurationMs: number;
+  holdElapsedMs: number;
+  holdTransitionMs: number;
+  holdX: number;
+  holdEntryX: number;
+  maneuverAmplitude: number;
+  maneuverFrequency: number;
+  maneuverPhase: number;
+  sideExitDirection: -1 | 1;
+  sideExitProgress: number;
+  sideExitStartX: number;
+  sideExitStartY: number;
+  diveBlendProgress: number;
+  diveStartX: number;
+  diveStartY: number;
 };
 
 export type EnemyVariant = "cometa" | "vanguarda" | "vespa" | "espectro" | "bastiao";
@@ -46,7 +64,6 @@ export type EnemyStyle = {
   core: Array<{ x: number; y: number }>;
   wingColor: number;
   hullColor: number;
-  edgeColor: number;
   coreColor: number;
 };
 
@@ -57,5 +74,4 @@ export type PlayerShot = {
   startX: number;
   startY: number;
   endX: number;
-  endY: number;
 };

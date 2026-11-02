@@ -21,13 +21,23 @@ Abra o endereço exibido pelo Vite e selecione **Jogar agora** no catálogo.
 Na tela de início, selecione **Começar missão** ou pressione Enter/Espaço.
 Pilote a nave por trás com **WASD** ou as **setas**, atravesse o campo de
 asteroides que surgem no horizonte em várias direções e enfrente naves inimigas.
-Segure **Espaço** para atirar: os disparos seguem pontos de fuga além da tela e
-destroem inimigos e asteroides. Você tem três vidas; após perdê-las, use
-**Jogar novamente** (ou Enter/Espaço) na tela de game over. Cada fase inclui
+Os pilotos inimigos manobram, param por instantes diante da nave e podem fugir
+pela lateral ou continuar descendo.
+Nas fases sem buracos negros, pequenas estrelas surgem em diferentes pontos do
+horizonte e seguem em várias direções; algumas deixam rastros sutis enquanto
+crescem para reforçar a sensação de avanço.
+Segure **Espaço** para atirar: os disparos encolhem e desaparecem ao alcançar o
+horizonte, destruindo inimigos e asteroides no caminho. Você tem três vidas;
+obstáculos comuns deixam de colidir com a nave quando ultrapassam 100% de escala,
+mas chefes continuam perigosos. As naves inimigas não usam transparência nem
+contornos externos; a profundidade é indicada por variações de tom. Após perder
+as vidas, use **Jogar novamente** (ou Enter/Espaço) na tela de game over.
+Cada fase inclui
 setores e ondas de inimigos próprios que culminam em um chefe; derrotá-lo libera
-a próxima fase. A campanha percorre quatro ambientes: Cinturão de Órion,
-Nebulosa Carmesim, Abismo de Titã e Coroa Solar. O botão **Catálogo** retorna à
-página inicial.
+a próxima fase. A campanha percorre sete ambientes: Cinturão de Órion,
+Nebulosa Carmesim, Abismo de Titã, Coroa Solar, Pilares de Carina, Horizonte
+de Cygnus e a órbita do horizonte de eventos do buraco negro. O botão **Catálogo**
+retorna à página inicial.
 O protótipo também pode ser aberto diretamente pela rota
 `#/jogos/rastro-estelar`, que pode ser compartilhada ou recarregada.
 
@@ -58,6 +68,9 @@ src/
         level-2.json
         level-3.json
         level-4.json
+        level-5.json
+        level-6.json
+        level-7.json
       constants.ts
       types.ts
       components/

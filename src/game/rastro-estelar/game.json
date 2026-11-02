@@ -3,7 +3,7 @@
   "player": {
     "width": 108,
     "height": 66,
-    "speed": 220,
+    "speed": 330,
     "startY": 0.8,
     "minScale": 0.58,
     "scaleRange": 0.54,
@@ -16,7 +16,6 @@
     "speedRange": [0.09, 0.3],
     "sizeRange": [38, 130],
     "lanes": [-0.96, -0.78, -0.6, -0.42, -0.26, 0, 0.26, 0.42, 0.6, 0.78, 0.96],
-    "horizonY": 0.13,
     "straightDownChance": 0.18,
     "downwardChance": 0.78,
     "downwardTravel": [1.02, 0.35],
@@ -24,7 +23,7 @@
     "horizontalTravel": [0.12, 0.92],
     "verticalHorizonJitter": 0.035,
     "projectionExponent": 1.35,
-    "scaleRange": [0.04, 0.95],
+    "scaleRange": [0.05, 2.95],
     "removeMargin": 0
   },
   "enemies": {
@@ -33,13 +32,13 @@
     "speedRange": [0.12, 0.21],
     "sizeRange": [0.72, 1.1],
     "lanes": [-0.82, -0.58, -0.34, 0.34, 0.58, 0.82],
-    "horizonY": 0.13,
     "verticalHorizonJitter": 0.035,
     "destinationXRange": [0.15, 0.85],
     "destinationYRange": [1.2, 1.6],
     "bossHoldY": 0.4,
     "projectionExponent": 1.35,
-    "scaleRange": [0.05, 0.93],
+    "scaleRange": [0.05, 2.95],
+    "bossScaleRange": [0.05, 0.93],
     "removeMargin": 0
   },
   "weapon": {
@@ -47,10 +46,8 @@
     "maxShots": 8,
     "speed": 0.48,
     "initialScale": 0.48,
-    "scaleLoss": 0.43,
     "aimOffset": 0.58,
     "rotationInfluence": 0.12,
-    "endYFactor": -0.38,
     "projectionExponent": 1.15,
     "targetWidthFactor": 0.36,
     "targetHeightFactor": 0.36
@@ -60,11 +57,6 @@
     "obstacleHeightFactor": 0.36,
     "playerWidthFactor": 0.38,
     "playerHeightFactor": 0.42,
-    "playerContactPointOffset": 0.2,
-    "asteroidMinimumProgress": 0.58,
-    "enemyMinimumProgress": 0.58,
-    "asteroidDepthTolerance": 0.025,
-    "depthTolerance": 0.08,
     "cameraShakeMs": 280,
     "cameraShakeIntensity": 0.018,
     "cameraFlashMs": 180,
@@ -72,9 +64,9 @@
     "invulnerabilityMs": 1400
   },
   "perspective": {
+    "horizonY": 0.18,
     "distantTint": "#8390ad",
-    "nearTint": "#ffffff",
-    "distantAlpha": 0.72
+    "nearTint": "#ffffff"
   },
   "texts": {
     "title": "Rastro Estelar",
@@ -82,7 +74,6 @@
     "livesLabel": "VIDAS",
     "startControls": "WASD/setas para pilotar · Espaço para atirar",
     "startButton": "Começar missão",
-    "collision": "COLISÃO!",
     "gameOverTitle": "FIM DE JOGO",
     "gameOverDescription": "Sua nave ficou sem vidas.",
     "phaseLabel": "FASE",
@@ -90,7 +81,7 @@
     "levelCompleteTitle": "SETOR CONCLUÍDO",
     "levelCompleteDescription": "Próxima rota liberada.",
     "missionCompleteTitle": "MISSÃO CONCLUÍDA",
-    "missionCompleteDescription": "Quatro zonas atravessadas. A rota estelar está livre da frota inimiga.",
+    "missionCompleteDescription": "Sete zonas atravessadas. A rota estelar está livre da frota inimiga.",
     "restartButton": "Jogar novamente"
   }
 }
