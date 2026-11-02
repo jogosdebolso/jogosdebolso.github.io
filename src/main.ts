@@ -174,10 +174,6 @@ async function loadGame(gameId: GameId, entry: GameEntry): Promise<void> {
 }
 
 function renderRoute(): void {
-  if (window.location.hash === "#/naves") {
-    window.history.replaceState(window.history.state, "", "#/");
-  }
-
   const gameId = getGameIdFromRoute();
   if (gameId && window.location.hash === "#/jogos/passeio-azul") {
     window.history.replaceState(window.history.state, "", `#/jogos/${gameId}`);
