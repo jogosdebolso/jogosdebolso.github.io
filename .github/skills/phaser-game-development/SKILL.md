@@ -24,10 +24,10 @@ projeto TypeScript com Phaser 3.
 
 ## Implementação
 
-1. Coloque cenas simples em `src/game/scenes/`; jogos maiores ficam em uma
-   pasta própria `src/game/<jogo>/` (cena, componentes, texturas e um JSON de
-   fase/configuração, como em `src/game/platform/`). Registre a cena em
-   `src/main.ts`/`src/game/config.ts` quando necessário.
+1. Coloque cada jogo em sua própria pasta `src/game/<jogo>/` (cena,
+   componentes, texturas e JSON de fase/configuração, quando aplicável, como
+   em `src/game/platform/`). Registre a cena em `src/main.ts`/`src/game/config.ts`
+   quando necessário.
 2. Separe lógica de jogo da navegação do catálogo em `src/main.ts`.
 3. Considere redimensionamento, limites da tela, limpeza de listeners/objetos e
    acessibilidade quando alterar controles ou interface.

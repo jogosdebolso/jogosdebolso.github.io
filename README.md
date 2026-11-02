@@ -45,6 +45,8 @@ npm run preview    # visualiza a build localmente
 ```text
 src/
   game/
+    bosque-das-lanternas/
+      ForestScene.ts
     config.ts
     rastro-estelar/
       RastroEstelarScene.ts
@@ -62,18 +64,19 @@ src/
         PlayerShip.ts
         ShipTextures.ts
         SpaceBackground.ts
-    scenes/
   main.ts
   style.css
 index.html
 vite.config.ts
 ```
 
-O jogo **Rastro Estelar** fica isolado em `src/game/rastro-estelar/`. Parâmetros
-globais de jogador, trajetórias, armas e colisões estão em `game.json`;
+Cada jogo tem sua própria pasta em `src/game/`: **Bosque das Lanternas** em
+`bosque-das-lanternas/`, **Rastro Estelar** em `rastro-estelar/` e
+**Salto das Nuvens** em `platform/`. Parâmetros globais de jogador,
+trajetórias, armas e colisões de Rastro Estelar estão em `game.json`;
 `levels/level-N.json` contém cenário, formações iniciais, variantes e marcos,
 ondas e chefe da fase. `levelConfig.ts` valida esses dados e `components/`
-reúne os elementos visuais. Os demais jogos simples usam `src/game/scenes/`.
+reúne os elementos visuais.
 Coloque recursos estáticos, como imagens e áudio, em `public/`.
 
 Cada jogo é importado somente quando sua rota é aberta. Isso mantém o catálogo

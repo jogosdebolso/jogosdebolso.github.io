@@ -38,7 +38,7 @@
 - `index.html` contém o catálogo e a área de jogo.
 - `src/main.ts` controla a navegação entre o catálogo e cada jogo pela rota `#/jogos/<id>`.
 - `src/game/config.ts` cria a configuração Phaser para a cena do jogo selecionado.
-- `src/game/scenes/` contém as cenas simples; jogos maiores ganham uma pasta própria em `src/game/<jogo>/` (ex.: `platform/` e `rastro-estelar/`); `src/style.css` estiliza catálogo e área do jogo.
+- Cada rota de jogo tem sua pasta em `src/game/<jogo>/`: `bosque-das-lanternas/`, `platform/` (Salto das Nuvens) e `rastro-estelar/`. `src/style.css` estiliza catálogo e área do jogo.
 - Recursos estáticos devem ficar em `public/`.
 
 ## Validação

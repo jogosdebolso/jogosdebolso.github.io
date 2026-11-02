@@ -31,9 +31,9 @@ const games: Record<GameId, GameEntry> = {
   "bosque-das-lanternas": {
     title: "Bosque das Lanternas",
     hint: "WASD ou setas para explorar",
-    modulePath: "/src/game/scenes/ForestScene",
+    modulePath: "/src/game/bosque-das-lanternas/ForestScene",
     loadScene: async () =>
-      (await import("./game/scenes/ForestScene")).ForestScene,
+      (await import("./game/bosque-das-lanternas/ForestScene")).ForestScene,
   },
   "salto-das-nuvens": {
     title: "Salto das Nuvens",
