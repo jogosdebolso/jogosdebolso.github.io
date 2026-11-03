@@ -33,46 +33,264 @@
     { "progress": 0.42, "lane": -0.76, "speed": 0.14 },
     { "progress": 0.44, "lane": 0.76, "speed": 0.14 }
   ],
-  "initialEnemies": [
-    { "progress": 0.12, "lane": -0.68, "variant": "espectro" },
-    { "progress": 0.15, "lane": 0.68, "variant": "bastiao" }
-  ],
-  "ambientVariants": ["espectro", "bastiao", "vanguarda", "vespa"],
+  "initialEnemies": [],
+  "ambientVariants": [],
   "events": [
-    {
-      "atMs": 0,
-      "title": "FASE 7 — ÓRBITA DO HORIZONTE",
-      "message": "A gravidade curva a rota. Mantenha-se no anel luminoso!",
-      "wave": [
-        { "variant": "espectro", "lane": -0.72 },
-        { "variant": "bastiao", "lane": 0.72 },
-        { "variant": "vespa", "lane": -0.32 },
-        { "variant": "vanguarda", "lane": 0.32 }
-      ]
-    },
-    {
-      "atMs": 17000,
-      "title": "SETOR 2 — ANEL DE ACREÇÃO",
-      "message": "Fragmentos incandescentes e caças inimigas convergem para o núcleo!",
-      "wave": [
-        { "variant": "vanguarda", "lane": -0.82, "size": 1.15 },
-        { "variant": "espectro", "lane": -0.42 },
-        { "variant": "bastiao", "lane": 0.12, "size": 1.2 },
-        { "variant": "vespa", "lane": 0.52 },
-        { "variant": "cometa", "lane": 0.84 }
-      ]
-    },
-    {
-      "atMs": 35000,
-      "title": "SETOR FINAL — SINGULARIDADE",
-      "message": "A Sentinela protege o limite do horizonte de eventos!",
-      "boss": {
-        "name": "Sentinela da Singularidade",
-        "variant": "bastiao",
-        "lane": 0,
-        "size": 3.8,
-        "health": 36
+      {
+          "atMs": 0,
+          "title": "FASE 7 — ÓRBITA DO HORIZONTE",
+          "message": "Os rivais das outras fases voltaram. Sem trégua!",
+          "wave": [
+              {
+                  "variant": "atirador",
+                  "lane": -0.5
+              },
+              {
+                  "variant": "atirador",
+                  "lane": 0.5
+              },
+              {
+                  "variant": "sonda",
+                  "lane": 0.0
+              },
+              {
+                  "variant": "satelite",
+                  "lane": -0.85
+              },
+              {
+                  "variant": "sonda",
+                  "lane": 0.85
+              }
+          ]
+      },
+      {
+          "atMs": 6000,
+          "title": "REGRESSO — BASTIÃO ÔRION",
+          "message": "O primeiro comandante retorna!",
+          "waitForClear": true,
+          "boss": {
+              "name": "Bastião Ôrion",
+              "variant": "bastiao",
+              "lane": 0,
+              "size": 2.8,
+              "health": 8,
+              "art": 1,
+              "final": false
+          }
+      },
+      {
+          "atMs": 7000,
+          "title": "REGRESSO — ALMIRANTE ESPECTRO",
+          "message": "A nebulosa carmesim cobra sua dívida!",
+          "waitForClear": true,
+          "boss": {
+              "name": "Almirante Espectro",
+              "variant": "espectro",
+              "lane": 0,
+              "size": 3.2,
+              "health": 9,
+              "art": 2,
+              "final": false
+          }
+      },
+      {
+          "atMs": 8000,
+          "title": "ECOS DE TITÃ",
+          "message": "Atiradores glaciais fecham o cerco!",
+          "waitForClear": true,
+          "wave": [
+              {
+                  "variant": "atirador",
+                  "lane": -0.7
+              },
+              {
+                  "variant": "atirador",
+                  "lane": 0.0
+              },
+              {
+                  "variant": "atirador",
+                  "lane": 0.7
+              }
+          ]
+      },
+      {
+          "atMs": 9000,
+          "title": "REGRESSO — COLOSSO DE TITÃ",
+          "message": "O gigante de gelo despertou de novo!",
+          "waitForClear": true,
+          "boss": {
+              "name": "Colosso de Titã",
+              "variant": "bastiao",
+              "lane": 0,
+              "size": 3.35,
+              "health": 10,
+              "art": 3,
+              "final": false
+          }
+      },
+      {
+          "atMs": 10000,
+          "title": "REGRESSO — ARAUTO SOLAR",
+          "message": "O brilho da coroa solar ofusca o radar!",
+          "waitForClear": true,
+          "boss": {
+              "name": "Arauto Solar",
+              "variant": "cometa",
+              "lane": 0,
+              "size": 3.5,
+              "health": 11,
+              "art": 4,
+              "final": false
+          }
+      },
+      {
+          "atMs": 11000,
+          "title": "ECOS DE CARINA",
+          "message": "Satélites e sondas em alta velocidade!",
+          "waitForClear": true,
+          "wave": [
+              {
+                  "variant": "satelite",
+                  "lane": -0.85
+              },
+              {
+                  "variant": "sonda",
+                  "lane": -0.3
+              },
+              {
+                  "variant": "satelite",
+                  "lane": 0.4
+              },
+              {
+                  "variant": "sonda",
+                  "lane": 0.8
+              },
+              {
+                  "variant": "satelite",
+                  "lane": -0.6
+              },
+              {
+                  "variant": "sonda",
+                  "lane": 0.6
+              },
+              {
+                  "variant": "satelite",
+                  "lane": 0.1
+              },
+              {
+                  "variant": "sonda",
+                  "lane": -0.1
+              }
+          ]
+      },
+      {
+          "atMs": 12000,
+          "title": "REGRESSO — MATRIARCA DE CARINA",
+          "message": "A guardiã da nebulosa retorna!",
+          "waitForClear": true,
+          "boss": {
+              "name": "Matriarca de Carina",
+              "variant": "bastiao",
+              "lane": 0,
+              "size": 3.4,
+              "health": 12,
+              "art": 5,
+              "final": false
+          }
+      },
+      {
+          "atMs": 13000,
+          "title": "ECOS DE CYGNUS",
+          "message": "Fantasmas atravessam o disco de acreção!",
+          "waitForClear": true,
+          "wave": [
+              {
+                  "variant": "fantasma",
+                  "lane": -0.6
+              },
+              {
+                  "variant": "fantasma",
+                  "lane": 0.0
+              },
+              {
+                  "variant": "fantasma",
+                  "lane": 0.6
+              }
+          ]
+      },
+      {
+          "atMs": 14000,
+          "title": "REGRESSO — GUARDIÃO DO HORIZONTE",
+          "message": "O guardião do horizonte emerge outra vez!",
+          "waitForClear": true,
+          "boss": {
+              "name": "Guardião do Horizonte",
+              "variant": "espectro",
+              "lane": 0,
+              "size": 3.7,
+              "health": 13,
+              "art": 6,
+              "final": false
+          }
+      },
+      {
+          "atMs": 15000,
+          "title": "ÚLTIMA ONDA",
+          "message": "Todos os inimigos convergem para o núcleo!",
+          "waitForClear": true,
+          "wave": [
+              {
+                  "variant": "atirador",
+                  "lane": -0.55
+              },
+              {
+                  "variant": "fantasma",
+                  "lane": 0.0
+              },
+              {
+                  "variant": "atirador",
+                  "lane": 0.55
+              },
+              {
+                  "variant": "sonda",
+                  "lane": -0.9
+              },
+              {
+                  "variant": "satelite",
+                  "lane": 0.9
+              },
+              {
+                  "variant": "satelite",
+                  "lane": -0.6
+              },
+              {
+                  "variant": "sonda",
+                  "lane": 0.6
+              },
+              {
+                  "variant": "satelite",
+                  "lane": 0.1
+              },
+              {
+                  "variant": "sonda",
+                  "lane": -0.1
+              }
+          ]
+      },
+      {
+          "atMs": 16000,
+          "title": "SETOR FINAL — SINGULARIDADE",
+          "message": "A Sentinela protege o limite do horizonte de eventos!",
+          "waitForClear": true,
+          "boss": {
+              "name": "Sentinela da Singularidade",
+              "variant": "bastiao",
+              "lane": 0,
+              "size": 3.8,
+              "health": 36,
+              "art": 7,
+              "final": true
+          }
       }
-    }
   ]
 }

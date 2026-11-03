@@ -36,14 +36,14 @@
     { "progress": 0.11, "lane": -0.68, "variant": "espectro" },
     { "progress": 0.15, "lane": 0.68, "variant": "bastiao" }
   ],
-  "ambientVariants": ["espectro", "bastiao", "vanguarda"],
+  "ambientVariants": ["espectro", "bastiao", "vanguarda", "fantasma"],
   "events": [
     {
       "atMs": 0,
       "title": "FASE 6 — HORIZONTE DE CYGNUS",
       "message": "A lente gravitacional distorce a rota. Mantenha distância do núcleo!",
       "wave": [
-        { "variant": "espectro", "lane": -0.58 },
+        { "variant": "fantasma", "lane": -0.58 },
         { "variant": "bastiao", "lane": 0.58 }
       ]
     },
@@ -53,8 +53,9 @@
       "message": "A matéria incandescente acelera ao redor da singularidade!",
       "wave": [
         { "variant": "vanguarda", "lane": -0.78 },
-        { "variant": "espectro", "lane": -0.3 },
+        { "variant": "fantasma", "lane": -0.3 },
         { "variant": "bastiao", "lane": 0.3, "size": 1.2 },
+        { "variant": "fantasma", "lane": 0.55 },
         { "variant": "vespa", "lane": 0.78 }
       ]
     },

@@ -35,31 +35,35 @@
     { "progress": 0.13, "lane": -0.68, "variant": "vanguarda" },
     { "progress": 0.18, "lane": 0.68, "variant": "bastiao" }
   ],
-  "ambientVariants": ["vanguarda", "espectro", "bastiao"],
+  "ambientVariants": ["vanguarda", "espectro", "bastiao", "atirador"],
   "events": [
     {
       "atMs": 0,
       "title": "FASE 3 — ABISMO DE TITÃ",
-      "message": "Campo de gelo à frente. Destroços em rota de colisão.",
+      "message": "Campo de gelo à frente.",
+      "asteroids": { "variants": [] },
       "wave": [
         { "variant": "vanguarda", "lane": -0.52 },
-        { "variant": "espectro", "lane": 0.52 }
+        { "variant": "atirador", "lane": 0.52 }
       ]
     },
     {
       "atMs": 18000,
       "title": "SETOR 2 — FRATURA GLACIAL",
-      "message": "A crosta está cedendo. Interceptadores no radar!",
+      "message": "A crosta está cedendo. Blocos de gelo à deriva!",
+      "asteroids": { "variants": [2], "intervalMs": 300 },
       "wave": [
         { "variant": "bastiao", "lane": -0.38, "size": 1.15 },
-        { "variant": "vespa", "lane": 0.38 },
-        { "variant": "vanguarda", "lane": 0.76 }
+        { "variant": "atirador", "lane": 0.2 },
+        { "variant": "vespa", "lane": 0.5 },
+        { "variant": "atirador", "lane": 0.76 }
       ]
     },
     {
       "atMs": 36000,
       "title": "SETOR FINAL — COLOSSO",
       "message": "O Colosso de Titã bloqueia a saída do abismo!",
+      "asteroids": { "variants": [] },
       "boss": {
         "name": "Colosso de Titã",
         "variant": "bastiao",

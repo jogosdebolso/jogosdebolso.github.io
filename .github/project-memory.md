@@ -46,6 +46,15 @@
 - Planetas e luas do cenário usam tons ainda mais suavizados, dessaturados e com menor contraste/opacidade, mantendo leitura dos detalhes e parecendo mais distantes; o sol da Coroa Solar é uma exceção luminosa em âmbar e dourado, com núcleo claro e brilho próprio.
 - Cada fase tem uma silhueta procedural distinta: mundo anelado com lua em Órion, fenda nebular carmesim, mundo gelado craterado com fragmentos em Titã e estrela com raios de corona na Coroa Solar.
 
+## Rastro Estelar: dificuldade progressiva
+
+- Fase 3: `atirador` paira na frente do jogador e dispara projéteis mirados (esquiváveis).
+- Fase 5: `satelite` e `sonda` seguem trajetória fixa e rápida (reaproveitam a mecânica dos asteroides).
+- Fase 6: `fantasma` alterna entre sólido e só contorno; invulnerável (tiros atravessam) mas ainda colide.
+- Fase 7: sem minions; "boss rush" com os chefes das fases 1 a 6 (eventos com `art`, `final: false` e `waitForClear`) antes do chefe final.
+- Cada setor pode definir, no evento da fase (JSON): `minionRate` (frequência dos minions), `asteroids` (`variants` e `intervalMs`) e `hazards` (`ionStormMs`, `plasmaWaveMs`). Sprites de asteroide: 0 cinza (sem uso), 1 marrom, 2 gelo, 3 carbono, 4-6 destroços de naves.
+- Fase 1 setor 2: destroços; fase 2 setor 2: tempestade iônica (colunas que piscam antes de cair); fase 3 setor 2: gelo; fase 4 setor 2: ondas de plasma do sol (com abertura); fase 5: só drones no setor 1, asteroides de gelo e carbono só no setor 3B.
+
 ## Stack e arquitetura
 
 - Phaser 3 para o jogo, TypeScript em modo estrito e Vite para desenvolvimento e build.

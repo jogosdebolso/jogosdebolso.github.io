@@ -32,36 +32,75 @@
     { "progress": 0.38, "lane": 0.32 },
     { "progress": 0.42, "lane": -0.78 }
   ],
-  "initialEnemies": [
-    { "progress": 0.12, "lane": -0.64, "variant": "vespa" },
-    { "progress": 0.16, "lane": 0.64, "variant": "espectro" }
-  ],
+  "initialEnemies": [],
   "ambientVariants": ["vespa", "espectro", "bastiao"],
   "events": [
     {
       "atMs": 0,
       "title": "FASE 5 — PILARES DE CARINA",
-      "message": "Paredes de gás ionizado e fragmentos cobrem a rota.",
+      "message": "Paredes de gás ionizado. Satélites e sondas cruzam a rota.",
+      "minionRate": 0,
+      "asteroids": { "variants": [] },
       "wave": [
-        { "variant": "vespa", "lane": -0.56 },
-        { "variant": "espectro", "lane": 0.56 }
+        { "variant": "satelite", "lane": -0.8 },
+        { "variant": "sonda", "lane": 0.3 },
+        { "variant": "satelite", "lane": 0.75 },
+        { "variant": "sonda", "lane": -0.35 },
+        { "variant": "sonda", "lane": 0.9 }
       ]
     },
     {
       "atMs": 17000,
       "title": "SETOR 2 — BERÇÁRIO ESTELAR",
       "message": "Jatos protostelares detectados. Interceptadores se aproximam!",
+      "minionRate": 1,
+      "asteroids": { "variants": [] },
       "wave": [
         { "variant": "cometa", "lane": -0.72 },
         { "variant": "bastiao", "lane": -0.22, "size": 1.15 },
         { "variant": "vespa", "lane": 0.42 },
-        { "variant": "espectro", "lane": 0.78 }
+        { "variant": "espectro", "lane": 0.78 },
+        { "variant": "sonda", "lane": -0.4 },
+        { "variant": "satelite", "lane": 0.85 },
+        { "variant": "sonda", "lane": 0.1 }
+      ]
+    },
+    {
+      "atMs": 27000,
+      "title": "SETOR 3 — CHUVA DE SUCATA",
+      "message": "Satélites e sondas cruzam a nebulosa em alta velocidade!",
+      "wave": [
+        { "variant": "satelite", "lane": -0.85 },
+        { "variant": "sonda", "lane": -0.15 },
+        { "variant": "satelite", "lane": 0.6 },
+        { "variant": "sonda", "lane": 0.45 },
+        { "variant": "satelite", "lane": -0.5 },
+        { "variant": "sonda", "lane": -0.7 },
+        { "variant": "satelite", "lane": 0.15 },
+        { "variant": "sonda", "lane": 0.85 },
+        { "variant": "satelite", "lane": 0.9 },
+        { "variant": "sonda", "lane": 0.0 },
+        { "variant": "satelite", "lane": -0.2 },
+        { "variant": "sonda", "lane": -0.95 }
+      ]
+    },
+    {
+      "atMs": 31000,
+      "title": "SETOR 3B — TEMPESTADE ORBITAL",
+      "message": "Chuva de asteroides de gelo e carbono em órbita!",
+      "asteroids": { "variants": [2, 3], "intervalMs": 200 },
+      "wave": [
+        { "variant": "sonda", "lane": -0.6 },
+        { "variant": "satelite", "lane": -0.2 },
+        { "variant": "sonda", "lane": 0.25 },
+        { "variant": "satelite", "lane": 0.7 }
       ]
     },
     {
       "atMs": 35000,
       "title": "SETOR FINAL — MATRIARCA",
       "message": "A Matriarca guarda o coração da nebulosa!",
+      "asteroids": { "variants": [3] },
       "boss": {
         "name": "Matriarca de Carina",
         "variant": "bastiao",

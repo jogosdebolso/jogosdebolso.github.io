@@ -45,6 +45,7 @@
       "atMs": 0,
       "title": "SETOR 1 — CINTURÃO",
       "message": "Tráfego hostil detectado à frente.",
+      "asteroids": { "variants": [] },
       "wave": [
         { "variant": "cometa", "lane": -0.48 },
         { "variant": "vespa", "lane": 0.48 }
@@ -53,17 +54,19 @@
     {
       "atMs": 18000,
       "title": "SETOR 2 — CAMPO DE DESTROÇOS",
-      "message": "Atenção: interceptadores entrando na rota.",
+      "message": "Atenção: destroços de naves à deriva e poucos interceptadores.",
+      "minionRate": 0.4,
+      "asteroids": { "variants": [4, 5, 6], "intervalMs": 380 },
       "wave": [
-        { "variant": "vanguarda", "lane": -0.34 },
-        { "variant": "espectro", "lane": 0.34 },
-        { "variant": "cometa", "lane": 0.72 }
+        { "variant": "vanguarda", "lane": 0.5 }
       ]
     },
     {
       "atMs": 36000,
       "title": "SETOR FINAL — COMANDANTE",
       "message": "O comandante do cinturão está se aproximando!",
+      "minionRate": 1,
+      "asteroids": { "variants": [] },
       "boss": {
         "name": "Bastião Ôrion",
         "variant": "bastiao",
