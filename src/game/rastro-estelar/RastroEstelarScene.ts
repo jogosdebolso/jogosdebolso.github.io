@@ -683,14 +683,6 @@ export class RastroEstelarScene extends Phaser.Scene {
 
   private checkAsteroidCollisions(): void {
     for (const obstacle of [...this.asteroids, ...this.enemies]) {
-      if (
-        obstacle.image.scaleX > 1 &&
-        !("isBoss" in obstacle && obstacle.isBoss) &&
-        !("solid" in obstacle && obstacle.solid)
-      ) {
-        continue;
-      }
-
       const horizontalRadius =
         obstacle.image.displayWidth * RASTRO_GAME_CONFIG.collision.obstacleWidthFactor +
         this.player.width * this.player.scaleX *
@@ -976,7 +968,6 @@ export class RastroEstelarScene extends Phaser.Scene {
         ? this.randomBetween([34, 66])
         : this.randomBetween(RASTRO_GAME_CONFIG.asteroids.sizeRange),
       rotationSpeed: (this.asteroidRandom() - 0.5) * 0.8,
-      solid: isDebris,
       startX,
       startY,
       endX: startX + sideDirection * horizontalTravel,
@@ -1161,7 +1152,6 @@ export class RastroEstelarScene extends Phaser.Scene {
       speed: speed ?? (isSatellite ? 0.34 : 0.44),
       size: size ?? (isSatellite ? 76 : 64),
       rotationSpeed: isSatellite ? 0.9 : 0,
-      solid: true,
       startX,
       startY,
       endX,
@@ -1225,11 +1215,15 @@ export class RastroEstelarScene extends Phaser.Scene {
         this.scale.height;
       const [minScale, scaleRange] = RASTRO_GAME_CONFIG.asteroids.scaleRange;
       const visibleProgress = Phaser.Math.Clamp(perspective, 0, 1);
-      const scale = (asteroid.size / 96) * (minScale + visibleProgress * scaleRange);
+      // Nunca passa de 100%: continua colidindo até sair da tela.
+      const scale = Math.min(
+        1,
+        (asteroid.size / 96) * (minScale + visibleProgress * scaleRange),
+      );
       asteroid.image
         .setPosition(x, y)
         .setScale(scale)
-        .setDepth(scale > 1 ? 1.4 : 0.8 + visibleProgress * 0.4)
+        .setDepth(perspective >= 1 ? 1.4 : 0.8 + visibleProgress * 0.4)
         .setVisible(true)
         .setTint(this.getPerspectiveTint(visibleProgress));
       asteroid.image.rotation += asteroid.rotationSpeed * (delta / 1000);
@@ -1432,7 +1426,9 @@ export class RastroEstelarScene extends Phaser.Scene {
         ? RASTRO_GAME_CONFIG.enemies.bossScaleRange
         : RASTRO_GAME_CONFIG.enemies.scaleRange;
       const visibleProgress = Phaser.Math.Clamp(perspective, 0, 1);
-      const scale = enemy.size * (minScale + visibleProgress * scaleRange);
+      const uncappedScale = enemy.size * (minScale + visibleProgress * scaleRange);
+      // Inimigos comuns nunca passam de 100%: seguem colidindo até saírem da tela.
+      const scale = enemy.isBoss ? uncappedScale : Math.min(1, uncappedScale);
       const renderScale = scale * (enemy.isBoss ? 100 / 320 : 1);
 
       if (enemy.variant === "fantasma" && !enemy.isBoss) {
@@ -1449,7 +1445,7 @@ export class RastroEstelarScene extends Phaser.Scene {
       enemy.image
         .setPosition(x, y)
         .setScale(renderScale)
-        .setDepth(scale > 1 ? 1.4 : 0.9 + visibleProgress * 0.4)
+        .setDepth(perspective >= 1 ? 1.4 : 0.9 + visibleProgress * 0.4)
         .setVisible(true)
         .setAlpha(enemy.ghost ? 0.55 : 1)
         .setTint(this.getPerspectiveTint(visibleProgress));

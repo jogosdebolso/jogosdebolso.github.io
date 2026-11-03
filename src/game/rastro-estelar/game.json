@@ -3,7 +3,7 @@
   "player": {
     "width": 108,
     "height": 66,
-    "speed": 330,
+    "speed": 380,
     "startY": 0.8,
     "minScale": 0.58,
     "scaleRange": 0.54,

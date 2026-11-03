@@ -6,8 +6,6 @@ export type Asteroid = {
   speed: number;
   size: number;
   rotationSpeed: number;
-  /** Colide mesmo quando a escala passa de 1 (destroços, satélites e sondas). */
-  solid?: boolean;
   startX: number;
   startY: number;
   endX: number;
