@@ -76,7 +76,15 @@
       "Mover a nave: WASD ou setas",
       "Atirar: Espaço (segure para disparo contínuo)",
       "Desvie de inimigos, asteroides e tiros: você tem 3 vidas",
-      "Derrote o chefe de cada fase para avançar"
+      "Estoure as caixas de metal e pegue o item: upgrade de tiro temporário",
+      "Derrote o chefe de cada fase para avançar e ganhar +1 vida"
+    ],
+    "startInstructionsTouch": [
+      "Mover a nave: arraste o dedo pela tela",
+      "Atirar: automático enquanto o dedo estiver na tela",
+      "Desvie de inimigos, asteroides e tiros: você tem 3 vidas",
+      "Estoure as caixas de metal e pegue o item: upgrade de tiro temporário",
+      "Derrote o chefe de cada fase para avançar e ganhar +1 vida"
     ],
     "startButton": "Começar missão",
     "gameOverTitle": "FIM DE JOGO",

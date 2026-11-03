@@ -54,6 +54,9 @@
 - Fase 7: sem minions; "boss rush" com os chefes das fases 1 a 6 (eventos com `art`, `final: false` e `waitForClear`) antes do chefe final.
 - Cada setor pode definir, no evento da fase (JSON): `minionRate` (frequência dos minions), `asteroids` (`variants` e `intervalMs`) e `hazards` (`ionStormMs`, `plasmaWaveMs`). Sprites de asteroide: 0 cinza (sem uso), 1 marrom, 2 gelo, 3 carbono, 4-6 destroços de naves.
 - Fase 1 setor 2: destroços; fase 2 setor 2: tempestade iônica (colunas que piscam antes de cair); fase 3 setor 2: gelo; fase 4 setor 2: ondas de plasma do sol (com abertura); fase 5: só drones no setor 1, asteroides de gelo e carbono só no setor 3B.
+- Duração: cada fase 1-4 e 6 tem 3 setores (~66 s até o chefe); a fase 5 tem 5 setores (~62 s). Ondas aceitam `delayMs` por inimigo para espalhar o nascimento no tempo (`pendingSpawns` segura os eventos `waitForClear`).
+- Chefes atiram (tiro próprio por arte, ver `fireBossAttack`) e têm vida alta (20 a 48; Sentinela 60). Vidas: 3 no início, +1 ao derrotar o chefe final de cada fase (máximo 4); vidas passam de fase em fase.
+- Upgrades de tiro: uma caixa de metal (`crateHealth` 3, em `asteroids`, ~0,055 de velocidade) surge a cada 18-26 s fora de lutas com chefe; ao abrir, solta um item que cai e, ao ser pego, dá uma arma por 18 s (`duplo`, `triplo`, `laser` que atravessa, `foguete` teleguiado). Perder uma vida remove o upgrade.
 
 ## Stack e arquitetura
 
@@ -68,3 +71,7 @@
 
 - `npm run typecheck`: valida os tipos.
 - `npm run build`: valida os tipos e gera a versão de produção em `dist/`.
+
+## Controles de celular e redimensionamento (Rastro Estelar)
+- Toque/arrasto: o dedo move a nave de forma relativa (sensibilidade `TOUCH_SENSITIVITY`) e o tiro é contínuo enquanto o dedo estiver na tela; toques sobre objetos interativos (botões, overlays) são ignorados. A tela inicial usa `startInstructionsTouch` em dispositivos com toque.
+- Redimensionar/girar a tela: `RESIZE` é coalescido por quadro (`queueResize`); redesenha o fundo, mantém a nave na mesma posição relativa, reposiciona o HUD (`layoutHud`), reconstrói overlays (`rebuildOverlay`) e reinicia a página da tela de vitória. `src/main.ts` observa o contêiner com `ResizeObserver` (`getParentBounds` + `refresh`). CSS usa `touch-action: none`.

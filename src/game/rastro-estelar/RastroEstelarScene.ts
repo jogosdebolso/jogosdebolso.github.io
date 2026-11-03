@@ -33,6 +33,8 @@ import type {
   EnemyShot,
   EnemySpawnSettings,
   PlayerShot,
+  PowerUp,
+  WeaponKind,
 } from "./types";
 
 interface DebugSettings {
@@ -63,6 +65,26 @@ export class RastroEstelarScene extends Phaser.Scene {
   private playerShots: PlayerShot[] = [];
   private enemyShots: EnemyShot[] = [];
   private bossVolleyCount = 0;
+  /** Upgrades de tiro: caixa de metal -> item solto -> arma temporária. */
+  private static readonly WEAPON_DURATION_MS = 18000;
+  private static readonly MAX_LIVES = 4;
+  private static readonly WEAPONS: Record<
+    Exclude<WeaponKind, "normal">,
+    { label: string; color: string }
+  > = {
+    duplo: { label: "TIRO DUPLO", color: "#fde047" },
+    triplo: { label: "TIRO TRIPLO", color: "#86efac" },
+    laser: { label: "LASER", color: "#67e8f9" },
+    foguete: { label: "FOGUETES", color: "#fb923c" },
+  };
+  private weaponKind: WeaponKind = "normal";
+  private weaponMsRemaining = 0;
+  private weaponText!: Phaser.GameObjects.Text;
+  private powerUps: PowerUp[] = [];
+  private crateElapsedMs = 0;
+  private nextCrateMs = 14000;
+  /** Inimigos agendados (delayMs) que ainda não nasceram. */
+  private pendingSpawns = 0;
   private ionStorm!: IonStorm;
   private plasmaWaves!: PlasmaWaves;
   /** Configuração do setor atual (definida pelos eventos da fase). */
@@ -80,6 +102,18 @@ export class RastroEstelarScene extends Phaser.Scene {
   /** Página da tela de vitória (undefined = jogo normal). */
   private victoryPage?: number;
   private isPlaying = false;
+  /** Toque/arrasto: ponteiro que controla a nave e deslocamento acumulado. */
+  private touchPointerId?: number;
+  private touchLastX = 0;
+  private touchLastY = 0;
+  private touchDX = 0;
+  private touchDY = 0;
+  private resizeFrame?: number;
+  private lastWidth = 0;
+  private lastHeight = 0;
+  private hudExtraY = 0;
+  private overlay?: Phaser.GameObjects.Container;
+  private rebuildOverlay?: () => void;
   private debugDamageDisabled = false;
   private debugFreezeEnabled = false;
   private debugInfiniteLives = false;
@@ -97,6 +131,9 @@ export class RastroEstelarScene extends Phaser.Scene {
     left: Phaser.Input.Keyboard.Key;
     right: Phaser.Input.Keyboard.Key;
   };
+
+  /** Quanto o nave anda por pixel arrastado (dedo na tela). */
+  private static readonly TOUCH_SENSITIVITY = 1.6;
 
   constructor() {
     super("RastroEstelarScene");
@@ -140,9 +177,30 @@ export class RastroEstelarScene extends Phaser.Scene {
           ? new MovingStarfield(this, 85, true)
           : new MovingStarfield(this);
     }
-    this.scale.on(Phaser.Scale.Events.RESIZE, this.drawSpaceBackground, this);
+    this.lastWidth = this.scale.width;
+    this.lastHeight = this.scale.height;
+    this.touchPointerId = undefined;
+    this.touchDX = 0;
+    this.touchDY = 0;
+    this.overlay = undefined;
+    this.rebuildOverlay = undefined;
+    this.scale.on(Phaser.Scale.Events.RESIZE, this.queueResize, this);
+    this.input.on("pointerdown", this.handlePointerDown, this);
+    this.input.on("pointermove", this.handlePointerMove, this);
+    this.input.on("pointerup", this.handlePointerUp, this);
+    this.input.on("pointerupoutside", this.handlePointerUp, this);
+    this.input.on("gameout", this.releaseTouch, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      this.scale.off(Phaser.Scale.Events.RESIZE, this.drawSpaceBackground, this);
+      if (this.resizeFrame !== undefined) {
+        window.cancelAnimationFrame(this.resizeFrame);
+        this.resizeFrame = undefined;
+      }
+      this.scale.off(Phaser.Scale.Events.RESIZE, this.queueResize, this);
+      this.input.off("pointerdown", this.handlePointerDown, this);
+      this.input.off("pointermove", this.handlePointerMove, this);
+      this.input.off("pointerup", this.handlePointerUp, this);
+      this.input.off("pointerupoutside", this.handlePointerUp, this);
+      this.input.off("gameout", this.releaseTouch, this);
       this.input.off("pointerup", this.stopDebugAdvance, this);
     });
 
@@ -156,6 +214,12 @@ export class RastroEstelarScene extends Phaser.Scene {
     this.enemies = [];
     this.playerShots = [];
     this.enemyShots = [];
+    this.powerUps = [];
+    this.weaponKind = "normal";
+    this.weaponMsRemaining = 0;
+    this.crateElapsedMs = 0;
+    this.nextCrateMs = 14000;
+    this.pendingSpawns = 0;
     this.asteroidSpawnElapsed = 0;
     this.enemySpawnElapsed = 0;
     this.shotCooldownElapsed = 0;
@@ -198,6 +262,19 @@ export class RastroEstelarScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setDepth(10);
 
+    this.weaponText = this.add
+      .text(this.scale.width - 24, 54, "", {
+        color: "#fde047",
+        fontFamily: "system-ui, sans-serif",
+        fontSize: "14px",
+        fontStyle: "bold",
+        resolution: textResolution,
+      })
+      .setOrigin(1, 0)
+      .setScrollFactor(0)
+      .setDepth(10)
+      .setVisible(false);
+
     this.createDebugPanel();
 
     this.stageAnnouncement = this.add
@@ -227,6 +304,7 @@ export class RastroEstelarScene extends Phaser.Scene {
       .setDepth(10)
       .setVisible(false);
     this.bossHealthBar = this.add.graphics().setDepth(10).setVisible(false);
+    this.layoutHud();
 
     const centerX = this.scale.width / 2;
     const centerY = this.getPlayerStartY();
@@ -292,11 +370,11 @@ export class RastroEstelarScene extends Phaser.Scene {
     }
 
     if (!this.isPlaying || this.isColliding) {
+      this.touchDX = 0;
+      this.touchDY = 0;
       return;
     }
 
-    this.livesText.setX(this.scale.width - 24);
-    this.bossStatusText.setX(this.scale.width / 2);
     this.invulnerabilityMsRemaining = Math.max(
       0,
       this.invulnerabilityMsRemaining - delta,
@@ -309,13 +387,17 @@ export class RastroEstelarScene extends Phaser.Scene {
     }
     this.updateAsteroids(obstacleDelta);
 
-    const horizontal =
+    const keyHorizontal =
       Number(this.cursors.right.isDown || this.movementKeys.right.isDown) -
       Number(this.cursors.left.isDown || this.movementKeys.left.isDown);
-    const vertical =
+    const keyVertical =
       Number(this.cursors.down.isDown || this.movementKeys.down.isDown) -
       Number(this.cursors.up.isDown || this.movementKeys.up.isDown);
-    const direction = new Phaser.Math.Vector2(horizontal, vertical).normalize();
+    const touchMoveX = this.touchDX * RastroEstelarScene.TOUCH_SENSITIVITY;
+    const touchMoveY = this.touchDY * RastroEstelarScene.TOUCH_SENSITIVITY;
+    this.touchDX = 0;
+    this.touchDY = 0;
+    const direction = new Phaser.Math.Vector2(keyHorizontal, keyVertical).normalize();
     const distanceX =
       RASTRO_GAME_CONFIG.player.speed *
       (this.scale.width / RASTRO_REFERENCE_VIEWPORT.width) *
@@ -324,6 +406,16 @@ export class RastroEstelarScene extends Phaser.Scene {
       RASTRO_GAME_CONFIG.player.speed *
       (this.scale.height / RASTRO_REFERENCE_VIEWPORT.height) *
       (delta / 1000);
+    const horizontalInput = Phaser.Math.Clamp(
+      keyHorizontal + touchMoveX / Math.max(distanceX, 0.001),
+      -1,
+      1,
+    );
+    const vertical = Phaser.Math.Clamp(
+      keyVertical + touchMoveY / Math.max(distanceY, 0.001),
+      -1,
+      1,
+    );
     const horizonY = this.scale.height * RASTRO_GAME_CONFIG.perspective.horizonY;
     const perspective = Phaser.Math.Clamp(
       (this.player.y - horizonY) / (this.scale.height - horizonY),
@@ -333,7 +425,7 @@ export class RastroEstelarScene extends Phaser.Scene {
     const targetScale =
       RASTRO_GAME_CONFIG.player.minScale +
       perspective * RASTRO_GAME_CONFIG.player.scaleRange;
-    const targetRotation = horizontal * RASTRO_GAME_CONFIG.player.rotation;
+    const targetRotation = horizontalInput * RASTRO_GAME_CONFIG.player.rotation;
     const motionBlend =
       1 - Math.exp(-delta / RASTRO_GAME_CONFIG.player.rotationSmoothingMs);
     const halfWidth = (this.player.width * targetScale) / 2;
@@ -341,12 +433,12 @@ export class RastroEstelarScene extends Phaser.Scene {
     const minimumY = horizonY + halfHeight;
 
     this.player.x = Phaser.Math.Clamp(
-      this.player.x + direction.x * distanceX,
+      this.player.x + direction.x * distanceX + touchMoveX,
       halfWidth,
       this.scale.width - halfWidth,
     );
     this.player.y = Phaser.Math.Clamp(
-      this.player.y + direction.y * distanceY,
+      this.player.y + direction.y * distanceY + touchMoveY,
       minimumY,
       this.scale.height - halfHeight,
     );
@@ -369,6 +461,7 @@ export class RastroEstelarScene extends Phaser.Scene {
     this.updateEnemyShots(obstacleDelta);
     this.updateBossHud();
     this.updatePlayerShots(delta);
+    this.updatePowerUps(delta);
     const planet = this.phase.background.planet;
     const sunX = this.scale.width * planet.x;
     const sunY = this.scale.height * planet.y;
@@ -467,10 +560,129 @@ export class RastroEstelarScene extends Phaser.Scene {
   /** Barra única no alto da tela: botões lado a lado, pequenos e discretos. */
   private layoutDebugBar(): void {
     let x = 12;
+    let y = 8;
     for (const button of this.debugBar) {
-      button.setPosition(x, 8).setDepth(30).setScrollFactor(0);
+      if (x > 12 && x + button.width > this.scale.width - 12) {
+        x = 12;
+        y += 24;
+      }
+      button.setPosition(x, y).setDepth(30).setScrollFactor(0);
       x += button.width + 4;
     }
+    // Barra com várias linhas (tela estreita): empurra o HUD para baixo.
+    this.hudExtraY = y - 8;
+    this.layoutHud();
+  }
+
+  /** Reposiciona os textos do HUD conforme o tamanho atual da tela. */
+  private layoutHud(): void {
+    const { width, height } = this.scale;
+    this.livesText?.setPosition(width - 24, 28 + this.hudExtraY);
+    this.weaponText?.setPosition(width - 24, 54 + this.hudExtraY);
+    this.bossStatusText?.setPosition(width / 2, 78 + this.hudExtraY);
+    this.stageAnnouncement
+      ?.setPosition(width / 2, height * 0.2)
+      .setWordWrapWidth(width - 48);
+  }
+
+  private queueResize(): void {
+    if (this.resizeFrame !== undefined) {
+      return;
+    }
+    // Um único redesenho por quadro: rotacionar a tela dispara vários eventos.
+    this.resizeFrame = window.requestAnimationFrame(() => {
+      this.resizeFrame = undefined;
+      this.applyResize();
+    });
+  }
+
+  private applyResize(): void {
+    const { width, height } = this.scale;
+    if (width === this.lastWidth && height === this.lastHeight) {
+      return;
+    }
+    if (!this.sys.isActive()) {
+      return;
+    }
+
+    if (this.victoryPage !== undefined) {
+      this.showVictoryPageScene(this.victoryPage);
+      return;
+    }
+
+    const ratioX = width / Math.max(this.lastWidth, 1);
+    const ratioY = height / Math.max(this.lastHeight, 1);
+    this.lastWidth = width;
+    this.lastHeight = height;
+    this.drawSpaceBackground();
+    if (this.player) {
+      this.player.setPosition(this.player.x * ratioX, this.player.y * ratioY);
+    }
+    this.layoutDebugBar();
+    this.rebuildOverlay?.();
+  }
+
+  private handlePointerDown(
+    pointer: Phaser.Input.Pointer,
+    over: Phaser.GameObjects.GameObject[],
+  ): void {
+    if (over.length > 0 || this.touchPointerId !== undefined || !this.player) {
+      return;
+    }
+    this.touchPointerId = pointer.id;
+    this.touchLastX = pointer.x;
+    this.touchLastY = pointer.y;
+    this.startFiring();
+  }
+
+  private handlePointerMove(pointer: Phaser.Input.Pointer): void {
+    if (pointer.id !== this.touchPointerId) {
+      return;
+    }
+    this.touchDX += pointer.x - this.touchLastX;
+    this.touchDY += pointer.y - this.touchLastY;
+    this.touchLastX = pointer.x;
+    this.touchLastY = pointer.y;
+  }
+
+  private handlePointerUp(pointer: Phaser.Input.Pointer): void {
+    if (pointer.id === this.touchPointerId) {
+      this.releaseTouch();
+    }
+  }
+
+  private releaseTouch(): void {
+    if (this.touchPointerId === undefined) {
+      return;
+    }
+    this.touchPointerId = undefined;
+    this.touchDX = 0;
+    this.touchDY = 0;
+    this.stopFiring();
+  }
+
+  /** Escala da interface: telas pequenas (celular) usam textos menores. */
+  private getUiScale(): number {
+    return Phaser.Math.Clamp(
+      Math.min(this.scale.height / 600, this.scale.width / 480),
+      0.7,
+      1,
+    );
+  }
+
+  /** Empilha os textos na vertical, centralizados na tela. */
+  private stackCentered(
+    items: Phaser.GameObjects.Text[],
+    gaps: number[],
+  ): void {
+    const total =
+      items.reduce((sum, item) => sum + item.height, 0) +
+      gaps.reduce((sum, gap) => sum + gap, 0);
+    let y = Math.max(8, (this.scale.height - total) / 2);
+    items.forEach((item, index) => {
+      item.setOrigin(0.5, 0).setPosition(this.scale.width / 2, y);
+      y += item.height + (gaps[index] ?? 0);
+    });
   }
 
   private loadDebugSettings(): void {
@@ -620,7 +832,9 @@ export class RastroEstelarScene extends Phaser.Scene {
       // Eventos "waitForClear" esperam o campo esvaziar (inimigos e chefes).
       if (
         event.waitForClear &&
-        (this.enemies.length > 0 || this.asteroids.length > 0)
+        (this.enemies.length > 0 ||
+          this.pendingSpawns > 0 ||
+          this.asteroids.some((asteroid) => asteroid.crateHealth === undefined))
       ) {
         break;
       }
@@ -637,7 +851,9 @@ export class RastroEstelarScene extends Phaser.Scene {
             speed: spawn.speed,
           });
         if (spawn.delayMs) {
+          this.pendingSpawns += 1;
           this.time.delayedCall(spawn.delayMs, () => {
+            this.pendingSpawns = Math.max(0, this.pendingSpawns - 1);
             if (this.isPlaying) {
               spawnNow();
             }
@@ -708,9 +924,9 @@ export class RastroEstelarScene extends Phaser.Scene {
       .setText(boss.bossName ?? "")
       .setVisible(true);
     this.bossHealthBar.setVisible(true).clear();
-    const barWidth = Math.min(this.scale.width * 0.36, 280);
+    const barWidth = Math.min(this.scale.width * 0.5, 280);
     const barX = (this.scale.width - barWidth) / 2;
-    const barY = 100;
+    const barY = 100 + this.hudExtraY;
     this.bossHealthBar.fillStyle(0x1f2937, 0.92).fillRoundedRect(
       barX,
       barY,
@@ -753,6 +969,7 @@ export class RastroEstelarScene extends Phaser.Scene {
     this.isColliding = true;
     this.isPlaying = false;
     this.isFiring = false;
+    this.setWeapon("normal");
     if (!this.debugInfiniteLives) {
       this.lives = Math.max(0, this.lives - 1);
     }
@@ -822,45 +1039,8 @@ export class RastroEstelarScene extends Phaser.Scene {
   }
 
   private showGameOver(): void {
-    const centerX = this.scale.width / 2;
-    const centerY = this.scale.height / 2;
-    const overlay = this.add
-      .rectangle(centerX, centerY, this.scale.width, this.scale.height, 0x080d20, 0.88)
-      .setDepth(20);
-
-    this.add
-      .text(centerX, centerY - 40, RASTRO_GAME_CONFIG.texts.gameOverTitle, {
-        color: "#f9fafb",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "36px",
-        fontStyle: "bold",
-        resolution: this.getTextResolution(),
-      })
-      .setOrigin(0.5)
-      .setDepth(21);
-
-    const restartButton = this.add
-      .text(centerX, centerY + 20, RASTRO_GAME_CONFIG.texts.restartButton, {
-        color: "#111827",
-        backgroundColor: "#67e8f9",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "16px",
-        fontStyle: "bold",
-        padding: { x: 18, y: 12 },
-        resolution: this.getTextResolution(),
-      })
-      .setOrigin(0.5)
-      .setDepth(21)
-      .setInteractive({ useHandCursor: true });
-
-    restartButton.on("pointerover", () =>
-      restartButton.setStyle({ backgroundColor: "#a5f3fc" }),
-    );
-    restartButton.on("pointerout", () =>
-      restartButton.setStyle({ backgroundColor: "#67e8f9" }),
-    );
-
     const restart = (): void => {
+      this.rebuildOverlay = undefined;
       this.scene.restart({
         lives: RASTRO_GAME_CONFIG.lives,
         hasStarted: false,
@@ -868,109 +1048,120 @@ export class RastroEstelarScene extends Phaser.Scene {
       });
     };
 
-    restartButton.once("pointerdown", restart);
+    const build = (): void => {
+      this.overlay?.destroy();
+      const { width, height } = this.scale;
+      const ui = this.getUiScale();
+      const resolution = this.getTextResolution();
+      const container = this.add.container(0, 0).setDepth(20);
+      this.overlay = container;
+      container.add(
+        this.add.rectangle(width / 2, height / 2, width, height, 0x080d20, 0.88).setInteractive(),
+      );
+      const title = this.add.text(0, 0, RASTRO_GAME_CONFIG.texts.gameOverTitle, {
+        color: "#f9fafb",
+        fontFamily: "system-ui, sans-serif",
+        fontSize: `${Math.round(36 * ui)}px`,
+        fontStyle: "bold",
+        resolution,
+      });
+      const button = this.makeOverlayButton(
+        RASTRO_GAME_CONFIG.texts.restartButton,
+        ui,
+        resolution,
+      );
+      container.add([title, button]);
+      this.stackCentered([title, button], [Math.round(28 * ui)]);
+      button.once("pointerdown", restart);
+    };
+
+    build();
+    this.rebuildOverlay = build;
     this.input.keyboard?.once("keydown-ENTER", restart);
     this.input.keyboard?.once("keydown-SPACE", restart);
-    overlay.setInteractive();
+  }
+
+  private makeOverlayButton(
+    label: string,
+    ui: number,
+    resolution: number,
+  ): Phaser.GameObjects.Text {
+    const button = this.add
+      .text(0, 0, label, {
+        color: "#111827",
+        backgroundColor: "#67e8f9",
+        fontFamily: "system-ui, sans-serif",
+        fontSize: `${Math.round(16 * Math.max(ui, 0.85))}px`,
+        fontStyle: "bold",
+        padding: { x: 20, y: 14 },
+        resolution,
+      })
+      .setInteractive({ useHandCursor: true });
+    button.on("pointerover", () => button.setStyle({ backgroundColor: "#a5f3fc" }));
+    button.on("pointerout", () => button.setStyle({ backgroundColor: "#67e8f9" }));
+    return button;
   }
 
   private showStartScreen(): void {
     this.livesText.setVisible(false);
-    const centerX = this.scale.width / 2;
-    const centerY = this.scale.height / 2;
-    const overlay = this.add
-      .container(0, 0)
-      .setDepth(20);
-
-    overlay.add(
-      this.add
-        .rectangle(centerX, centerY, this.scale.width, this.scale.height, 0x080d20, 0.84)
-        .setInteractive(),
-    );
     const texts = RASTRO_GAME_CONFIG.texts;
-    const resolution = this.getTextResolution();
-    overlay.add(
-      this.add
-        .text(centerX, centerY - 150, texts.title.toUpperCase(), {
-          color: "#f9fafb",
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "40px",
-          fontStyle: "bold",
-          resolution,
-        })
-        .setOrigin(0.5),
-    );
-    overlay.add(
-      this.add
-        .text(centerX, centerY - 86, texts.startInstructionsTitle.toUpperCase(), {
-          color: "#67e8f9",
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "16px",
-          fontStyle: "bold",
-          resolution,
-        })
-        .setOrigin(0.5),
-    );
-    overlay.add(
-      this.add
-        .text(
-          centerX,
-          centerY - 58,
-          texts.startInstructions.map((line) => `•  ${line}`).join("\n"),
-          {
-            color: "#cbd5e1",
-            fontFamily: "system-ui, sans-serif",
-            fontSize: "15px",
-            lineSpacing: 8,
-            wordWrap: { width: Math.min(this.scale.width - 48, 460) },
-            resolution,
-          },
-        )
-        .setOrigin(0.5, 0),
-    );
-
-    const startButton = this.add
-      .text(centerX, centerY + 130, RASTRO_GAME_CONFIG.texts.startButton, {
-        color: "#111827",
-        backgroundColor: "#67e8f9",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "16px",
-        fontStyle: "bold",
-        padding: { x: 18, y: 12 },
-        resolution: this.getTextResolution(),
-      })
-      .setOrigin(0.5)
-      .setInteractive({ useHandCursor: true });
-
-    startButton.on("pointerover", () =>
-      startButton.setStyle({ backgroundColor: "#a5f3fc" }),
-    );
-    startButton.on("pointerout", () =>
-      startButton.setStyle({ backgroundColor: "#67e8f9" }),
-    );
-    overlay.add(startButton);
+    const lines = this.sys.game.device.input.touch
+      ? texts.startInstructionsTouch
+      : texts.startInstructions;
 
     const startGame = (): void => {
-      if (this.isPlaying) {
+      if (this.isPlaying || !this.overlay) {
         return;
       }
 
       this.hasStarted = true;
       this.isPlaying = true;
       this.livesText.setVisible(true);
-      overlay.destroy();
+      this.overlay.destroy();
+      this.overlay = undefined;
+      this.rebuildOverlay = undefined;
     };
 
-    startButton.once("pointerdown", startGame);
+    const build = (): void => {
+      this.overlay?.destroy();
+      const { width, height } = this.scale;
+      const ui = this.getUiScale();
+      const resolution = this.getTextResolution();
+      const container = this.add.container(0, 0).setDepth(20);
+      this.overlay = container;
+      container.add(
+        this.add.rectangle(width / 2, height / 2, width, height, 0x080d20, 0.84).setInteractive(),
+      );
+      const make = (text: string, size: number, color: string, extra = {}) =>
+        this.add.text(0, 0, text, {
+          color,
+          fontFamily: "system-ui, sans-serif",
+          fontSize: `${Math.round(size * ui)}px`,
+          fontStyle: "bold",
+          resolution,
+          ...extra,
+        });
+      const title = make(texts.title.toUpperCase(), 40, "#f9fafb");
+      const header = make(texts.startInstructionsTitle.toUpperCase(), 16, "#67e8f9");
+      const list = make(lines.map((line) => `•  ${line}`).join("\n"), 15, "#cbd5e1", {
+        fontStyle: "normal",
+        lineSpacing: Math.round(8 * ui),
+        wordWrap: { width: Math.min(width - 32, 460) },
+      });
+      const button = this.makeOverlayButton(texts.startButton, ui, resolution);
+      container.add([title, header, list, button]);
+      this.stackCentered(
+        [title, header, list, button],
+        [14, 10, 26].map((gap) => Math.round(gap * ui)),
+      );
+      button.once("pointerdown", startGame);
+    };
+
+    build();
+    this.rebuildOverlay = build;
     this.input.keyboard?.once("keydown-ENTER", startGame);
     this.input.keyboard?.once("keydown-SPACE", startGame);
   }
-
-
-
-
-
-
 
   private spawnAsteroid(
     progress = 0,
@@ -1349,6 +1540,16 @@ export class RastroEstelarScene extends Phaser.Scene {
       return;
     }
 
+    this.crateElapsedMs += delta;
+    if (
+      this.crateElapsedMs >= this.nextCrateMs &&
+      !this.enemies.some((enemy) => enemy.isBoss)
+    ) {
+      this.crateElapsedMs = 0;
+      this.nextCrateMs = 18000 + this.asteroidRandom() * 8000;
+      this.spawnCrate();
+    }
+
     this.asteroidSpawnElapsed += delta;
     if (
       this.asteroidVariants.length > 0 &&
@@ -1633,8 +1834,9 @@ export class RastroEstelarScene extends Phaser.Scene {
     this.shotCooldownElapsed += delta;
     if (
       this.isFiring &&
-      this.shotCooldownElapsed >= RASTRO_GAME_CONFIG.weapon.cooldownMs &&
-      this.playerShots.length < RASTRO_GAME_CONFIG.weapon.maxShots
+      this.shotCooldownElapsed >= this.getShotCooldownMs() &&
+      this.playerShots.length <
+        (this.weaponKind === "normal" ? RASTRO_GAME_CONFIG.weapon.maxShots : 30)
     ) {
       this.firePlayerShot();
       this.shotCooldownElapsed = 0;
@@ -1655,23 +1857,50 @@ export class RastroEstelarScene extends Phaser.Scene {
         depth,
         RASTRO_GAME_CONFIG.weapon.projectionExponent,
       );
-      const x = Phaser.Math.Linear(shot.endX, shot.startX, perspective);
+      let x = Phaser.Math.Linear(shot.endX, shot.startX, perspective);
       const y = Phaser.Math.Linear(
         this.scale.height * RASTRO_GAME_CONFIG.perspective.horizonY,
         shot.startY,
         perspective,
       );
+      if (shot.kind === "foguete") {
+        // Persegue o alvo mais próximo à frente, deslocando-se de lado.
+        let best: { x: number } | undefined;
+        let bestScore = Infinity;
+        for (const target of [...this.enemies, ...this.asteroids]) {
+          if (
+            ("ghost" in target && target.ghost) ||
+            !target.image.visible ||
+            target.image.y > y + 30
+          ) {
+            continue;
+          }
+          const score =
+            Math.abs(target.image.x - (x + shot.homingOffset)) +
+            Math.abs(target.image.y - y) * 0.4;
+          if (score < bestScore) {
+            bestScore = score;
+            best = target.image;
+          }
+        }
+        if (best) {
+          const wanted = best.x - x;
+          const step = 620 * (delta / 1000);
+          shot.homingOffset += Phaser.Math.Clamp(wanted - shot.homingOffset, -step, step);
+        }
+        x += shot.homingOffset;
+      }
       const scale = RASTRO_GAME_CONFIG.weapon.initialScale * perspective;
       shot.image
         .setPosition(x, y)
-        .setScale(scale)
+        .setScale(scale * (shot.kind === "foguete" ? 1.1 : shot.kind === "laser" ? 0.9 : 1))
         .setAlpha(perspective)
-        .setBlendMode(Phaser.BlendModes.ADD)
+        .setBlendMode(shot.kind === "foguete" ? Phaser.BlendModes.NORMAL : Phaser.BlendModes.ADD)
         .setDepth(1.05 + shot.progress * 0.5);
 
       let hit = false;
       for (const target of [...this.asteroids, ...this.enemies]) {
-        if ("ghost" in target && target.ghost) {
+        if (("ghost" in target && target.ghost) || shot.hitTargets?.has(target)) {
           continue;
         }
         const horizontalGap = Math.abs(target.image.x - x);
@@ -1686,8 +1915,14 @@ export class RastroEstelarScene extends Phaser.Scene {
               RASTRO_GAME_CONFIG.weapon.targetHeightFactor +
             shot.image.displayHeight * 0.5
         ) {
-          this.removeShotTarget(target);
           this.showShotImpact(x, y);
+          if (shot.hitTargets) {
+            // Laser: atravessa e segue, uma vez por alvo.
+            shot.hitTargets.add(target);
+            this.removeShotTarget(target);
+            continue;
+          }
+          this.removeShotTarget(target);
           hit = true;
           break;
         }
@@ -1702,24 +1937,186 @@ export class RastroEstelarScene extends Phaser.Scene {
 
   private firePlayerShot(): void {
     const startY = this.player.y - 20 * this.player.scaleY;
-    const image = this.add.image(
-      this.player.x,
-      startY,
-      RASTRO_TEXTURE_KEYS.shot,
-    ).setScale(RASTRO_GAME_CONFIG.weapon.initialScale);
     const centerX = this.scale.width / 2;
     const lateralOffset = this.player.x - centerX;
     const lateralAim =
       RASTRO_GAME_CONFIG.weapon.aimOffset -
       Math.sin(this.player.rotation) * RASTRO_GAME_CONFIG.weapon.rotationInfluence;
+    const baseEndX = centerX + lateralOffset * lateralAim;
+    const weapon = RASTRO_GAME_CONFIG.weapon;
 
-    this.playerShots.push({
+    const add = (
+      kind: WeaponKind,
+      startX: number,
+      endX: number,
+      texture: string,
+      scale: number,
+      speed: number,
+    ): void => {
+      const image = this.add.image(startX, startY, texture).setScale(scale);
+      this.playerShots.push({
+        image,
+        progress: 0,
+        speed,
+        startX,
+        startY,
+        endX,
+        kind,
+        homingOffset: 0,
+        hitTargets: kind === "laser" ? new Set() : undefined,
+      });
+    };
+    const x = this.player.x;
+    const side = this.scale.width * 0.12;
+
+    switch (this.weaponKind) {
+      case "duplo":
+        // Dois tiros paralelos, um de cada lado da nave.
+        add("duplo", x - 16, baseEndX - 5, RASTRO_TEXTURE_KEYS.shot, weapon.initialScale, weapon.speed);
+        add("duplo", x + 16, baseEndX + 5, RASTRO_TEXTURE_KEYS.shot, weapon.initialScale, weapon.speed);
+        break;
+      case "triplo":
+        // Leque: um central e dois abertos para os lados.
+        add("triplo", x, baseEndX, RASTRO_TEXTURE_KEYS.shot, weapon.initialScale, weapon.speed);
+        add("triplo", x - 6, baseEndX - side, RASTRO_TEXTURE_KEYS.shot, weapon.initialScale, weapon.speed);
+        add("triplo", x + 6, baseEndX + side, RASTRO_TEXTURE_KEYS.shot, weapon.initialScale, weapon.speed);
+        break;
+      case "laser":
+        // Raio rápido que atravessa tudo no caminho.
+        add("laser", x, baseEndX, RASTRO_TEXTURE_KEYS.laserShot, weapon.initialScale * 0.9, weapon.speed * 1.7);
+        break;
+      case "foguete":
+        // Dois foguetes que perseguem os alvos.
+        add("foguete", x - 14, baseEndX - 4, RASTRO_TEXTURE_KEYS.missileShot, weapon.initialScale * 1.1, weapon.speed * 0.8);
+        add("foguete", x + 14, baseEndX + 4, RASTRO_TEXTURE_KEYS.missileShot, weapon.initialScale * 1.1, weapon.speed * 0.8);
+        break;
+      default:
+        add("normal", x, baseEndX, RASTRO_TEXTURE_KEYS.shot, weapon.initialScale, weapon.speed);
+    }
+  }
+
+  /** Tempo entre disparos: cada arma tem seu ritmo. */
+  private getShotCooldownMs(): number {
+    const base = RASTRO_GAME_CONFIG.weapon.cooldownMs;
+    switch (this.weaponKind) {
+      case "duplo":
+        return base * 1.1;
+      case "triplo":
+        return base * 1.2;
+      case "laser":
+        return base * 0.6;
+      case "foguete":
+        return base * 2;
+      default:
+        return base;
+    }
+  }
+
+  private setWeapon(kind: WeaponKind): void {
+    this.weaponKind = kind;
+    this.weaponMsRemaining =
+      kind === "normal" ? 0 : RastroEstelarScene.WEAPON_DURATION_MS;
+    this.updateWeaponText();
+  }
+
+  private updateWeaponText(): void {
+    if (this.weaponKind === "normal") {
+      this.weaponText.setVisible(false);
+      return;
+    }
+    const info = RastroEstelarScene.WEAPONS[this.weaponKind];
+    this.weaponText
+      .setText(`${info.label} · ${Math.ceil(this.weaponMsRemaining / 1000)}s`)
+      .setColor(info.color)
+      .setVisible(true);
+  }
+
+  /** Caixa de metal: muito mais lenta que os outros obstáculos. */
+  private spawnCrate(): void {
+    const lanes = RASTRO_GAME_CONFIG.asteroids.lanes;
+    const lane = lanes[Math.floor(this.asteroidRandom() * lanes.length)] * 0.8;
+    const startX = 0.5 + lane * 0.48;
+    const startY = RASTRO_GAME_CONFIG.perspective.horizonY;
+    const image = this.add
+      .image(0, 0, RASTRO_TEXTURE_KEYS.crate)
+      .setDepth(0.85)
+      .setVisible(false);
+    this.asteroids.push({
       image,
       progress: 0,
-      speed: RASTRO_GAME_CONFIG.weapon.speed,
-      startX: this.player.x,
+      speed: 0.055,
+      size: 76,
+      rotationSpeed: 0,
+      crateHealth: 3,
+      startX,
       startY,
-      endX: centerX + lateralOffset * lateralAim,
+      endX: startX + (0.5 - startX) * 0.35,
+      endY: startY + 1.1,
+    });
+  }
+
+  private dropPowerUp(x: number, y: number): void {
+    const kinds = Object.keys(RastroEstelarScene.WEAPONS) as Array<
+      Exclude<WeaponKind, "normal">
+    >;
+    const kind = kinds[Math.floor(this.asteroidRandom() * kinds.length)];
+    const image = this.add
+      .image(x, y, `${RASTRO_TEXTURE_KEYS.powerUpPrefix}${kind}`)
+      .setDepth(1.2);
+    this.powerUps.push({ image, kind, ageMs: 0 });
+  }
+
+  private updatePowerUps(delta: number): void {
+    if (this.weaponKind !== "normal") {
+      this.weaponMsRemaining -= delta;
+      if (this.weaponMsRemaining <= 0) {
+        this.setWeapon("normal");
+      } else {
+        this.updateWeaponText();
+      }
+    }
+
+    const fall = (this.scale.height * 0.16 * delta) / 1000;
+    for (let index = this.powerUps.length - 1; index >= 0; index -= 1) {
+      const item = this.powerUps[index];
+      item.ageMs += delta;
+      item.image.y += fall;
+      item.image.setScale(1 + Math.sin(item.ageMs * 0.008) * 0.1);
+      const reach = 28 + this.player.displayWidth * 0.4;
+      const near =
+        Math.hypot(item.image.x - this.player.x, item.image.y - this.player.y) < reach;
+      if (near && !this.isColliding) {
+        this.setWeapon(item.kind);
+        this.showWeaponPickup(item.kind);
+        item.image.destroy();
+        this.powerUps.splice(index, 1);
+      } else if (item.image.y > this.scale.height + 40) {
+        item.image.destroy();
+        this.powerUps.splice(index, 1);
+      }
+    }
+  }
+
+  private showWeaponPickup(kind: Exclude<WeaponKind, "normal">): void {
+    const info = RastroEstelarScene.WEAPONS[kind];
+    const label = this.add
+      .text(this.player.x, this.player.y - 50, info.label, {
+        color: info.color,
+        fontFamily: "system-ui, sans-serif",
+        fontSize: "20px",
+        fontStyle: "bold",
+        stroke: "#080d20",
+        strokeThickness: 4,
+        resolution: this.getTextResolution(),
+      })
+      .setOrigin(0.5)
+      .setDepth(12);
+    this.tweens.add({
+      targets: label,
+      y: label.y - 40,
+      alpha: 0,
+      duration: 1100,
+      onComplete: () => label.destroy(),
     });
   }
 
@@ -1739,6 +2136,16 @@ export class RastroEstelarScene extends Phaser.Scene {
     const asteroidIndex = this.asteroids.findIndex((asteroid) => asteroid === target);
     if (asteroidIndex >= 0) {
       const asteroid = this.asteroids[asteroidIndex];
+      if (asteroid.crateHealth !== undefined && asteroid.crateHealth > 1) {
+        // A caixa de metal aguenta alguns tiros; pisca ao ser atingida.
+        asteroid.crateHealth -= 1;
+        asteroid.image.setTintFill(0xffffff);
+        this.time.delayedCall(70, () => asteroid.image.clearTint());
+        return;
+      }
+      if (asteroid.crateHealth !== undefined) {
+        this.dropPowerUp(asteroid.image.x, asteroid.image.y);
+      }
       this.createTargetExplosion(asteroid);
       asteroid.image.destroy();
       this.asteroids.splice(asteroidIndex, 1);
@@ -1759,6 +2166,12 @@ export class RastroEstelarScene extends Phaser.Scene {
       enemy.image.destroy();
       this.enemies.splice(enemyIndex, 1);
       if (isBoss && enemy.isFinalBoss) {
+        // Recompensa: +1 vida ao derrotar o chefe da fase.
+        if (this.lives < RastroEstelarScene.MAX_LIVES) {
+          this.lives += 1;
+          this.livesText.setText(`${RASTRO_GAME_CONFIG.texts.livesLabel}: ${this.lives}`);
+          this.showStageAnnouncement("+1 VIDA", true);
+        }
         this.isPlaying = false;
         this.isFiring = false;
         this.updateBossHud();

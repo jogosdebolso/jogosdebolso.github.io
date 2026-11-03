@@ -68,6 +68,7 @@ export function createHazardTextures(scene: Phaser.Scene): void {
 
   createDebrisTextures(scene);
   createBossShotTextures(scene);
+  createUpgradeTextures(scene);
 
   if (!scene.textures.exists(RASTRO_TEXTURE_KEYS.enemyShot)) {
     const g = scene.make.graphics({ x: 0, y: 0 });
@@ -206,6 +207,106 @@ function createDebrisTextures(scene: Phaser.Scene): void {
     g.fillCircle(40, 14, 3);
     g.fillRect(56, 70, 14, 10);
     g.generateTexture(key(6), 96, 96);
+    g.destroy();
+  }
+}
+
+/** Caixa de metal (upgrade), ícones dos upgrades e tiros laser/foguete do jogador. */
+function createUpgradeTextures(scene: Phaser.Scene): void {
+  if (!scene.textures.exists(RASTRO_TEXTURE_KEYS.crate)) {
+    const g = scene.make.graphics({ x: 0, y: 0 });
+    g.fillStyle(0x334155, 1);
+    g.fillRoundedRect(8, 12, 80, 72, 6);
+    g.fillStyle(0x64748b, 1);
+    g.fillRoundedRect(8, 12, 80, 20, 6);
+    g.fillStyle(0x475569, 1);
+    g.fillRect(8, 32, 80, 4);
+    // Cintas e rebites.
+    g.fillStyle(0x1e293b, 1);
+    g.fillRect(20, 12, 8, 72);
+    g.fillRect(68, 12, 8, 72);
+    g.fillStyle(0xcbd5e1, 1);
+    for (const [x, y] of [[24, 18], [72, 18], [24, 78], [72, 78]]) {
+      g.fillCircle(x, y, 2.2);
+    }
+    // Emblema de energia.
+    g.fillStyle(0xfacc15, 1);
+    g.fillPoints(
+      [
+        { x: 52, y: 40 }, { x: 40, y: 58 }, { x: 48, y: 58 },
+        { x: 44, y: 74 }, { x: 58, y: 54 }, { x: 50, y: 54 },
+      ],
+      true,
+    );
+    g.lineStyle(2, 0x0f172a, 1);
+    g.strokeRoundedRect(8, 12, 80, 72, 6);
+    g.generateTexture(RASTRO_TEXTURE_KEYS.crate, 96, 96);
+    g.destroy();
+  }
+
+  const kinds: Record<string, number> = {
+    duplo: 0xfde047,
+    triplo: 0x86efac,
+    laser: 0x67e8f9,
+    foguete: 0xfb923c,
+  };
+  for (const [kind, color] of Object.entries(kinds)) {
+    const key = `${RASTRO_TEXTURE_KEYS.powerUpPrefix}${kind}`;
+    if (scene.textures.exists(key)) {
+      continue;
+    }
+    const g = scene.make.graphics({ x: 0, y: 0 });
+    g.fillStyle(color, 0.22);
+    g.fillCircle(22, 22, 21);
+    g.fillStyle(0x0f172a, 1);
+    g.fillCircle(22, 22, 15);
+    g.lineStyle(2.5, color, 1);
+    g.strokeCircle(22, 22, 15);
+    g.fillStyle(color, 1);
+    if (kind === "duplo") {
+      g.fillRect(15, 12, 4, 18);
+      g.fillRect(25, 12, 4, 18);
+    } else if (kind === "triplo") {
+      g.fillRect(20, 11, 4, 20);
+      g.fillPoints([{ x: 13, y: 14 }, { x: 16, y: 13 }, { x: 19, y: 29 }, { x: 16, y: 30 }], true);
+      g.fillPoints([{ x: 31, y: 14 }, { x: 28, y: 13 }, { x: 25, y: 29 }, { x: 28, y: 30 }], true);
+    } else if (kind === "laser") {
+      g.fillRect(19.5, 9, 5, 26);
+      g.fillStyle(0xffffff, 1);
+      g.fillRect(21, 9, 2, 26);
+    } else {
+      g.fillPoints([{ x: 22, y: 9 }, { x: 27, y: 18 }, { x: 27, y: 30 }, { x: 17, y: 30 }, { x: 17, y: 18 }], true);
+      g.fillStyle(0xffffff, 1);
+      g.fillTriangle(17, 30, 27, 30, 22, 37);
+    }
+    g.generateTexture(key, 44, 44);
+    g.destroy();
+  }
+
+  if (!scene.textures.exists(RASTRO_TEXTURE_KEYS.laserShot)) {
+    const g = scene.make.graphics({ x: 0, y: 0 });
+    g.fillStyle(0x22d3ee, 0.45);
+    g.fillRoundedRect(0, 0, 12, 72, 6);
+    g.fillStyle(0x67e8f9, 1);
+    g.fillRoundedRect(3, 2, 6, 68, 3);
+    g.fillStyle(0xffffff, 1);
+    g.fillRect(5, 4, 2, 64);
+    g.generateTexture(RASTRO_TEXTURE_KEYS.laserShot, 12, 72);
+    g.destroy();
+  }
+
+  if (!scene.textures.exists(RASTRO_TEXTURE_KEYS.missileShot)) {
+    const g = scene.make.graphics({ x: 0, y: 0 });
+    g.fillStyle(0xfb923c, 0.85);
+    g.fillTriangle(4, 26, 14, 26, 9, 38);
+    g.fillStyle(0xe2e8f0, 1);
+    g.fillRoundedRect(3, 6, 12, 22, 4);
+    g.fillStyle(0xef4444, 1);
+    g.fillTriangle(3, 10, 15, 10, 9, 0);
+    g.fillStyle(0x94a3b8, 1);
+    g.fillRect(0, 20, 3, 8);
+    g.fillRect(15, 20, 3, 8);
+    g.generateTexture(RASTRO_TEXTURE_KEYS.missileShot, 18, 40);
     g.destroy();
   }
 }

@@ -75,6 +75,7 @@ interface RastroGameFile {
     livesLabel: string;
     startInstructionsTitle: string;
     startInstructions: string[];
+    startInstructionsTouch: string[];
     startButton: string;
     gameOverTitle: string;
     restartButton: string;

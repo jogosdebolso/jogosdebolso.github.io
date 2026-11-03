@@ -6,6 +6,8 @@ export type Asteroid = {
   speed: number;
   size: number;
   rotationSpeed: number;
+  /** Caixa de upgrade: nº de tiros restantes para abrir (indefinido = asteroide comum). */
+  crateHealth?: number;
   startX: number;
   startY: number;
   endX: number;
@@ -101,6 +103,8 @@ export type EnemyStyle = {
   coreColor: number;
 };
 
+export type WeaponKind = "normal" | "duplo" | "triplo" | "laser" | "foguete";
+
 export type PlayerShot = {
   image: Phaser.GameObjects.Image;
   progress: number;
@@ -108,4 +112,16 @@ export type PlayerShot = {
   startX: number;
   startY: number;
   endX: number;
+  kind: WeaponKind;
+  /** Laser: alvos já atingidos por este tiro (ele atravessa). */
+  hitTargets?: Set<object>;
+  /** Foguete: deslocamento lateral acumulado ao perseguir um alvo (px). */
+  homingOffset: number;
+};
+
+/** Upgrade de tiro solto por uma caixa destruída; cai devagar até sair da tela. */
+export type PowerUp = {
+  image: Phaser.GameObjects.Image;
+  kind: Exclude<WeaponKind, "normal">;
+  ageMs: number;
 };
