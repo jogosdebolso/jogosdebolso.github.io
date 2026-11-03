@@ -72,19 +72,16 @@ interface RastroGameFile {
   };
   texts: {
     title: string;
-    controls: string;
     livesLabel: string;
-    startControls: string;
+    startInstructionsTitle: string;
+    startInstructions: string[];
     startButton: string;
     gameOverTitle: string;
-    gameOverDescription: string;
-    phaseLabel: string;
-    bossHealthLabel: string;
-    levelCompleteTitle: string;
-    levelCompleteDescription: string;
-    missionCompleteTitle: string;
-    missionCompleteDescription: string;
     restartButton: string;
+    victoryEnemiesTitle: string;
+    victoryCongratsTitle: string;
+    victoryCongratsMessage: string;
+    victoryExitHint: string;
   };
 }
 

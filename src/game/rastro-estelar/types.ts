@@ -51,6 +51,8 @@ export type Enemy = {
   fireElapsedMs: number;
   /** Só o chefe final encerra a fase (os demais são do "boss rush"). */
   isFinalBoss: boolean;
+  /** Arte (1 a 7) do chefe: define o tipo de tiro. */
+  bossArt: number;
 };
 
 export type EnemyShot = {
@@ -61,6 +63,8 @@ export type EnemyShot = {
   endY: number;
   progress: number;
   durationMs: number;
+  /** Multiplicador do tamanho do projétil (padrão 1). */
+  scaleFactor: number;
 };
 
 export type EnemyVariant =

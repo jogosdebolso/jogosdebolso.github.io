@@ -18,6 +18,8 @@ type EnemySpawnFile = {
   lane: number;
   size?: number;
   speed?: number;
+  /** Atraso (ms) após o início do evento, para espalhar a onda no tempo. */
+  delayMs?: number;
 };
 
 type LevelEnemyFile = LevelObstacle & EnemySpawnFile;
@@ -34,7 +36,6 @@ type LevelBossFile = EnemySpawnFile & {
 type LevelEventFile = {
   atMs: number;
   title: string;
-  message: string;
   wave?: EnemySpawnFile[];
   boss?: LevelBossFile;
   /** Só dispara quando não houver inimigos, asteroides nem chefes em campo. */
@@ -85,7 +86,6 @@ export type RastroEnemySpawn = Omit<EnemySpawnFile, "variant"> & {
 export type RastroLevelEvent = {
   atMs: number;
   title: string;
-  message: string;
   wave?: RastroEnemySpawn[];
   boss?: RastroEnemySpawn & {
     name: string;
@@ -178,7 +178,8 @@ function normalizeSpawn(spawn: EnemySpawnFile, field: string): RastroEnemySpawn 
   }
   if (
     (spawn.size !== undefined && (!Number.isFinite(spawn.size) || spawn.size <= 0)) ||
-    (spawn.speed !== undefined && (!Number.isFinite(spawn.speed) || spawn.speed <= 0))
+    (spawn.speed !== undefined && (!Number.isFinite(spawn.speed) || spawn.speed <= 0)) ||
+    (spawn.delayMs !== undefined && (!Number.isFinite(spawn.delayMs) || spawn.delayMs < 0))
   ) {
     throw new Error(`rastro-estelar/levels: escala/velocidade inválida em ${field}.`);
   }
@@ -217,8 +218,7 @@ function normalizeLevel(level: LevelFile): RastroLevel {
     if (
       !Number.isFinite(event.atMs) ||
       event.atMs < previousAtMs ||
-      !event.title ||
-      !event.message
+      !event.title
     ) {
       throw new Error(`rastro-estelar/levels/level-${level.id}.json: evento ${index} inválido.`);
     }

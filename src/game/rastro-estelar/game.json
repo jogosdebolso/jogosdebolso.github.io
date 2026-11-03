@@ -70,18 +70,20 @@
   },
   "texts": {
     "title": "Rastro Estelar",
-    "controls": "WASD/setas para mover · Espaço para atirar",
     "livesLabel": "VIDAS",
-    "startControls": "WASD/setas para pilotar · Espaço para atirar",
+    "startInstructionsTitle": "Como jogar",
+    "startInstructions": [
+      "Mover a nave: WASD ou setas",
+      "Atirar: Espaço (segure para disparo contínuo)",
+      "Desvie de inimigos, asteroides e tiros: você tem 3 vidas",
+      "Derrote o chefe de cada fase para avançar"
+    ],
     "startButton": "Começar missão",
     "gameOverTitle": "FIM DE JOGO",
-    "gameOverDescription": "Sua nave ficou sem vidas.",
-    "phaseLabel": "FASE",
-    "bossHealthLabel": "INTEGRIDADE",
-    "levelCompleteTitle": "SETOR CONCLUÍDO",
-    "levelCompleteDescription": "Próxima rota liberada.",
-    "missionCompleteTitle": "MISSÃO CONCLUÍDA",
-    "missionCompleteDescription": "Sete zonas atravessadas. A rota estelar está livre da frota inimiga.",
-    "restartButton": "Jogar novamente"
+    "restartButton": "Voltar ao início",
+    "victoryEnemiesTitle": "Inimigos da frota",
+    "victoryCongratsTitle": "Parabéns!",
+    "victoryCongratsMessage": "Sete zonas atravessadas e todos os chefes derrotados. A rota estelar está livre da frota inimiga.",
+    "victoryExitHint": "Clique ou pressione qualquer tecla para voltar ao início"
   }
 }

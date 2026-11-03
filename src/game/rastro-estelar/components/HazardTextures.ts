@@ -67,6 +67,7 @@ export function createHazardTextures(scene: Phaser.Scene): void {
   }
 
   createDebrisTextures(scene);
+  createBossShotTextures(scene);
 
   if (!scene.textures.exists(RASTRO_TEXTURE_KEYS.enemyShot)) {
     const g = scene.make.graphics({ x: 0, y: 0 });
@@ -77,6 +78,62 @@ export function createHazardTextures(scene: Phaser.Scene): void {
     g.fillStyle(0xffffff, 1);
     g.fillCircle(12, 12, 3.5);
     g.generateTexture(RASTRO_TEXTURE_KEYS.enemyShot, 24, 24);
+    g.destroy();
+  }
+}
+
+/** Tiros dos chefes (2 a 7); o do chefe 1 usa o tiro comum, laranja. */
+function createBossShotTextures(scene: Phaser.Scene): void {
+  const colors: Record<number, [number, number, number]> = {
+    2: [0x7c3aed, 0xc4b5fd, 0xf5f3ff],
+    3: [0x0891b2, 0x67e8f9, 0xffffff],
+    4: [0xdc2626, 0xfbbf24, 0xfffbeb],
+    5: [0xdb2777, 0xf9a8d4, 0xffffff],
+    6: [0x0f766e, 0x5eead4, 0xf0fdfa],
+    7: [0xb91c1c, 0xfecaca, 0xffffff],
+  };
+  for (const [id, [outer, mid, core]] of Object.entries(colors)) {
+    const key = `${RASTRO_TEXTURE_KEYS.bossShotPrefix}${id}`;
+    if (scene.textures.exists(key)) {
+      continue;
+    }
+    const g = scene.make.graphics({ x: 0, y: 0 });
+    const n = Number(id);
+    if (n === 2) {
+      // Losango (lâmina de energia).
+      g.fillStyle(outer, 1);
+      g.fillPoints([{ x: 14, y: 1 }, { x: 25, y: 14 }, { x: 14, y: 27 }, { x: 3, y: 14 }], true);
+      g.fillStyle(mid, 1);
+      g.fillPoints([{ x: 14, y: 6 }, { x: 21, y: 14 }, { x: 14, y: 22 }, { x: 7, y: 14 }], true);
+    } else if (n === 6) {
+      // Anel vazado.
+      g.lineStyle(5, outer, 1);
+      g.strokeCircle(14, 14, 10);
+      g.lineStyle(2.5, mid, 1);
+      g.strokeCircle(14, 14, 10);
+    } else if (n === 4 || n === 7) {
+      // Estrela de quatro pontas.
+      g.fillStyle(outer, 1);
+      g.fillPoints(
+        [
+          { x: 14, y: 0 }, { x: 18, y: 10 }, { x: 28, y: 14 }, { x: 18, y: 18 },
+          { x: 14, y: 28 }, { x: 10, y: 18 }, { x: 0, y: 14 }, { x: 10, y: 10 },
+        ],
+        true,
+      );
+      g.fillStyle(mid, 1);
+      g.fillCircle(14, 14, 7);
+    } else {
+      g.fillStyle(outer, 1);
+      g.fillCircle(14, 14, 13);
+      g.fillStyle(mid, 1);
+      g.fillCircle(14, 14, 8.5);
+    }
+    if (n !== 6) {
+      g.fillStyle(core, 1);
+      g.fillCircle(14, 14, 3.5);
+    }
+    g.generateTexture(key, 28, 28);
     g.destroy();
   }
 }
