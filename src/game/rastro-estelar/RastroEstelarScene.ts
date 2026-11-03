@@ -112,6 +112,8 @@ export class RastroEstelarScene extends Phaser.Scene {
   private lastWidth = 0;
   private lastHeight = 0;
   private hudExtraY = 0;
+  /** Os textos do HUD desta execução da cena já foram criados? */
+  private hudReady = false;
   private overlay?: Phaser.GameObjects.Container;
   private rebuildOverlay?: () => void;
   private debugDamageDisabled = false;
@@ -177,6 +179,8 @@ export class RastroEstelarScene extends Phaser.Scene {
           ? new MovingStarfield(this, 85, true)
           : new MovingStarfield(this);
     }
+    this.hudReady = false;
+    this.hudExtraY = 0;
     this.lastWidth = this.scale.width;
     this.lastHeight = this.scale.height;
     this.touchPointerId = undefined;
@@ -304,6 +308,7 @@ export class RastroEstelarScene extends Phaser.Scene {
       .setDepth(10)
       .setVisible(false);
     this.bossHealthBar = this.add.graphics().setDepth(10).setVisible(false);
+    this.hudReady = true;
     this.layoutHud();
 
     const centerX = this.scale.width / 2;
@@ -576,6 +581,9 @@ export class RastroEstelarScene extends Phaser.Scene {
 
   /** Reposiciona os textos do HUD conforme o tamanho atual da tela. */
   private layoutHud(): void {
+    if (!this.hudReady) {
+      return;
+    }
     const { width, height } = this.scale;
     this.livesText?.setPosition(width - 24, 28 + this.hudExtraY);
     this.weaponText?.setPosition(width - 24, 54 + this.hudExtraY);
