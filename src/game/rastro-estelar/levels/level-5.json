@@ -37,77 +37,85 @@
   "events": [
     {
       "atMs": 0,
-      "title": "FASE 5 — PILARES DE CARINA",
-      "message": "Paredes de gás ionizado. Satélites e sondas cruzam a rota.",
+      "title": "PILARES DE CARINA",
       "minionRate": 0,
       "asteroids": { "variants": [] },
       "wave": [
-        { "variant": "satelite", "lane": -0.8 },
-        { "variant": "sonda", "lane": 0.3 },
-        { "variant": "satelite", "lane": 0.75 },
-        { "variant": "sonda", "lane": -0.35 },
-        { "variant": "sonda", "lane": 0.9 }
+        { "variant": "satelite", "lane": -0.8, "delayMs": 0 },
+        { "variant": "sonda", "lane": 0.3, "delayMs": 1115 },
+        { "variant": "satelite", "lane": 0.75, "delayMs": 2231 },
+        { "variant": "sonda", "lane": -0.35, "delayMs": 3346 },
+        { "variant": "satelite", "lane": 0.9, "delayMs": 4462 },
+        { "variant": "sonda", "lane": -0.6, "delayMs": 5577 },
+        { "variant": "satelite", "lane": 0.1, "delayMs": 6692 },
+        { "variant": "sonda", "lane": 0.6, "delayMs": 7808 },
+        { "variant": "satelite", "lane": -0.9, "delayMs": 8923 },
+        { "variant": "sonda", "lane": 0.45, "delayMs": 10038 },
+        { "variant": "satelite", "lane": -0.2, "delayMs": 11154 },
+        { "variant": "sonda", "lane": 0.85, "delayMs": 12269 },
+        { "variant": "satelite", "lane": -0.5, "delayMs": 13385 },
+        { "variant": "sonda", "lane": 0.0, "delayMs": 14500 }
       ]
     },
     {
       "atMs": 17000,
-      "title": "SETOR 2 — BERÇÁRIO ESTELAR",
-      "message": "Jatos protostelares detectados. Interceptadores se aproximam!",
+      "title": "BERÇÁRIO ESTELAR",
       "minionRate": 1,
       "asteroids": { "variants": [] },
       "wave": [
-        { "variant": "cometa", "lane": -0.72 },
-        { "variant": "bastiao", "lane": -0.22, "size": 1.15 },
-        { "variant": "vespa", "lane": 0.42 },
-        { "variant": "espectro", "lane": 0.78 },
-        { "variant": "sonda", "lane": -0.4 },
-        { "variant": "satelite", "lane": 0.85 },
-        { "variant": "sonda", "lane": 0.1 }
+        { "variant": "cometa", "lane": -0.72, "delayMs": 0 },
+        { "variant": "bastiao", "lane": -0.22, "size": 1.15, "delayMs": 818 },
+        { "variant": "vespa", "lane": 0.42, "delayMs": 1636 },
+        { "variant": "espectro", "lane": 0.78, "delayMs": 2455 },
+        { "variant": "sonda", "lane": -0.4, "delayMs": 3273 },
+        { "variant": "satelite", "lane": 0.85, "delayMs": 4091 },
+        { "variant": "sonda", "lane": 0.1, "delayMs": 4909 },
+        { "variant": "vespa", "lane": -0.15, "delayMs": 5727 },
+        { "variant": "cometa", "lane": 0.6, "delayMs": 6545 },
+        { "variant": "sonda", "lane": -0.8, "delayMs": 7364 },
+        { "variant": "satelite", "lane": 0.3, "delayMs": 8182 },
+        { "variant": "espectro", "lane": -0.55, "delayMs": 9000 }
       ]
     },
     {
       "atMs": 27000,
-      "title": "SETOR 3 — CHUVA DE SUCATA",
-      "message": "Satélites e sondas cruzam a nebulosa em alta velocidade!",
+      "title": "CHUVA DE SUCATA",
       "wave": [
-        { "variant": "satelite", "lane": -0.85 },
-        { "variant": "sonda", "lane": -0.15 },
-        { "variant": "satelite", "lane": 0.6 },
-        { "variant": "sonda", "lane": 0.45 },
-        { "variant": "satelite", "lane": -0.5 },
-        { "variant": "sonda", "lane": -0.7 },
-        { "variant": "satelite", "lane": 0.15 },
-        { "variant": "sonda", "lane": 0.85 },
-        { "variant": "satelite", "lane": 0.9 },
-        { "variant": "sonda", "lane": 0.0 },
-        { "variant": "satelite", "lane": -0.2 },
-        { "variant": "sonda", "lane": -0.95 }
+        { "variant": "satelite", "lane": -0.85, "delayMs": 0 },
+        { "variant": "sonda", "lane": -0.15, "delayMs": 327 },
+        { "variant": "satelite", "lane": 0.6, "delayMs": 655 },
+        { "variant": "sonda", "lane": 0.45, "delayMs": 982 },
+        { "variant": "satelite", "lane": -0.5, "delayMs": 1309 },
+        { "variant": "sonda", "lane": -0.7, "delayMs": 1636 },
+        { "variant": "satelite", "lane": 0.15, "delayMs": 1964 },
+        { "variant": "sonda", "lane": 0.85, "delayMs": 2291 },
+        { "variant": "satelite", "lane": 0.9, "delayMs": 2618 },
+        { "variant": "sonda", "lane": 0.0, "delayMs": 2945 },
+        { "variant": "satelite", "lane": -0.2, "delayMs": 3273 },
+        { "variant": "sonda", "lane": -0.95, "delayMs": 3600 }
       ]
     },
     {
       "atMs": 31000,
-      "title": "SETOR 3B — TEMPESTADE ORBITAL",
-      "message": "Chuva de asteroides de gelo e carbono em órbita!",
-      "asteroids": { "variants": [2, 3], "intervalMs": 200 },
+      "title": "TEMPESTADE ORBITAL",
+      "asteroids": {
+        "variants": [2, 3],
+        "intervalMs": 200
+      },
       "wave": [
-        { "variant": "sonda", "lane": -0.6 },
-        { "variant": "satelite", "lane": -0.2 },
-        { "variant": "sonda", "lane": 0.25 },
-        { "variant": "satelite", "lane": 0.7 }
+        { "variant": "sonda", "lane": -0.6, "delayMs": 0 },
+        { "variant": "satelite", "lane": -0.2, "delayMs": 1067 },
+        { "variant": "sonda", "lane": 0.25, "delayMs": 2133 },
+        { "variant": "satelite", "lane": 0.7, "delayMs": 3200 }
       ]
     },
     {
       "atMs": 35000,
-      "title": "SETOR FINAL — MATRIARCA",
-      "message": "A Matriarca guarda o coração da nebulosa!",
-      "asteroids": { "variants": [3] },
-      "boss": {
-        "name": "Matriarca de Carina",
-        "variant": "bastiao",
-        "lane": 0,
-        "size": 3.4,
-        "health": 26
-      }
+      "title": "MATRIARCA",
+      "asteroids": {
+        "variants": [3]
+      },
+      "boss": { "name": "Matriarca de Carina", "variant": "bastiao", "lane": 0, "size": 3.4, "health": 42 }
     }
   ]
 }

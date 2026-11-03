@@ -39,8 +39,7 @@
   "events": [
     {
       "atMs": 0,
-      "title": "FASE 3 — ABISMO DE TITÃ",
-      "message": "Campo de gelo à frente.",
+      "title": "ABISMO DE TITÃ",
       "asteroids": { "variants": [] },
       "wave": [
         { "variant": "vanguarda", "lane": -0.52 },
@@ -49,8 +48,7 @@
     },
     {
       "atMs": 18000,
-      "title": "SETOR 2 — FRATURA GLACIAL",
-      "message": "A crosta está cedendo. Blocos de gelo à deriva!",
+      "title": "FRATURA GLACIAL",
       "asteroids": { "variants": [2], "intervalMs": 300 },
       "wave": [
         { "variant": "bastiao", "lane": -0.38, "size": 1.15 },
@@ -61,15 +59,14 @@
     },
     {
       "atMs": 36000,
-      "title": "SETOR FINAL — COLOSSO",
-      "message": "O Colosso de Titã bloqueia a saída do abismo!",
+      "title": "COLOSSO",
       "asteroids": { "variants": [] },
       "boss": {
         "name": "Colosso de Titã",
         "variant": "bastiao",
         "lane": 0,
         "size": 3.35,
-        "health": 20
+        "health": 32
       }
     }
   ]

@@ -4,7 +4,12 @@
   "description": "Atravesse o cinturão e enfrente o comandante que controla a rota.",
   "background": {
     "baseColor": "#080d20",
-    "nebulaColors": ["#24236b", "#0b6d9b", "#9b3a91", "#8b5cf6"],
+    "nebulaColors": [
+      "#24236b",
+      "#0b6d9b",
+      "#9b3a91",
+      "#8b5cf6"
+    ],
     "horizonColor": "#6ee7ff",
     "planet": {
       "x": 0.82,
@@ -24,55 +29,116 @@
     }
   },
   "initialAsteroids": [
-    { "progress": 0.08, "lane": 0, "speed": 0.11 },
-    { "progress": 0.2, "lane": -0.78 },
-    { "progress": 0.28, "lane": 0.78 },
-    { "progress": 0.34, "lane": 0.12, "speed": 0.11 },
-    { "progress": 0.38, "lane": -0.6 },
-    { "progress": 0.42, "lane": 0.9 },
-    { "progress": 0.26, "lane": -0.26 },
-    { "progress": 0.32, "lane": 0.42 },
-    { "progress": 0.1, "lane": -0.92 },
-    { "progress": 0.18, "lane": 0.92 }
+    {
+      "progress": 0.08,
+      "lane": 0,
+      "speed": 0.11
+    },
+    {
+      "progress": 0.2,
+      "lane": -0.78
+    },
+    {
+      "progress": 0.28,
+      "lane": 0.78
+    },
+    {
+      "progress": 0.34,
+      "lane": 0.12,
+      "speed": 0.11
+    },
+    {
+      "progress": 0.38,
+      "lane": -0.6
+    },
+    {
+      "progress": 0.42,
+      "lane": 0.9
+    },
+    {
+      "progress": 0.26,
+      "lane": -0.26
+    },
+    {
+      "progress": 0.32,
+      "lane": 0.42
+    },
+    {
+      "progress": 0.1,
+      "lane": -0.92
+    },
+    {
+      "progress": 0.18,
+      "lane": 0.92
+    }
   ],
   "initialEnemies": [
-    { "progress": 0.12, "lane": -0.6, "variant": "cometa" },
-    { "progress": 0.16, "lane": 0.6, "variant": "vespa" }
+    {
+      "progress": 0.12,
+      "lane": -0.6,
+      "variant": "cometa"
+    },
+    {
+      "progress": 0.16,
+      "lane": 0.6,
+      "variant": "vespa"
+    }
   ],
-  "ambientVariants": ["cometa", "vespa", "espectro"],
+  "ambientVariants": [
+    "cometa",
+    "vespa",
+    "espectro"
+  ],
   "events": [
     {
       "atMs": 0,
-      "title": "SETOR 1 — CINTURÃO",
-      "message": "Tráfego hostil detectado à frente.",
-      "asteroids": { "variants": [] },
+      "title": "CINTURÃO DE ÓRION",
+      "asteroids": {
+        "variants": []
+      },
       "wave": [
-        { "variant": "cometa", "lane": -0.48 },
-        { "variant": "vespa", "lane": 0.48 }
+        {
+          "variant": "cometa",
+          "lane": -0.48
+        },
+        {
+          "variant": "vespa",
+          "lane": 0.48
+        }
       ]
     },
     {
       "atMs": 18000,
-      "title": "SETOR 2 — CAMPO DE DESTROÇOS",
-      "message": "Atenção: destroços de naves à deriva e poucos interceptadores.",
+      "title": "CAMPO DE DESTROÇOS",
       "minionRate": 0.4,
-      "asteroids": { "variants": [4, 5, 6], "intervalMs": 380 },
+      "asteroids": {
+        "variants": [
+          4,
+          5,
+          6
+        ],
+        "intervalMs": 380
+      },
       "wave": [
-        { "variant": "vanguarda", "lane": 0.5 }
+        {
+          "variant": "vanguarda",
+          "lane": 0.5
+        }
       ]
     },
     {
       "atMs": 36000,
-      "title": "SETOR FINAL — COMANDANTE",
-      "message": "O comandante do cinturão está se aproximando!",
+      "title": "COMANDANTE",
       "minionRate": 1,
-      "asteroids": { "variants": [] },
+      "asteroids": {
+        "variants": []
+      },
       "boss": {
-        "name": "Bastião Ôrion",
+        "name": "Bastião Órion",
         "variant": "bastiao",
         "lane": 0,
         "size": 2.8,
-        "health": 12
+        "health": 20
       }
     }
   ]

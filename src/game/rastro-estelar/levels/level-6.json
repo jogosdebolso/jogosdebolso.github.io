@@ -40,8 +40,7 @@
   "events": [
     {
       "atMs": 0,
-      "title": "FASE 6 — HORIZONTE DE CYGNUS",
-      "message": "A lente gravitacional distorce a rota. Mantenha distância do núcleo!",
+      "title": "HORIZONTE DE CYGNUS",
       "wave": [
         { "variant": "fantasma", "lane": -0.58 },
         { "variant": "bastiao", "lane": 0.58 }
@@ -49,8 +48,7 @@
     },
     {
       "atMs": 16000,
-      "title": "SETOR 2 — DISCO DE ACREÇÃO",
-      "message": "A matéria incandescente acelera ao redor da singularidade!",
+      "title": "DISCO DE ACREÇÃO",
       "wave": [
         { "variant": "vanguarda", "lane": -0.78 },
         { "variant": "fantasma", "lane": -0.3 },
@@ -61,14 +59,13 @@
     },
     {
       "atMs": 33000,
-      "title": "SETOR FINAL — GUARDIÃO",
-      "message": "O Guardião do Horizonte emergiu do disco!",
+      "title": "GUARDIÃO",
       "boss": {
         "name": "Guardião do Horizonte",
         "variant": "espectro",
         "lane": 0,
         "size": 3.7,
-        "health": 30
+        "health": 48
       }
     }
   ]

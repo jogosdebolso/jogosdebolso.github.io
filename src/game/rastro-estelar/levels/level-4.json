@@ -39,8 +39,7 @@
   "events": [
     {
       "atMs": 0,
-      "title": "FASE 4 — COROA SOLAR",
-      "message": "Calor extremo detectado. Mantenha-se na rota!",
+      "title": "COROA SOLAR",
       "asteroids": { "variants": [1] },
       "hazards": { "plasmaWaveMs": 0 },
       "wave": [
@@ -50,8 +49,7 @@
     },
     {
       "atMs": 18000,
-      "title": "SETOR 2 — TEMPESTADE DE PLASMA",
-      "message": "A estrela lança ondas de plasma. Passe pela abertura!",
+      "title": "TEMPESTADE DE PLASMA",
       "hazards": { "plasmaWaveMs": 5200 },
       "wave": [
         { "variant": "bastiao", "lane": -0.4, "size": 1.2 },
@@ -61,15 +59,14 @@
     },
     {
       "atMs": 36000,
-      "title": "SETOR FINAL — ARAUTO SOLAR",
-      "message": "O núcleo inimigo está exposto. Finalize a missão!",
+      "title": "ARAUTO SOLAR",
       "hazards": { "plasmaWaveMs": 0 },
       "boss": {
         "name": "Arauto Solar",
         "variant": "cometa",
         "lane": 0,
         "size": 3.5,
-        "health": 24
+        "health": 38
       }
     }
   ]

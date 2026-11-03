@@ -38,8 +38,7 @@
   "events": [
     {
       "atMs": 0,
-      "title": "FASE 2 — NEBULOSA CARMESIM",
-      "message": "Visibilidade reduzida. A frota de elite protege o setor.",
+      "title": "NEBULOSA CARMESIM",
       "asteroids": { "variants": [] },
       "hazards": { "ionStormMs": 0 },
       "wave": [
@@ -49,8 +48,7 @@
     },
     {
       "atMs": 18000,
-      "title": "SETOR 2 — TEMPESTADE IÔNICA",
-      "message": "Raios iônicos: a coluna pisca antes de cair. Saia dela!",
+      "title": "TEMPESTADE IÔNICA",
       "minionRate": 0.5,
       "hazards": { "ionStormMs": 2600 },
       "wave": [
@@ -59,8 +57,7 @@
     },
     {
       "atMs": 36000,
-      "title": "SETOR FINAL — ALMIRANTE",
-      "message": "Almirante Espectro detectado. Derrube a nave de comando!",
+      "title": "ALMIRANTE",
       "minionRate": 1,
       "hazards": { "ionStormMs": 0 },
       "boss": {
@@ -68,7 +65,7 @@
         "variant": "espectro",
         "lane": 0,
         "size": 3.2,
-        "health": 16
+        "health": 26
       }
     }
   ]
