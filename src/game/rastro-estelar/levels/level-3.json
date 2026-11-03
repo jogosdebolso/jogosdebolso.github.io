@@ -43,37 +43,48 @@
       "asteroids": { "variants": [] },
       "wave": [
         { "variant": "vanguarda", "lane": -0.52 },
-        { "variant": "atirador", "lane": 0.52, "delayMs": 5333 },
-        { "variant": "espectro", "lane": -0.1, "delayMs": 10667 },
-        { "variant": "vanguarda", "lane": 0.4, "delayMs": 16000 }
+        { "variant": "vanguarda", "lane": 0.52, "delayMs": 3636 },
+        { "variant": "atirador", "lane": 0.52, "delayMs": 7272 },
+        { "variant": "vanguarda", "lane": -0.52, "delayMs": 10909 },
+        { "variant": "espectro", "lane": -0.1, "delayMs": 14546 },
+        { "variant": "espectro", "lane": 0.1, "delayMs": 18182 },
+        { "variant": "vanguarda", "lane": 0.4, "delayMs": 21818 },
+        { "variant": "vanguarda", "lane": -0.4, "delayMs": 24818 }
       ]
     },
     {
-      "atMs": 22000,
+      "atMs": 30000,
       "title": "FRATURA GLACIAL",
-      "asteroids": { "variants": [2], "intervalMs": 380 },
+      "asteroids": { "variants": [2], "intervalMs": 280 },
       "wave": [
         { "variant": "bastiao", "lane": -0.38, "size": 1.15 },
-        { "variant": "atirador", "lane": 0.3, "delayMs": 5000 },
-        { "variant": "vespa", "lane": 0.5, "delayMs": 10000 }
+        { "variant": "bastiao", "lane": 0.38, "size": 1.15, "delayMs": 3409 },
+        { "variant": "atirador", "lane": 0.3, "delayMs": 6818 },
+        { "variant": "vanguarda", "lane": -0.3, "delayMs": 10227 },
+        { "variant": "vespa", "lane": 0.5, "delayMs": 13636 },
+        { "variant": "vespa", "lane": -0.5, "delayMs": 17386 }
       ]
     },
     {
-      "atMs": 44000,
+      "atMs": 60000,
       "title": "CORRENTE GELADA",
-      "minionRate": 0.8,
-      "asteroids": { "variants": [2], "intervalMs": 480 },
+      "minionRate": 1.04,
+      "asteroids": { "variants": [2], "intervalMs": 360 },
       "wave": [
         { "variant": "atirador", "lane": -0.6 },
-        { "variant": "atirador", "lane": 0.6, "delayMs": 4667 },
-        { "variant": "bastiao", "lane": 0.0, "size": 1.2, "delayMs": 9333 },
-        { "variant": "vespa", "lane": -0.2, "delayMs": 14000 }
+        { "variant": "vanguarda", "lane": 0.6, "delayMs": 3182 },
+        { "variant": "atirador", "lane": 0.6, "delayMs": 6364 },
+        { "variant": "vanguarda", "lane": -0.6, "delayMs": 9546 },
+        { "variant": "bastiao", "lane": 0.0, "size": 1.2, "delayMs": 12727 },
+        { "variant": "bastiao", "lane": 0.5, "size": 1.2, "delayMs": 15909 },
+        { "variant": "vespa", "lane": -0.2, "delayMs": 19091 },
+        { "variant": "vespa", "lane": 0.2, "delayMs": 22091 }
       ]
     },
     {
-      "atMs": 66000,
+      "atMs": 90000,
       "title": "COLOSSO",
-      "minionRate": 1,
+      "minionRate": 1.3,
       "asteroids": { "variants": [] },
       "boss": { "name": "Colosso de Titã", "variant": "bastiao", "lane": 0, "size": 3.35, "health": 32 }
     }

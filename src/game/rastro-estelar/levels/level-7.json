@@ -41,10 +41,15 @@
       "title": "ÓRBITA DO HORIZONTE",
       "wave": [
         { "variant": "atirador", "lane": -0.5 },
-        { "variant": "atirador", "lane": 0.5, "delayMs": 2500 },
-        { "variant": "sonda", "lane": 0.0, "delayMs": 5000 },
-        { "variant": "satelite", "lane": -0.85, "delayMs": 7500 },
-        { "variant": "sonda", "lane": 0.85, "delayMs": 10000 }
+        { "variant": "vanguarda", "lane": 0.5, "delayMs": 1625 },
+        { "variant": "atirador", "lane": 0.5, "delayMs": 3250 },
+        { "variant": "vanguarda", "lane": -0.5, "delayMs": 4875 },
+        { "variant": "sonda", "lane": 0.0, "delayMs": 6500 },
+        { "variant": "sonda", "lane": 0.5, "delayMs": 8125 },
+        { "variant": "satelite", "lane": -0.85, "delayMs": 9750 },
+        { "variant": "satelite", "lane": 0.85, "delayMs": 11375 },
+        { "variant": "sonda", "lane": 0.85, "delayMs": 13000 },
+        { "variant": "sonda", "lane": -0.85, "delayMs": 13000 }
       ]
     },
     {
@@ -54,88 +59,111 @@
       "boss": { "name": "Bastião Órion", "variant": "bastiao", "lane": 0, "size": 2.8, "health": 12, "art": 1, "final": false }
     },
     {
-      "atMs": 15000,
+      "atMs": 16000,
       "title": "ALMIRANTE ESPECTRO",
       "waitForClear": true,
       "boss": { "name": "Almirante Espectro", "variant": "espectro", "lane": 0, "size": 3.2, "health": 14, "art": 2, "final": false }
     },
     {
-      "atMs": 18000,
+      "atMs": 20000,
       "title": "ECOS DE TITÃ",
       "waitForClear": true,
       "wave": [
         { "variant": "atirador", "lane": -0.7 },
         { "variant": "atirador", "lane": 0.0 },
-        { "variant": "atirador", "lane": 0.7 }
+        { "variant": "atirador", "lane": 0.7 },
+        { "variant": "vanguarda", "lane": 0.7, "delayMs": 1 },
+        { "variant": "vanguarda", "lane": 0.5, "delayMs": 1 },
+        { "variant": "vanguarda", "lane": -0.7, "delayMs": 1 }
       ]
     },
     {
-      "atMs": 21000,
+      "atMs": 24000,
       "title": "COLOSSO DE TITÃ",
       "waitForClear": true,
       "boss": { "name": "Colosso de Titã", "variant": "bastiao", "lane": 0, "size": 3.35, "health": 16, "art": 3, "final": false }
     },
     {
-      "atMs": 24000,
+      "atMs": 28000,
       "title": "ARAUTO SOLAR",
       "waitForClear": true,
       "boss": { "name": "Arauto Solar", "variant": "cometa", "lane": 0, "size": 3.5, "health": 18, "art": 4, "final": false }
     },
     {
-      "atMs": 27000,
+      "atMs": 32000,
       "title": "ECOS DE CARINA",
       "waitForClear": true,
       "wave": [
         { "variant": "satelite", "lane": -0.85 },
-        { "variant": "sonda", "lane": -0.3, "delayMs": 1143 },
-        { "variant": "satelite", "lane": 0.4, "delayMs": 2286 },
-        { "variant": "sonda", "lane": 0.8, "delayMs": 3429 },
-        { "variant": "satelite", "lane": -0.6, "delayMs": 4571 },
-        { "variant": "sonda", "lane": 0.6, "delayMs": 5714 },
-        { "variant": "satelite", "lane": 0.1, "delayMs": 6857 },
-        { "variant": "sonda", "lane": -0.1, "delayMs": 8000 }
+        { "variant": "satelite", "lane": 0.85, "delayMs": 743 },
+        { "variant": "sonda", "lane": -0.3, "delayMs": 1486 },
+        { "variant": "sonda", "lane": 0.3, "delayMs": 2229 },
+        { "variant": "satelite", "lane": 0.4, "delayMs": 2972 },
+        { "variant": "satelite", "lane": -0.4, "delayMs": 3715 },
+        { "variant": "sonda", "lane": 0.8, "delayMs": 4458 },
+        { "variant": "sonda", "lane": -0.8, "delayMs": 5200 },
+        { "variant": "satelite", "lane": -0.6, "delayMs": 5942 },
+        { "variant": "satelite", "lane": 0.6, "delayMs": 6685 },
+        { "variant": "sonda", "lane": 0.6, "delayMs": 7428 },
+        { "variant": "sonda", "lane": -0.6, "delayMs": 8171 },
+        { "variant": "satelite", "lane": 0.1, "delayMs": 8914 },
+        { "variant": "satelite", "lane": -0.1, "delayMs": 9657 },
+        { "variant": "sonda", "lane": -0.1, "delayMs": 10400 },
+        { "variant": "sonda", "lane": 0.1, "delayMs": 10400 }
       ]
     },
     {
-      "atMs": 30000,
+      "atMs": 36000,
       "title": "MATRIARCA DE CARINA",
       "waitForClear": true,
       "boss": { "name": "Matriarca de Carina", "variant": "bastiao", "lane": 0, "size": 3.4, "health": 20, "art": 5, "final": false }
     },
     {
-      "atMs": 33000,
+      "atMs": 40000,
       "title": "ECOS DE CYGNUS",
       "waitForClear": true,
       "wave": [
         { "variant": "fantasma", "lane": -0.6 },
         { "variant": "fantasma", "lane": 0.0 },
-        { "variant": "fantasma", "lane": 0.6 }
+        { "variant": "fantasma", "lane": 0.6 },
+        { "variant": "fantasma", "lane": 0.6, "delayMs": 1 },
+        { "variant": "fantasma", "lane": 0.5, "delayMs": 1 },
+        { "variant": "fantasma", "lane": -0.6, "delayMs": 1 }
       ]
     },
     {
-      "atMs": 36000,
+      "atMs": 44000,
       "title": "GUARDIÃO DO HORIZONTE",
       "waitForClear": true,
       "boss": { "name": "Guardião do Horizonte", "variant": "espectro", "lane": 0, "size": 3.7, "health": 22, "art": 6, "final": false }
     },
     {
-      "atMs": 39000,
+      "atMs": 48000,
       "title": "ÚLTIMA ONDA",
       "waitForClear": true,
       "wave": [
         { "variant": "atirador", "lane": -0.55 },
-        { "variant": "fantasma", "lane": 0.0, "delayMs": 1000 },
-        { "variant": "atirador", "lane": 0.55, "delayMs": 2000 },
-        { "variant": "sonda", "lane": -0.9, "delayMs": 3000 },
-        { "variant": "satelite", "lane": 0.9, "delayMs": 4000 },
-        { "variant": "satelite", "lane": -0.6, "delayMs": 5000 },
-        { "variant": "sonda", "lane": 0.6, "delayMs": 6000 },
-        { "variant": "satelite", "lane": 0.1, "delayMs": 7000 },
-        { "variant": "sonda", "lane": -0.1, "delayMs": 8000 }
+        { "variant": "vanguarda", "lane": 0.55, "delayMs": 650 },
+        { "variant": "fantasma", "lane": 0.0, "delayMs": 1300 },
+        { "variant": "fantasma", "lane": 0.5, "delayMs": 1950 },
+        { "variant": "atirador", "lane": 0.55, "delayMs": 2600 },
+        { "variant": "vanguarda", "lane": -0.55, "delayMs": 3250 },
+        { "variant": "sonda", "lane": -0.9, "delayMs": 3900 },
+        { "variant": "sonda", "lane": 0.9, "delayMs": 4550 },
+        { "variant": "satelite", "lane": 0.9, "delayMs": 5200 },
+        { "variant": "satelite", "lane": -0.9, "delayMs": 5850 },
+        { "variant": "satelite", "lane": -0.6, "delayMs": 6500 },
+        { "variant": "satelite", "lane": 0.6, "delayMs": 7150 },
+        { "variant": "sonda", "lane": 0.6, "delayMs": 7800 },
+        { "variant": "sonda", "lane": -0.6, "delayMs": 8450 },
+        { "variant": "satelite", "lane": 0.1, "delayMs": 9100 },
+        { "variant": "satelite", "lane": -0.1, "delayMs": 9750 },
+        { "variant": "sonda", "lane": -0.1, "delayMs": 10400 },
+        { "variant": "sonda", "lane": 0.1, "delayMs": 10400 }
       ]
     },
     {
-      "atMs": 42000,
+      "atMs": 52000,
       "title": "SINGULARIDADE",
       "waitForClear": true,
       "boss": { "name": "Sentinela da Singularidade", "variant": "bastiao", "lane": 0, "size": 3.8, "health": 60, "art": 7, "final": true }

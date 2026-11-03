@@ -989,12 +989,17 @@ export class RastroEstelarScene extends Phaser.Scene {
     );
   }
 
+  /** Já chegou a 50% do tamanho? Antes disso não colide nem recebe tiro. */
+  private isCloseEnough(target: Asteroid | Enemy): boolean {
+    const boss = "isBoss" in target && target.isBoss;
+    const fullScale = target.image.scaleX * (boss ? 320 / 100 : 1);
+    return fullScale >= RastroEstelarScene.COLLISION_MIN_SCALE;
+  }
+
   private checkAsteroidCollisions(): void {
     for (const obstacle of [...this.asteroids, ...this.enemies]) {
       // Longe demais para valer: só colide depois de chegar a 50% do tamanho.
-      const boss = "isBoss" in obstacle && obstacle.isBoss;
-      const fullScale = obstacle.image.scaleX * (boss ? 320 / 100 : 1);
-      if (fullScale < RastroEstelarScene.COLLISION_MIN_SCALE) {
+      if (!this.isCloseEnough(obstacle)) {
         continue;
       }
       const horizontalRadius =
@@ -1408,7 +1413,7 @@ export class RastroEstelarScene extends Phaser.Scene {
 
   /** Cada chefe tem seu próprio tiro: textura, padrão e ritmo. */
   private static readonly BOSS_FIRE_INTERVAL_MS: Record<number, number> = {
-    1: 2300, 2: 2500, 3: 3100, 4: 2900, 5: 2900, 6: 3300, 7: 2100,
+    1: 1700, 2: 1850, 3: 2300, 4: 2150, 5: 2150, 6: 2450, 7: 1550,
   };
 
   private updateBossFire(enemy: Enemy, delta: number): void {
@@ -1416,7 +1421,7 @@ export class RastroEstelarScene extends Phaser.Scene {
       return;
     }
     // Chefes do boss rush (fase 7) atiram um pouco mais devagar.
-    const slower = enemy.isFinalBoss ? 1 : 1.3;
+    const slower = enemy.isFinalBoss ? 1 : 1.15;
     enemy.fireElapsedMs += delta;
     if (
       enemy.fireElapsedMs <
@@ -1459,20 +1464,22 @@ export class RastroEstelarScene extends Phaser.Scene {
 
     switch (art) {
       case 1: // Bastião Órion: um tiro mirado.
-        fan(1, 0, 1700, 1.2);
+        fan(3, 0.45, 1600, 1.2);
         break;
       case 2: // Almirante Espectro: três lâminas em leque.
-        fan(3, 0.7, 1600, 1);
+        fan(5, 1.0, 1500, 1);
         break;
       case 3: // Colosso de Titã: dois orbes grandes e lentos, com vão no meio.
-        shoot(aim() - 0.28, 2300, 1.7);
-        shoot(aim() + 0.28, 2300, 1.7);
+        shoot(aim() - 0.28, 2200, 1.7);
+        shoot(aim() + 0.28, 2200, 1.7);
+        shoot(aim() - 0.62, 2200, 1.7);
+        shoot(aim() + 0.62, 2200, 1.7);
         break;
       case 4: // Arauto Solar: leque de cinco estrelas de fogo.
-        fan(5, 1.2, 1900, 1);
+        fan(7, 1.5, 1800, 1);
         break;
       case 5: // Matriarca de Carina: rajada de três esporos, cada um mirado.
-        for (let burst = 0; burst < 3; burst += 1) {
+        for (let burst = 0; burst < 5; burst += 1) {
           this.time.delayedCall(burst * 260, () => {
             if (this.isPlaying && this.enemies.includes(enemy)) {
               shoot(aim(), 1500, 1);
@@ -1481,15 +1488,15 @@ export class RastroEstelarScene extends Phaser.Scene {
         }
         break;
       case 6: // Guardião do Horizonte: leque largo de anéis (sete).
-        fan(7, 1.9, 2100, 1);
+        fan(9, 2.2, 2000, 1);
         break;
       default: {
         // Sentinela: alterna leque curto mirado e leque largo de estrelas.
         this.bossVolleyCount += 1;
         if (this.bossVolleyCount % 2 === 0) {
-          fan(7, 1.7, 1700, 1);
+          fan(9, 2.0, 1600, 1);
         } else {
-          fan(3, 0.45, 1400, 1.1);
+          fan(5, 0.7, 1300, 1.1);
         }
       }
     }
@@ -1922,6 +1929,7 @@ export class RastroEstelarScene extends Phaser.Scene {
         for (const target of [...this.enemies, ...this.asteroids]) {
           if (
             ("ghost" in target && target.ghost) ||
+            !this.isCloseEnough(target) ||
             !target.image.visible ||
             target.image.y > y + 30
           ) {
@@ -1952,7 +1960,11 @@ export class RastroEstelarScene extends Phaser.Scene {
 
       let hit = false;
       for (const target of [...this.asteroids, ...this.enemies]) {
-        if (("ghost" in target && target.ghost) || shot.hitTargets?.has(target)) {
+        if (
+          ("ghost" in target && target.ghost) ||
+          !this.isCloseEnough(target) ||
+          shot.hitTargets?.has(target)
+        ) {
           continue;
         }
         const horizontalGap = Math.abs(target.image.x - x);

@@ -75,3 +75,8 @@
 ## Controles de celular e redimensionamento (Rastro Estelar)
 - Toque/arrasto: o dedo move a nave de forma relativa (sensibilidade `TOUCH_SENSITIVITY`) e o tiro é contínuo enquanto o dedo estiver na tela; toques sobre objetos interativos (botões, overlays) são ignorados. A tela inicial usa `startInstructionsTouch` em dispositivos com toque.
 - Redimensionar/girar a tela: `RESIZE` é coalescido por quadro (`queueResize`); redesenha o fundo, mantém a nave na mesma posição relativa, reposiciona o HUD (`layoutHud`), reconstrói overlays (`rebuildOverlay`) e reinicia a página da tela de vitória. `src/main.ts` observa o contêiner com `ResizeObserver` (`getParentBounds` + `refresh`). CSS usa `touch-action: none`.
+
+## Colisão, duração e chefes (ajuste de novembro)
+- Obstáculos, inimigos e chefes só colidem e só recebem tiro do jogador depois de 50% da escala (`COLLISION_MIN_SCALE`, `isCloseEnough`).
+- Fases 1–4 e 6: setores de 30 s e chefe em 90 s (fase 5: chefe ~87 s; fase 7: boss rush com 4 s entre eventos); ondas com cerca do dobro de inimigos e asteroides/minions ~30% mais frequentes.
+- Chefes atiram ~25% mais rápido e com mais projéteis por rajada.
