@@ -68,6 +68,8 @@ export class RastroEstelarScene extends Phaser.Scene {
   /** Upgrades de tiro: caixa de metal -> item solto -> arma temporária. */
   private static readonly WEAPON_DURATION_MS = 18000;
   private static readonly MAX_LIVES = 4;
+  /** Escala mínima (1 = 100%) para um obstáculo ou inimigo poder colidir. */
+  private static readonly COLLISION_MIN_SCALE = 0.5;
   private static readonly WEAPONS: Record<
     Exclude<WeaponKind, "normal">,
     { label: string; color: string }
@@ -989,6 +991,12 @@ export class RastroEstelarScene extends Phaser.Scene {
 
   private checkAsteroidCollisions(): void {
     for (const obstacle of [...this.asteroids, ...this.enemies]) {
+      // Longe demais para valer: só colide depois de chegar a 50% do tamanho.
+      const boss = "isBoss" in obstacle && obstacle.isBoss;
+      const fullScale = obstacle.image.scaleX * (boss ? 320 / 100 : 1);
+      if (fullScale < RastroEstelarScene.COLLISION_MIN_SCALE) {
+        continue;
+      }
       const horizontalRadius =
         obstacle.image.displayWidth * RASTRO_GAME_CONFIG.collision.obstacleWidthFactor +
         this.player.width * this.player.scaleX *
