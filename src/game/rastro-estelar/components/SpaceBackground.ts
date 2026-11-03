@@ -562,7 +562,7 @@ export function drawCygnusBlackHoleAnimation(
     orbitalApproach,
   );
   if (variant) {
-    drawBlackHoleVariant(graphics, variant, centerX, centerY, radius, time);
+    drawBlackHoleVariant(graphics, variant, centerX, centerY, radius, time, height);
     return;
   }
   const seconds = time / 1000;

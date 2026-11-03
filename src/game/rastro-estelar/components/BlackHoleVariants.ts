@@ -24,6 +24,19 @@ const SHADOW = 0x010208;
 const TILT = 0.12;
 const FLATTEN = 0.34;
 
+/** Ajustes de legibilidade: reduza para um cenário mais limpo, aumente para mais brilho. */
+const DISK_INNER = 1.28; // raio interno do disco (em raios do buraco negro)
+const DISK_SPAN = 1.1; // largura do disco; o alcance é INNER + SPAN (antes 3,58)
+const OUTER_ALPHA = 0.15; // brilho das órbitas mais externas (a interna é 1)
+const WHITE_CHANCE = 0.08; // fração de traços em branco puro
+const MAX_LINE_PX = 2.2; // espessura máxima dos traços
+const CALM_START = 0.45; // a partir desta altura da tela (0-1) o disco escurece
+const CALM_RANGE = 0.3; // e atinge o máximo após esta distância
+const LENS_RINGS = 16; // arcos que abraçam a sombra: muitos e juntos, como um halo
+const LENS_INNER = 1.05; // raio do primeiro arco (em raios do buraco negro)
+const LENS_SPAN = 0.24; // largura do halo (antes 0,5, com só 9 arcos)
+const CALM_STRENGTH = 0.65; // quanto escurece sob a nave (0 = nada)
+
 let streaks: Streak[] | undefined;
 
 function buildStreaks(): Streak[] {
@@ -37,16 +50,20 @@ function buildStreaks(): Streak[] {
   for (let orbit = 0; orbit < 54; orbit += 1) {
     const t = orbit / 53;
     // Mais traços e mais longos perto do buraco.
-    const dashes = 2 + Math.floor(random() * 4) + Math.round((1 - t) * 3);
+    const dashes = Math.max(
+      1,
+      Math.round(
+        (2 + Math.floor(random() * 4) + Math.round((1 - t) * 3)) * (1 - t * 0.5),
+      ),
+    );
     for (let dash = 0; dash < dashes; dash += 1) {
       list.push({
         orbit: t + (random() - 0.5) * 0.015,
         start: random() * Math.PI * 2,
         span: (0.25 + random() * 1.4) * (1 - t * 0.45),
-        width: 0.7 + random() * 1.5,
+        width: 0.6 + random() * 0.8,
         drift: 0.5 + random() * 0.5,
-        // Cerca de 1 em cada 4 traços é branco puro.
-        color: random() < 0.25
+        color: random() < WHITE_CHANCE
           ? 0xffffff
           : PALETTE[Math.min(PALETTE.length - 1, Math.floor(t * 3.6 + random() * 1.4))],
         lens: false,
@@ -54,14 +71,14 @@ function buildStreaks(): Streak[] {
     }
   }
   // Traços curvos rente à sombra, por cima e por baixo (luz do fundo do disco).
-  for (let ring = 0; ring < 9; ring += 1) {
-    const t = ring / 8;
-    for (let dash = 0; dash < 4; dash += 1) {
+  for (let ring = 0; ring < LENS_RINGS; ring += 1) {
+    const t = ring / (LENS_RINGS - 1);
+    for (let dash = 0; dash < 5; dash += 1) {
       list.push({
         orbit: t,
-        start: Math.PI * (1.05 + random() * 0.6),
-        span: 0.5 + random() * 1.1,
-        width: 0.8 + random() * 1.4,
+        start: Math.PI * (1.0 + random() * 0.8),
+        span: 0.45 + random() * 1.0,
+        width: 0.5 + random() * 0.6,
         drift: 0.3 + random() * 0.3,
         color: PALETTE[Math.min(3, Math.floor(t * 3.5))],
         lens: true,
@@ -78,6 +95,7 @@ export function drawBlackHoleVariant(
   cy: number,
   radius: number,
   time: number,
+  screenHeight = cy * 2,
 ): void {
   streaks ??= buildStreaks();
   const seconds = time / 1000;
@@ -106,17 +124,34 @@ export function drawBlackHoleVariant(
       let angle0: number;
       if (lens) {
         // Arco quase circular que abraça a sombra.
-        rx = radius * (1.07 + streak.orbit * 0.5);
+        rx = radius * (LENS_INNER + streak.orbit * LENS_SPAN);
         ry = rx * (0.92 + streak.orbit * 0.05);
         angle0 = streak.start + seconds * streak.drift * 0.15;
       } else {
-        rx = radius * (1.28 + streak.orbit * 2.3);
+        rx = radius * (DISK_INNER + streak.orbit * DISK_SPAN);
         ry = rx * FLATTEN;
         // Gira mais rápido por dentro (lei de Kepler simplificada).
         angle0 = streak.start + seconds * streak.drift * (1.1 / (1 + streak.orbit * 3.2));
       }
       const steps = Math.max(4, Math.ceil(streak.span / 0.07));
-      graphics.lineStyle(hairline * streak.width, streak.color, 1);
+      // Esmaece com a distância e escurece na zona onde a nave joga.
+      const midAngle = angle0 + streak.span / 2;
+      const midY = lens
+        ? cy + Math.sin(midAngle) * ry
+        : place(rx, ry, midAngle).y;
+      const calm = Phaser.Math.Clamp(
+        (midY / screenHeight - CALM_START) / CALM_RANGE,
+        0,
+        1,
+      );
+      const alpha =
+        Phaser.Math.Linear(1, OUTER_ALPHA, streak.orbit ** 0.8) *
+        (1 - CALM_STRENGTH * calm * Math.min(1, 0.3 + streak.orbit));
+      graphics.lineStyle(
+        Math.min(MAX_LINE_PX, hairline * streak.width),
+        streak.color,
+        alpha,
+      );
       let drawing = false;
       for (let step = 0; step <= steps; step += 1) {
         const angle = angle0 + (streak.span * step) / steps;

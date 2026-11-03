@@ -52,11 +52,13 @@ export class MovingStarfield {
       const projected = progress ** 2.2;
       const distance = projected * maxDistance;
       const startPx = star.startX * width;
-      const slopePx = ((startPx - centerX) / vanishingDepth);
+      // Nas laterais (fase 6) abrem menos, para ficarem mais tempo na tela.
+      const slopePx = ((startPx - centerX) / vanishingDepth) * (this.sidesOnly ? 0.3 : 1);
       const x = startPx + slopePx * distance;
       const y = horizonY + star.vertical * distance;
-      const size = star.size * (0.3 + projected * 1.1);
-      const alpha = Math.min(1, 0.15 + projected * 1.1);
+      // Nas laterais (fase 6) as estrelas são maiores e mais visíveis desde o início.
+      const size = star.size * (0.3 + projected * 1.1) * (this.sidesOnly ? 1.25 : 1);
+      const alpha = Math.min(1, (this.sidesOnly ? 0.3 : 0.15) + projected * 1.1);
 
       if (star.hasTail && progress > 0.08) {
         const tailDistance = (Math.max(0, progress - 0.03) ** 2.2) * maxDistance;
@@ -79,7 +81,7 @@ export class MovingStarfield {
   }
 
   private createStar(progress = this.random()): MovingStar {
-    const edge = 0.02 + this.random() * 0.16;
+    const edge = 0.015 + this.random() * 0.2;
     const startX = this.sidesOnly
       ? this.random() < 0.5
         ? edge
