@@ -39,34 +39,45 @@
     {
       "atMs": 0,
       "title": "NEBULOSA CARMESIM",
+      "minionRate": 1,
       "asteroids": { "variants": [] },
       "hazards": { "ionStormMs": 0 },
       "wave": [
-        { "variant": "vanguarda", "lane": -0.58 },
-        { "variant": "espectro", "lane": 0.58 }
+        { "variant": "vanguarda", "lane": -0.5 },
+        { "variant": "espectro", "lane": 0.5, "delayMs": 5333 },
+        { "variant": "bastiao", "lane": 0.0, "size": 1.1, "delayMs": 10667 },
+        { "variant": "vanguarda", "lane": 0.3, "delayMs": 16000 }
       ]
     },
     {
-      "atMs": 18000,
+      "atMs": 22000,
       "title": "TEMPESTADE IÔNICA",
       "minionRate": 0.5,
       "hazards": { "ionStormMs": 2600 },
       "wave": [
-        { "variant": "vespa", "lane": 0.3 }
+        { "variant": "vespa", "lane": -0.4 },
+        { "variant": "espectro", "lane": 0.4, "delayMs": 6500 },
+        { "variant": "vanguarda", "lane": 0.0, "delayMs": 13000 }
       ]
     },
     {
-      "atMs": 36000,
+      "atMs": 44000,
+      "title": "ELITE CARMESIM",
+      "minionRate": 1,
+      "hazards": { "ionStormMs": 3400 },
+      "wave": [
+        { "variant": "bastiao", "lane": -0.6, "size": 1.15 },
+        { "variant": "espectro", "lane": 0.6, "delayMs": 5333 },
+        { "variant": "vanguarda", "lane": 0.0, "delayMs": 10667 },
+        { "variant": "bastiao", "lane": 0.3, "size": 1.1, "delayMs": 16000 }
+      ]
+    },
+    {
+      "atMs": 66000,
       "title": "ALMIRANTE",
       "minionRate": 1,
       "hazards": { "ionStormMs": 0 },
-      "boss": {
-        "name": "Almirante Espectro",
-        "variant": "espectro",
-        "lane": 0,
-        "size": 3.2,
-        "health": 26
-      }
+      "boss": { "name": "Almirante Espectro", "variant": "espectro", "lane": 0, "size": 3.2, "health": 26 }
     }
   ]
 }

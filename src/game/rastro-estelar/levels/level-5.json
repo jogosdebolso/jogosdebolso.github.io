@@ -41,80 +41,84 @@
       "minionRate": 0,
       "asteroids": { "variants": [] },
       "wave": [
-        { "variant": "satelite", "lane": -0.8, "delayMs": 0 },
-        { "variant": "sonda", "lane": 0.3, "delayMs": 1115 },
-        { "variant": "satelite", "lane": 0.75, "delayMs": 2231 },
-        { "variant": "sonda", "lane": -0.35, "delayMs": 3346 },
-        { "variant": "satelite", "lane": 0.9, "delayMs": 4462 },
-        { "variant": "sonda", "lane": -0.6, "delayMs": 5577 },
-        { "variant": "satelite", "lane": 0.1, "delayMs": 6692 },
-        { "variant": "sonda", "lane": 0.6, "delayMs": 7808 },
-        { "variant": "satelite", "lane": -0.9, "delayMs": 8923 },
-        { "variant": "sonda", "lane": 0.45, "delayMs": 10038 },
-        { "variant": "satelite", "lane": -0.2, "delayMs": 11154 },
-        { "variant": "sonda", "lane": 0.85, "delayMs": 12269 },
-        { "variant": "satelite", "lane": -0.5, "delayMs": 13385 },
-        { "variant": "sonda", "lane": 0.0, "delayMs": 14500 }
+        { "variant": "satelite", "lane": -0.8 },
+        { "variant": "sonda", "lane": 0.3, "delayMs": 1118 },
+        { "variant": "satelite", "lane": 0.75, "delayMs": 2235 },
+        { "variant": "sonda", "lane": -0.35, "delayMs": 3353 },
+        { "variant": "satelite", "lane": 0.9, "delayMs": 4471 },
+        { "variant": "sonda", "lane": -0.6, "delayMs": 5588 },
+        { "variant": "satelite", "lane": 0.1, "delayMs": 6706 },
+        { "variant": "sonda", "lane": 0.6, "delayMs": 7824 },
+        { "variant": "satelite", "lane": -0.9, "delayMs": 8941 },
+        { "variant": "sonda", "lane": 0.45, "delayMs": 10059 },
+        { "variant": "satelite", "lane": -0.2, "delayMs": 11176 },
+        { "variant": "sonda", "lane": 0.85, "delayMs": 12294 },
+        { "variant": "satelite", "lane": -0.5, "delayMs": 13412 },
+        { "variant": "sonda", "lane": 0.0, "delayMs": 14529 },
+        { "variant": "satelite", "lane": 0.7, "delayMs": 15647 },
+        { "variant": "sonda", "lane": -0.75, "delayMs": 16765 },
+        { "variant": "satelite", "lane": 0.2, "delayMs": 17882 },
+        { "variant": "sonda", "lane": -0.4, "delayMs": 19000 }
       ]
     },
     {
-      "atMs": 17000,
+      "atMs": 20000,
       "title": "BERÇÁRIO ESTELAR",
       "minionRate": 1,
-      "asteroids": { "variants": [] },
       "wave": [
-        { "variant": "cometa", "lane": -0.72, "delayMs": 0 },
-        { "variant": "bastiao", "lane": -0.22, "size": 1.15, "delayMs": 818 },
-        { "variant": "vespa", "lane": 0.42, "delayMs": 1636 },
-        { "variant": "espectro", "lane": 0.78, "delayMs": 2455 },
-        { "variant": "sonda", "lane": -0.4, "delayMs": 3273 },
-        { "variant": "satelite", "lane": 0.85, "delayMs": 4091 },
-        { "variant": "sonda", "lane": 0.1, "delayMs": 4909 },
-        { "variant": "vespa", "lane": -0.15, "delayMs": 5727 },
-        { "variant": "cometa", "lane": 0.6, "delayMs": 6545 },
-        { "variant": "sonda", "lane": -0.8, "delayMs": 7364 },
-        { "variant": "satelite", "lane": 0.3, "delayMs": 8182 },
-        { "variant": "espectro", "lane": -0.55, "delayMs": 9000 }
+        { "variant": "cometa", "lane": -0.72 },
+        { "variant": "bastiao", "lane": -0.22, "size": 1.15, "delayMs": 1364 },
+        { "variant": "vespa", "lane": 0.42, "delayMs": 2727 },
+        { "variant": "espectro", "lane": 0.78, "delayMs": 4091 },
+        { "variant": "sonda", "lane": -0.4, "delayMs": 5455 },
+        { "variant": "satelite", "lane": 0.85, "delayMs": 6818 },
+        { "variant": "sonda", "lane": 0.1, "delayMs": 8182 },
+        { "variant": "vespa", "lane": -0.15, "delayMs": 9545 },
+        { "variant": "cometa", "lane": 0.6, "delayMs": 10909 },
+        { "variant": "sonda", "lane": -0.8, "delayMs": 12273 },
+        { "variant": "satelite", "lane": 0.3, "delayMs": 13636 },
+        { "variant": "espectro", "lane": -0.55, "delayMs": 15000 }
       ]
     },
     {
-      "atMs": 27000,
+      "atMs": 38000,
       "title": "CHUVA DE SUCATA",
+      "minionRate": 0.7,
       "wave": [
-        { "variant": "satelite", "lane": -0.85, "delayMs": 0 },
-        { "variant": "sonda", "lane": -0.15, "delayMs": 327 },
-        { "variant": "satelite", "lane": 0.6, "delayMs": 655 },
-        { "variant": "sonda", "lane": 0.45, "delayMs": 982 },
-        { "variant": "satelite", "lane": -0.5, "delayMs": 1309 },
-        { "variant": "sonda", "lane": -0.7, "delayMs": 1636 },
-        { "variant": "satelite", "lane": 0.15, "delayMs": 1964 },
-        { "variant": "sonda", "lane": 0.85, "delayMs": 2291 },
-        { "variant": "satelite", "lane": 0.9, "delayMs": 2618 },
-        { "variant": "sonda", "lane": 0.0, "delayMs": 2945 },
-        { "variant": "satelite", "lane": -0.2, "delayMs": 3273 },
-        { "variant": "sonda", "lane": -0.95, "delayMs": 3600 }
+        { "variant": "satelite", "lane": -0.85 },
+        { "variant": "sonda", "lane": -0.15, "delayMs": 692 },
+        { "variant": "satelite", "lane": 0.6, "delayMs": 1385 },
+        { "variant": "sonda", "lane": 0.45, "delayMs": 2077 },
+        { "variant": "satelite", "lane": -0.5, "delayMs": 2769 },
+        { "variant": "sonda", "lane": -0.7, "delayMs": 3462 },
+        { "variant": "satelite", "lane": 0.15, "delayMs": 4154 },
+        { "variant": "sonda", "lane": 0.85, "delayMs": 4846 },
+        { "variant": "satelite", "lane": 0.9, "delayMs": 5538 },
+        { "variant": "sonda", "lane": 0.0, "delayMs": 6231 },
+        { "variant": "satelite", "lane": -0.2, "delayMs": 6923 },
+        { "variant": "sonda", "lane": -0.95, "delayMs": 7615 },
+        { "variant": "satelite", "lane": 0.3, "delayMs": 8308 },
+        { "variant": "sonda", "lane": -0.35, "delayMs": 9000 }
       ]
     },
     {
-      "atMs": 31000,
+      "atMs": 49000,
       "title": "TEMPESTADE ORBITAL",
-      "asteroids": {
-        "variants": [2, 3],
-        "intervalMs": 200
-      },
+      "minionRate": 1,
+      "asteroids": { "variants": [2, 3], "intervalMs": 320 },
       "wave": [
-        { "variant": "sonda", "lane": -0.6, "delayMs": 0 },
-        { "variant": "satelite", "lane": -0.2, "delayMs": 1067 },
-        { "variant": "sonda", "lane": 0.25, "delayMs": 2133 },
-        { "variant": "satelite", "lane": 0.7, "delayMs": 3200 }
+        { "variant": "satelite", "lane": -0.6 },
+        { "variant": "sonda", "lane": -0.2, "delayMs": 1800 },
+        { "variant": "satelite", "lane": 0.25, "delayMs": 3600 },
+        { "variant": "sonda", "lane": 0.7, "delayMs": 5400 },
+        { "variant": "satelite", "lane": -0.8, "delayMs": 7200 },
+        { "variant": "sonda", "lane": 0.5, "delayMs": 9000 }
       ]
     },
     {
-      "atMs": 35000,
+      "atMs": 62000,
       "title": "MATRIARCA",
-      "asteroids": {
-        "variants": [3]
-      },
+      "asteroids": { "variants": [3], "intervalMs": 1400 },
       "boss": { "name": "Matriarca de Carina", "variant": "bastiao", "lane": 0, "size": 3.4, "health": 42 }
     }
   ]

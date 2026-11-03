@@ -40,34 +40,45 @@
     {
       "atMs": 0,
       "title": "COROA SOLAR",
-      "asteroids": { "variants": [1] },
+      "asteroids": { "variants": [1], "intervalMs": 420 },
       "hazards": { "plasmaWaveMs": 0 },
       "wave": [
         { "variant": "cometa", "lane": -0.56 },
-        { "variant": "vespa", "lane": 0.56 }
+        { "variant": "vespa", "lane": 0.56, "delayMs": 6000 },
+        { "variant": "bastiao", "lane": 0.0, "size": 1.1, "delayMs": 12000 }
       ]
     },
     {
-      "atMs": 18000,
+      "atMs": 22000,
       "title": "TEMPESTADE DE PLASMA",
-      "hazards": { "plasmaWaveMs": 5200 },
+      "asteroids": { "variants": [] },
+      "hazards": { "plasmaWaveMs": 5600 },
       "wave": [
         { "variant": "bastiao", "lane": -0.4, "size": 1.2 },
-        { "variant": "cometa", "lane": 0.4 },
-        { "variant": "vespa", "lane": 0.78 }
+        { "variant": "cometa", "lane": 0.4, "delayMs": 5500 },
+        { "variant": "vespa", "lane": 0.78, "delayMs": 11000 }
       ]
     },
     {
-      "atMs": 36000,
+      "atMs": 44000,
+      "title": "CORONA ARDENTE",
+      "minionRate": 1.2,
+      "asteroids": { "variants": [1], "intervalMs": 700 },
+      "hazards": { "plasmaWaveMs": 7000 },
+      "wave": [
+        { "variant": "cometa", "lane": -0.6 },
+        { "variant": "bastiao", "lane": 0.0, "size": 1.2, "delayMs": 5000 },
+        { "variant": "vespa", "lane": 0.6, "delayMs": 10000 },
+        { "variant": "cometa", "lane": 0.3, "delayMs": 15000 }
+      ]
+    },
+    {
+      "atMs": 66000,
       "title": "ARAUTO SOLAR",
+      "minionRate": 1,
+      "asteroids": { "variants": [] },
       "hazards": { "plasmaWaveMs": 0 },
-      "boss": {
-        "name": "Arauto Solar",
-        "variant": "cometa",
-        "lane": 0,
-        "size": 3.5,
-        "health": 38
-      }
+      "boss": { "name": "Arauto Solar", "variant": "cometa", "lane": 0, "size": 3.5, "health": 38 }
     }
   ]
 }

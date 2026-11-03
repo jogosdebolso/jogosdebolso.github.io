@@ -93,53 +93,47 @@
     {
       "atMs": 0,
       "title": "CINTURÃO DE ÓRION",
-      "asteroids": {
-        "variants": []
-      },
+      "minionRate": 1,
+      "asteroids": { "variants": [] },
       "wave": [
-        {
-          "variant": "cometa",
-          "lane": -0.48
-        },
-        {
-          "variant": "vespa",
-          "lane": 0.48
-        }
+        { "variant": "cometa", "lane": -0.48 },
+        { "variant": "vespa", "lane": 0.48, "delayMs": 3400 },
+        { "variant": "vespa", "lane": -0.2, "delayMs": 6800 },
+        { "variant": "cometa", "lane": 0.2, "delayMs": 10200 },
+        { "variant": "espectro", "lane": -0.7, "delayMs": 13600 },
+        { "variant": "vespa", "lane": 0.7, "delayMs": 17000 }
       ]
     },
     {
-      "atMs": 18000,
+      "atMs": 22000,
       "title": "CAMPO DE DESTROÇOS",
       "minionRate": 0.4,
-      "asteroids": {
-        "variants": [
-          4,
-          5,
-          6
-        ],
-        "intervalMs": 380
-      },
+      "asteroids": { "variants": [4, 5, 6], "intervalMs": 380 },
       "wave": [
-        {
-          "variant": "vanguarda",
-          "lane": 0.5
-        }
+        { "variant": "vanguarda", "lane": 0.5 },
+        { "variant": "vanguarda", "lane": -0.5, "delayMs": 7000 },
+        { "variant": "espectro", "lane": 0.0, "delayMs": 14000 }
       ]
     },
     {
-      "atMs": 36000,
+      "atMs": 44000,
+      "title": "TRÁFEGO HOSTIL",
+      "minionRate": 1.4,
+      "asteroids": { "variants": [1], "intervalMs": 700 },
+      "wave": [
+        { "variant": "espectro", "lane": -0.6 },
+        { "variant": "vanguarda", "lane": 0.6, "delayMs": 3750 },
+        { "variant": "vespa", "lane": 0.0, "delayMs": 7500 },
+        { "variant": "cometa", "lane": -0.3, "delayMs": 11250 },
+        { "variant": "vanguarda", "lane": 0.3, "delayMs": 15000 }
+      ]
+    },
+    {
+      "atMs": 66000,
       "title": "COMANDANTE",
       "minionRate": 1,
-      "asteroids": {
-        "variants": []
-      },
-      "boss": {
-        "name": "Bastião Órion",
-        "variant": "bastiao",
-        "lane": 0,
-        "size": 2.8,
-        "health": 20
-      }
+      "asteroids": { "variants": [] },
+      "boss": { "name": "Bastião Órion", "variant": "bastiao", "lane": 0, "size": 2.8, "health": 20 }
     }
   ]
 }

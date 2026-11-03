@@ -43,31 +43,39 @@
       "asteroids": { "variants": [] },
       "wave": [
         { "variant": "vanguarda", "lane": -0.52 },
-        { "variant": "atirador", "lane": 0.52 }
+        { "variant": "atirador", "lane": 0.52, "delayMs": 5333 },
+        { "variant": "espectro", "lane": -0.1, "delayMs": 10667 },
+        { "variant": "vanguarda", "lane": 0.4, "delayMs": 16000 }
       ]
     },
     {
-      "atMs": 18000,
+      "atMs": 22000,
       "title": "FRATURA GLACIAL",
-      "asteroids": { "variants": [2], "intervalMs": 300 },
+      "asteroids": { "variants": [2], "intervalMs": 380 },
       "wave": [
         { "variant": "bastiao", "lane": -0.38, "size": 1.15 },
-        { "variant": "atirador", "lane": 0.2 },
-        { "variant": "vespa", "lane": 0.5 },
-        { "variant": "atirador", "lane": 0.76 }
+        { "variant": "atirador", "lane": 0.3, "delayMs": 5000 },
+        { "variant": "vespa", "lane": 0.5, "delayMs": 10000 }
       ]
     },
     {
-      "atMs": 36000,
+      "atMs": 44000,
+      "title": "CORRENTE GELADA",
+      "minionRate": 0.8,
+      "asteroids": { "variants": [2], "intervalMs": 480 },
+      "wave": [
+        { "variant": "atirador", "lane": -0.6 },
+        { "variant": "atirador", "lane": 0.6, "delayMs": 4667 },
+        { "variant": "bastiao", "lane": 0.0, "size": 1.2, "delayMs": 9333 },
+        { "variant": "vespa", "lane": -0.2, "delayMs": 14000 }
+      ]
+    },
+    {
+      "atMs": 66000,
       "title": "COLOSSO",
+      "minionRate": 1,
       "asteroids": { "variants": [] },
-      "boss": {
-        "name": "Colosso de Titã",
-        "variant": "bastiao",
-        "lane": 0,
-        "size": 3.35,
-        "health": 32
-      }
+      "boss": { "name": "Colosso de Titã", "variant": "bastiao", "lane": 0, "size": 3.35, "health": 32 }
     }
   ]
 }
