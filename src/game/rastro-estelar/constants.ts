@@ -6,6 +6,9 @@ export const RASTRO_REFERENCE_VIEWPORT = {
 export const RASTRO_TEXTURE_KEYS = {
   asteroid: "space-asteroid",
   shot: "space-shot",
+  enemyShot: "space-enemy-shot",
+  satellite: "space-satellite",
+  probe: "space-probe",
   enemyPrefix: "space-enemy-",
   bossPrefix: "space-boss-",
 } as const;

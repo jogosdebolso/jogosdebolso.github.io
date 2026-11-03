@@ -25,6 +25,10 @@ type LevelEnemyFile = LevelObstacle & EnemySpawnFile;
 type LevelBossFile = EnemySpawnFile & {
   name: string;
   health: number;
+  /** Arte do chefe (1 a 7). */
+  art?: number;
+  /** Falso para chefes intermediários (não encerram a fase). */
+  final?: boolean;
 };
 
 type LevelEventFile = {
@@ -33,6 +37,14 @@ type LevelEventFile = {
   message: string;
   wave?: EnemySpawnFile[];
   boss?: LevelBossFile;
+  /** Só dispara quando não houver inimigos, asteroides nem chefes em campo. */
+  waitForClear?: boolean;
+  /** Frequência dos minions sorteados a partir deste evento (1 = normal, 0 = nenhum). */
+  minionRate?: number;
+  /** Asteroides/destroços a partir deste evento: tipos de sprite e intervalo. */
+  asteroids?: { variants: number[]; intervalMs?: number };
+  /** Perigos de cenário a partir deste evento (0 = desligado). */
+  hazards?: { ionStormMs?: number; plasmaWaveMs?: number };
 };
 
 type LevelFile = {
@@ -75,7 +87,16 @@ export type RastroLevelEvent = {
   title: string;
   message: string;
   wave?: RastroEnemySpawn[];
-  boss?: RastroEnemySpawn & { name: string; health: number };
+  boss?: RastroEnemySpawn & {
+    name: string;
+    health: number;
+    art?: number;
+    final?: boolean;
+  };
+  waitForClear?: boolean;
+  minionRate?: number;
+  asteroids?: { variants: number[]; intervalMs?: number };
+  hazards?: { ionStormMs?: number; plasmaWaveMs?: number };
 };
 
 export type RastroLevel = Omit<
@@ -119,7 +140,10 @@ const levelFiles: LevelFile[] = [
 ];
 
 function isEnemyVariant(value: string): value is EnemyVariant {
-  return ["cometa", "vanguarda", "vespa", "espectro", "bastiao"].includes(value);
+  return [
+    "cometa", "vanguarda", "vespa", "espectro", "bastiao",
+    "atirador", "fantasma", "satelite", "sonda",
+  ].includes(value);
 }
 
 function parseEnemyVariant(value: string, field: string): EnemyVariant {
@@ -170,7 +194,6 @@ function normalizeLevel(level: LevelFile): RastroLevel {
   }
   if (
     level.background.nebulaColors.length < 4 ||
-    level.ambientVariants.length === 0 ||
     !level.events.length
   ) {
     throw new Error(`rastro-estelar/levels/level-${level.id}.json: configuração incompleta.`);
@@ -208,9 +231,17 @@ function normalizeLevel(level: LevelFile): RastroLevel {
           ...normalizeSpawn(event.boss, `level-${level.id}.events[${index}].boss`),
           name: event.boss.name,
           health: event.boss.health,
+          art: event.boss.art,
+          final: event.boss.final,
         }
       : undefined;
-    if (boss && (!boss.name || !Number.isInteger(boss.health) || boss.health < 1)) {
+    if (
+      boss &&
+      (!boss.name ||
+        !Number.isInteger(boss.health) ||
+        boss.health < 1 ||
+        (boss.art !== undefined && (!Number.isInteger(boss.art) || boss.art < 1 || boss.art > 7)))
+    ) {
       throw new Error(`rastro-estelar/levels/level-${level.id}.json: chefe inválido.`);
     }
     if (!wave?.length && !boss) {

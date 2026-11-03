@@ -6,6 +6,8 @@ export type Asteroid = {
   speed: number;
   size: number;
   rotationSpeed: number;
+  /** Colide mesmo quando a escala passa de 1 (destroços, satélites e sondas). */
+  solid?: boolean;
   startX: number;
   startY: number;
   endX: number;
@@ -44,9 +46,35 @@ export type Enemy = {
   diveBlendProgress: number;
   diveStartX: number;
   diveStartY: number;
+  /** Fantasma: invulnerável e translúcido (só contorno) durante parte do ciclo. */
+  ghost: boolean;
+  ghostTimerMs: number;
+  /** Atirador: tempo desde o último disparo. */
+  fireElapsedMs: number;
+  /** Só o chefe final encerra a fase (os demais são do "boss rush"). */
+  isFinalBoss: boolean;
 };
 
-export type EnemyVariant = "cometa" | "vanguarda" | "vespa" | "espectro" | "bastiao";
+export type EnemyShot = {
+  image: Phaser.GameObjects.Image;
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+  progress: number;
+  durationMs: number;
+};
+
+export type EnemyVariant =
+  | "cometa"
+  | "vanguarda"
+  | "vespa"
+  | "espectro"
+  | "bastiao"
+  | "atirador"
+  | "fantasma"
+  | "satelite"
+  | "sonda";
 
 export type EnemySpawnSettings = {
   variant: EnemyVariant;
@@ -55,6 +83,10 @@ export type EnemySpawnSettings = {
   speed?: number;
   bossName?: string;
   health?: number;
+  /** Número da arte do chefe (1 a 7); padrão: a fase atual. */
+  bossArt?: number;
+  /** Falso para chefes intermediários do "boss rush". */
+  finalBoss?: boolean;
 };
 
 export type EnemyStyle = {

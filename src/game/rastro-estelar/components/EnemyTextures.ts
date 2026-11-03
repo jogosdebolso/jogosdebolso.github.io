@@ -105,6 +105,48 @@ export function createEnemyTextures(scene: Phaser.Scene): void {
       hullColor: 0x713f12,
       coreColor: 0xf59e0b,
     },
+    {
+      // Atirador: caça com canhões duplos nas asas; dispara ao pairar.
+      key: "atirador",
+      wing: [
+        { x: 50, y: 8 }, { x: 64, y: 22 }, { x: 90, y: 26 },
+        { x: 97, y: 46 }, { x: 78, y: 50 }, { x: 60, y: 46 },
+        { x: 50, y: 64 }, { x: 40, y: 46 }, { x: 22, y: 50 },
+        { x: 3, y: 46 }, { x: 10, y: 26 }, { x: 36, y: 22 },
+      ],
+      hull: [
+        { x: 50, y: 14 }, { x: 60, y: 30 }, { x: 57, y: 52 },
+        { x: 50, y: 60 }, { x: 43, y: 52 }, { x: 40, y: 30 },
+      ],
+      core: [
+        { x: 50, y: 24 }, { x: 56, y: 36 }, { x: 50, y: 48 },
+        { x: 44, y: 36 },
+      ],
+      wingColor: 0x166534,
+      hullColor: 0x14532d,
+      coreColor: 0x4ade80,
+    },
+    {
+      // Fantasma: nave pálida que alterna entre sólida e só contorno.
+      key: "fantasma",
+      wing: [
+        { x: 50, y: 6 }, { x: 66, y: 22 }, { x: 93, y: 30 },
+        { x: 80, y: 48 }, { x: 62, y: 46 }, { x: 50, y: 66 },
+        { x: 38, y: 46 }, { x: 20, y: 48 }, { x: 7, y: 30 },
+        { x: 34, y: 22 },
+      ],
+      hull: [
+        { x: 50, y: 14 }, { x: 60, y: 31 }, { x: 56, y: 52 },
+        { x: 50, y: 61 }, { x: 44, y: 52 }, { x: 40, y: 31 },
+      ],
+      core: [
+        { x: 50, y: 22 }, { x: 56, y: 36 }, { x: 50, y: 48 },
+        { x: 44, y: 36 },
+      ],
+      wingColor: 0x7c6f9c,
+      hullColor: 0x5b5280,
+      coreColor: 0xe9d5ff,
+    },
   ];
 
   for (const style of styles) {
@@ -164,8 +206,29 @@ export function createEnemyTextures(scene: Phaser.Scene): void {
     graphics.fillStyle(0xfde68a, 1);
     graphics.fillCircle(25, 41, style.key === "bastiao" ? 6 : 4);
     graphics.fillCircle(75, 41, style.key === "bastiao" ? 6 : 4);
+    if (style.key === "atirador") {
+      // Canhões duplos apontados para a frente.
+      graphics.fillStyle(0x0b1f14, 1);
+      graphics.fillRect(17, 40, 6, 22);
+      graphics.fillRect(77, 40, 6, 22);
+      graphics.fillStyle(0xfb923c, 1);
+      graphics.fillCircle(20, 62, 3);
+      graphics.fillCircle(80, 62, 3);
+    }
     graphics.generateTexture(key, 100, 72);
     graphics.destroy();
+
+    if (style.key === "fantasma") {
+      // Versão "só contorno" usada quando o fantasma fica invulnerável.
+      const outline = scene.make.graphics({ x: 0, y: 0 });
+      outline.lineStyle(2, 0xe9d5ff, 1);
+      outline.strokePoints(style.wing, true);
+      outline.lineStyle(1.5, 0xc4b5fd, 1);
+      outline.strokePoints(style.hull, true);
+      outline.strokePoints(style.core, true);
+      outline.generateTexture(`${key}-contorno`, 100, 72);
+      outline.destroy();
+    }
   }
 }
 

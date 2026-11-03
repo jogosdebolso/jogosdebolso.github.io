@@ -11,7 +11,6 @@ import {
   getCygnusBlackHoleGeometry,
   drawSpaceBackground as renderSpaceBackground,
 } from "./components/SpaceBackground";
-import { ASTEROID_VARIANT_COUNT } from "./components/AsteroidTextures";
 import { MovingStarfield } from "./components/MovingStarfield";
 import { GravityStarfield } from "./components/GravityStarfield";
 import { createExplosion } from "./components/Explosion";
@@ -21,12 +20,20 @@ import {
 } from "./constants";
 import { RASTRO_GAME_CONFIG } from "./gameConfig";
 import { RASTRO_LEVELS } from "./levelConfig";
-import type { RastroLevel } from "./levelConfig";
-import type { Asteroid, Enemy, EnemySpawnSettings, PlayerShot } from "./types";
+import type { RastroLevel, RastroLevelEvent } from "./levelConfig";
+import { IonStorm, PlasmaWaves } from "./components/Hazards";
+import type {
+  Asteroid,
+  Enemy,
+  EnemyShot,
+  EnemySpawnSettings,
+  PlayerShot,
+} from "./types";
 
 interface DebugSettings {
   damageDisabled: boolean;
   freezeEnabled: boolean;
+  infiniteLives?: boolean;
 }
 
 export class RastroEstelarScene extends Phaser.Scene {
@@ -35,11 +42,10 @@ export class RastroEstelarScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Container;
   private playerVisuals!: PlayerShipVisuals;
   private livesText!: Phaser.GameObjects.Text;
-  private debugPanel!: Phaser.GameObjects.Container;
+  private debugBar: Phaser.GameObjects.Text[] = [];
   private debugDamageToggle!: Phaser.GameObjects.Text;
   private debugFreezeToggle!: Phaser.GameObjects.Text;
   private debugAdvanceButton!: Phaser.GameObjects.Text;
-  private phaseText!: Phaser.GameObjects.Text;
   private stageAnnouncement!: Phaser.GameObjects.Text;
   private bossStatusText!: Phaser.GameObjects.Text;
   private bossHealthBar!: Phaser.GameObjects.Graphics;
@@ -50,6 +56,13 @@ export class RastroEstelarScene extends Phaser.Scene {
   private asteroids: Asteroid[] = [];
   private enemies: Enemy[] = [];
   private playerShots: PlayerShot[] = [];
+  private enemyShots: EnemyShot[] = [];
+  private ionStorm!: IonStorm;
+  private plasmaWaves!: PlasmaWaves;
+  /** Configuração do setor atual (definida pelos eventos da fase). */
+  private minionRate = 1;
+  private asteroidVariants: number[] = [];
+  private asteroidIntervalMs: number = RASTRO_GAME_CONFIG.asteroids.spawnIntervalMs;
   private asteroidRandom!: () => number;
   private asteroidSpawnElapsed = 0;
   private enemySpawnElapsed = 0;
@@ -61,6 +74,8 @@ export class RastroEstelarScene extends Phaser.Scene {
   private isPlaying = false;
   private debugDamageDisabled = false;
   private debugFreezeEnabled = false;
+  private debugInfiniteLives = false;
+  private debugLivesToggle!: Phaser.GameObjects.Text;
   private debugAdvanceHeld = false;
   private lives = RASTRO_GAME_CONFIG.lives;
   private phaseIndex = 0;
@@ -116,10 +131,8 @@ export class RastroEstelarScene extends Phaser.Scene {
           : new MovingStarfield(this);
     }
     this.scale.on(Phaser.Scale.Events.RESIZE, this.drawSpaceBackground, this);
-    this.scale.on(Phaser.Scale.Events.RESIZE, this.positionDebugPanel, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.scale.off(Phaser.Scale.Events.RESIZE, this.drawSpaceBackground, this);
-      this.scale.off(Phaser.Scale.Events.RESIZE, this.positionDebugPanel, this);
       this.input.off("pointerup", this.stopDebugAdvance, this);
     });
 
@@ -128,6 +141,7 @@ export class RastroEstelarScene extends Phaser.Scene {
     this.asteroids = [];
     this.enemies = [];
     this.playerShots = [];
+    this.enemyShots = [];
     this.asteroidSpawnElapsed = 0;
     this.enemySpawnElapsed = 0;
     this.shotCooldownElapsed = 0;
@@ -137,33 +151,21 @@ export class RastroEstelarScene extends Phaser.Scene {
     this.isFiring = false;
     this.isColliding = false;
     this.isPlaying = this.hasStarted;
-    if (this.hasAsteroids()) {
+    this.minionRate = 1;
+    this.asteroidVariants = [];
+    this.asteroidIntervalMs = RASTRO_GAME_CONFIG.asteroids.spawnIntervalMs;
+    this.ionStorm = new IonStorm(this);
+    this.plasmaWaves = new PlasmaWaves(this);
+    const firstEvent = this.phase.events[0];
+    if (firstEvent && firstEvent.atMs === 0) {
+      this.applySectorEnvironment(firstEvent);
+    }
+    if (this.asteroidVariants.length > 0) {
       this.phase.initialAsteroids.forEach(({ progress, lane, speed }) =>
         this.spawnAsteroid(progress, lane, speed),
       );
     }
     const textResolution = this.getTextResolution();
-
-    this.add
-      .text(24, 24, RASTRO_GAME_CONFIG.texts.title, {
-        color: "#f9fafb",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "28px",
-        fontStyle: "bold",
-        resolution: textResolution,
-      })
-      .setScrollFactor(0)
-      .setDepth(10);
-
-    this.add
-      .text(24, 62, RASTRO_GAME_CONFIG.texts.controls, {
-        color: "#9ca3af",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "16px",
-        resolution: textResolution,
-      })
-      .setScrollFactor(0)
-      .setDepth(10);
 
     this.livesText = this.add
       .text(
@@ -184,22 +186,6 @@ export class RastroEstelarScene extends Phaser.Scene {
 
     this.createDebugPanel();
 
-    this.phaseText = this.add
-      .text(
-        this.scale.width / 2,
-        24,
-        `${RASTRO_GAME_CONFIG.texts.phaseLabel} ${this.phase.id} · ${this.phase.name}`,
-        {
-          color: "#c4b5fd",
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "16px",
-          fontStyle: "bold",
-          resolution: textResolution,
-        },
-      )
-      .setOrigin(0.5, 0)
-      .setScrollFactor(0)
-      .setDepth(10);
     this.stageAnnouncement = this.add
       .text(this.scale.width / 2, this.scale.height * 0.2, "", {
         color: "#f8fafc",
@@ -295,7 +281,6 @@ export class RastroEstelarScene extends Phaser.Scene {
     }
 
     this.livesText.setX(this.scale.width - 24);
-    this.phaseText.setX(this.scale.width / 2);
     this.bossStatusText.setX(this.scale.width / 2);
     this.invulnerabilityMsRemaining = Math.max(
       0,
@@ -366,14 +351,36 @@ export class RastroEstelarScene extends Phaser.Scene {
     );
 
     this.updateEnemies(obstacleDelta);
+    this.updateEnemyShots(obstacleDelta);
     this.updateBossHud();
     this.updatePlayerShots(delta);
+    const planet = this.phase.background.planet;
+    const sunX = this.scale.width * planet.x;
+    const sunY = this.scale.height * planet.y;
+    const sunRadius = Math.min(this.scale.width, this.scale.height) * planet.radius;
+    this.ionStorm.update(obstacleDelta, this.scale.width, this.scale.height, this.player.x);
+    this.plasmaWaves.update(
+      obstacleDelta,
+      this.scale.width,
+      this.scale.height,
+      sunX,
+      sunY,
+      sunRadius,
+    );
     if (
       !this.debugDamageDisabled &&
       this.isPlaying &&
       !this.isColliding &&
       this.invulnerabilityMsRemaining === 0
     ) {
+      const halfWidth = this.player.displayWidth / 2;
+      if (
+        this.ionStorm.hits(this.player.x, halfWidth) ||
+        this.plasmaWaves.hits(this.player.x, this.player.y, halfWidth, sunX, sunY)
+      ) {
+        this.triggerCollision();
+        return;
+      }
       this.checkAsteroidCollisions();
     }
   }
@@ -381,108 +388,38 @@ export class RastroEstelarScene extends Phaser.Scene {
   private createDebugPanel(): void {
     this.loadDebugSettings();
 
-    const panelBackground = this.add.graphics();
-    panelBackground.fillStyle(0x0b1220, 0.9);
-    panelBackground.lineStyle(1, 0x67e8f9, 0.55);
-    panelBackground.fillRoundedRect(-210, 0, 210, 132, 8);
-    panelBackground.strokeRoundedRect(-210, 0, 210, 132, 8);
+    const makeButton = (label: string, color = "#cbd5e1", background = "#1e293b") =>
+      this.add
+        .text(0, 0, label, {
+          color,
+          backgroundColor: background,
+          fontFamily: "system-ui, sans-serif",
+          fontSize: "11px",
+          fontStyle: "bold",
+          padding: { x: 7, y: 4 },
+          resolution: this.getTextResolution(),
+        })
+        .setInteractive({ useHandCursor: true });
 
-    const title = this.add.text(-198, 6, "DEBUG", {
-      color: "#67e8f9",
-      fontFamily: "system-ui, sans-serif",
-      fontSize: "10px",
-      fontStyle: "bold",
-      resolution: this.getTextResolution(),
-    });
-    this.debugDamageToggle = this.add
-      .text(-198, 22, "", {
-        color: "#fca5a5",
-        backgroundColor: "#3f1d2b",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "12px",
-        fontStyle: "bold",
-        padding: { x: 6, y: 3 },
-        resolution: this.getTextResolution(),
-      })
-      .setInteractive({ useHandCursor: true });
-    this.debugFreezeToggle = this.add
-      .text(-198, 47, "", {
-        color: "#fca5a5",
-        backgroundColor: "#3f1d2b",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "12px",
-        fontStyle: "bold",
-        padding: { x: 6, y: 3 },
-        resolution: this.getTextResolution(),
-      })
-      .setInteractive({ useHandCursor: true });
-    this.debugAdvanceButton = this.add
-      .text(-198, 74, "Segure p/ avançar (Shift)", {
-        color: "#cbd5e1",
-        backgroundColor: "#1e293b",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "11px",
-        padding: { x: 6, y: 3 },
-        resolution: this.getTextResolution(),
-      })
-      .setInteractive({ useHandCursor: true });
-    const previousPhaseButton = this.add
-      .text(-198, 102, "◀", {
-        color: "#cbd5e1",
-        backgroundColor: "#1e293b",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "12px",
-        padding: { x: 8, y: 4 },
-        resolution: this.getTextResolution(),
-      })
-      .setInteractive({ useHandCursor: true });
-    const restartPhaseButton = this.add
-      .text(-164, 102, "↻", {
-        color: "#cbd5e1",
-        backgroundColor: "#1e293b",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "15px",
-        fontStyle: "bold",
-        padding: { x: 8, y: 2 },
-        resolution: this.getTextResolution(),
-      })
-      .setInteractive({ useHandCursor: true });
-    const nextPhaseButton = this.add
-      .text(-130, 102, "▶", {
-        color: "#cbd5e1",
-        backgroundColor: "#1e293b",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "12px",
-        padding: { x: 8, y: 4 },
-        resolution: this.getTextResolution(),
-      })
-      .setInteractive({ useHandCursor: true });
-    const debugBossButton = this.add
-      .text(-92, 102, "Chefe", {
-        color: "#fda4af",
-        backgroundColor: "#3f1d2b",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "11px",
-        fontStyle: "bold",
-        padding: { x: 6, y: 4 },
-        resolution: this.getTextResolution(),
-      })
-      .setInteractive({ useHandCursor: true });
+    this.debugDamageToggle = makeButton("");
+    this.debugFreezeToggle = makeButton("");
+    this.debugLivesToggle = makeButton("");
+    this.debugAdvanceButton = makeButton("Avançar (Shift)");
+    const previousPhaseButton = makeButton("◀");
+    const restartPhaseButton = makeButton("↻");
+    const nextPhaseButton = makeButton("▶");
+    const debugBossButton = makeButton("Chefe", "#fda4af", "#3f1d2b");
+    this.debugBar = [
+      this.debugDamageToggle,
+      this.debugFreezeToggle,
+      this.debugLivesToggle,
+      this.debugAdvanceButton,
+      previousPhaseButton,
+      restartPhaseButton,
+      nextPhaseButton,
+      debugBossButton,
+    ];
 
-    this.debugPanel = this.add
-      .container(0, 66, [
-        panelBackground,
-        title,
-        this.debugDamageToggle,
-        this.debugFreezeToggle,
-        this.debugAdvanceButton,
-        previousPhaseButton,
-        restartPhaseButton,
-        nextPhaseButton,
-        debugBossButton,
-      ])
-      .setDepth(30)
-      .setScrollFactor(0);
     this.debugDamageToggle.on("pointerdown", () => {
       this.debugDamageDisabled = !this.debugDamageDisabled;
       this.saveDebugSettings();
@@ -493,20 +430,35 @@ export class RastroEstelarScene extends Phaser.Scene {
       this.saveDebugSettings();
       this.updateDebugFreezeToggle();
     });
+    this.debugLivesToggle.on("pointerdown", () => {
+      this.debugInfiniteLives = !this.debugInfiniteLives;
+      this.saveDebugSettings();
+      this.updateDebugLivesToggle();
+    });
     this.debugAdvanceButton.on("pointerdown", this.startDebugAdvance, this);
     previousPhaseButton.on("pointerdown", () => this.jumpToPhase(this.phaseIndex - 1));
     restartPhaseButton.on("pointerdown", () => this.jumpToPhase(this.phaseIndex));
     nextPhaseButton.on("pointerdown", () => this.jumpToPhase(this.phaseIndex + 1));
     debugBossButton.on("pointerdown", this.spawnBossAtDestination, this);
     this.input.on("pointerup", this.stopDebugAdvance, this);
-    this.positionDebugPanel();
     this.updateDebugDamageToggle();
     this.updateDebugFreezeToggle();
+    this.updateDebugLivesToggle();
+  }
+
+  /** Barra única no alto da tela: botões lado a lado, pequenos e discretos. */
+  private layoutDebugBar(): void {
+    let x = 12;
+    for (const button of this.debugBar) {
+      button.setPosition(x, 8).setDepth(30).setScrollFactor(0);
+      x += button.width + 4;
+    }
   }
 
   private loadDebugSettings(): void {
     this.debugDamageDisabled = false;
     this.debugFreezeEnabled = false;
+    this.debugInfiniteLives = false;
 
     try {
       const saved = window.localStorage.getItem(
@@ -530,6 +482,8 @@ export class RastroEstelarScene extends Phaser.Scene {
 
       this.debugDamageDisabled = settings.damageDisabled;
       this.debugFreezeEnabled = settings.freezeEnabled;
+      this.debugInfiniteLives =
+        "infiniteLives" in settings && settings.infiniteLives === true;
     } catch (error) {
       console.error("Não foi possível carregar as opções de debug.", error);
     }
@@ -539,6 +493,7 @@ export class RastroEstelarScene extends Phaser.Scene {
     const settings: DebugSettings = {
       damageDisabled: this.debugDamageDisabled,
       freezeEnabled: this.debugFreezeEnabled,
+      infiniteLives: this.debugInfiniteLives,
     };
 
     try {
@@ -551,30 +506,38 @@ export class RastroEstelarScene extends Phaser.Scene {
     }
   }
 
-  private positionDebugPanel(): void {
-    this.debugPanel?.setX(this.scale.width - 12);
-  }
-
   private updateDebugDamageToggle(): void {
     this.debugDamageToggle
       .setText(
-        this.debugDamageDisabled ? "Dano: DESATIVADO" : "Dano: ATIVO",
+        this.debugDamageDisabled ? "Dano OFF" : "Dano ON",
       )
       .setStyle({
-        color: this.debugDamageDisabled ? "#86efac" : "#fca5a5",
-        backgroundColor: this.debugDamageDisabled ? "#123524" : "#3f1d2b",
+        color: this.debugDamageDisabled ? "#86efac" : "#cbd5e1",
+        backgroundColor: this.debugDamageDisabled ? "#123524" : "#1e293b",
       });
+    this.layoutDebugBar();
+  }
+
+  private updateDebugLivesToggle(): void {
+    this.debugLivesToggle
+      .setText(this.debugInfiniteLives ? "Vidas ∞ ON" : "Vidas ∞ OFF")
+      .setStyle({
+        color: this.debugInfiniteLives ? "#86efac" : "#cbd5e1",
+        backgroundColor: this.debugInfiniteLives ? "#123524" : "#1e293b",
+      });
+    this.layoutDebugBar();
   }
 
   private updateDebugFreezeToggle(): void {
     this.debugFreezeToggle
       .setText(
-        this.debugFreezeEnabled ? "Obstáculos: CONGELADOS" : "Obstáculos: ATIVOS",
+        this.debugFreezeEnabled ? "Congelar ON" : "Congelar OFF",
       )
       .setStyle({
-        color: this.debugFreezeEnabled ? "#86efac" : "#fca5a5",
-        backgroundColor: this.debugFreezeEnabled ? "#123524" : "#3f1d2b",
+        color: this.debugFreezeEnabled ? "#86efac" : "#cbd5e1",
+        backgroundColor: this.debugFreezeEnabled ? "#123524" : "#1e293b",
       });
+    this.layoutDebugBar();
   }
 
   private jumpToPhase(phaseIndex: number): void {
@@ -588,7 +551,12 @@ export class RastroEstelarScene extends Phaser.Scene {
   }
 
   private spawnBossAtDestination(): void {
-    const bossEventIndex = this.phase.events.findIndex((event) => event.boss);
+    let bossEventIndex = -1;
+    this.phase.events.forEach((event, index) => {
+      if (event.boss) {
+        bossEventIndex = index;
+      }
+    });
     const bossEvent = this.phase.events[bossEventIndex];
     if (!bossEvent?.boss) {
       throw new Error(`A fase ${this.phase.id} não tem um chefe configurado.`);
@@ -611,6 +579,8 @@ export class RastroEstelarScene extends Phaser.Scene {
       speed: bossEvent.boss.speed,
       bossName: bossEvent.boss.name,
       health: bossEvent.boss.health,
+      bossArt: bossEvent.boss.art,
+      finalBoss: bossEvent.boss.final,
     });
     this.updateEnemies(0);
     this.updateBossHud();
@@ -630,7 +600,15 @@ export class RastroEstelarScene extends Phaser.Scene {
       this.phase.events[this.nextPhaseEventIndex].atMs <= this.phaseElapsedMs
     ) {
       const event = this.phase.events[this.nextPhaseEventIndex];
+      // Eventos "waitForClear" esperam o campo esvaziar (inimigos e chefes).
+      if (
+        event.waitForClear &&
+        (this.enemies.length > 0 || this.asteroids.length > 0)
+      ) {
+        break;
+      }
       this.nextPhaseEventIndex += 1;
+      this.applySectorEnvironment(event);
       this.showStageAnnouncement(event.title, event.message);
       event.wave?.forEach((spawn) =>
         this.spawnEnemy(0, spawn.lane, {
@@ -646,13 +624,16 @@ export class RastroEstelarScene extends Phaser.Scene {
           speed: event.boss.speed,
           bossName: event.boss.name,
           health: event.boss.health,
+          bossArt: event.boss.art,
+          finalBoss: event.boss.final,
         });
       }
     }
   }
 
   private showStageAnnouncement(title: string, message: string): void {
-    this.stageAnnouncement.setText(`${title}\n${message}`);
+    // Anúncio de início de fase ("FASE n — ..."): só o título, sem subtítulo.
+    this.stageAnnouncement.setText(title.startsWith("FASE") ? title : `${title}\n${message}`);
     this.stageAnnouncement
       .setPosition(this.scale.width / 2, this.scale.height * 0.2)
       .setAlpha(1);
@@ -660,8 +641,8 @@ export class RastroEstelarScene extends Phaser.Scene {
     this.tweens.add({
       targets: this.stageAnnouncement,
       alpha: 0,
-      delay: 2400,
-      duration: 700,
+      delay: 5200,
+      duration: 900,
       ease: "Sine.easeIn",
     });
   }
@@ -704,7 +685,8 @@ export class RastroEstelarScene extends Phaser.Scene {
     for (const obstacle of [...this.asteroids, ...this.enemies]) {
       if (
         obstacle.image.scaleX > 1 &&
-        !("isBoss" in obstacle && obstacle.isBoss)
+        !("isBoss" in obstacle && obstacle.isBoss) &&
+        !("solid" in obstacle && obstacle.solid)
       ) {
         continue;
       }
@@ -728,10 +710,14 @@ export class RastroEstelarScene extends Phaser.Scene {
   }
 
   private triggerCollision(): void {
+    this.enemyShots.forEach(({ image }) => image.destroy());
+    this.enemyShots = [];
     this.isColliding = true;
     this.isPlaying = false;
     this.isFiring = false;
-    this.lives = Math.max(0, this.lives - 1);
+    if (!this.debugInfiniteLives) {
+      this.lives = Math.max(0, this.lives - 1);
+    }
     this.livesText.setText(
       `${RASTRO_GAME_CONFIG.texts.livesLabel}: ${this.lives}`,
     );
@@ -874,7 +860,7 @@ export class RastroEstelarScene extends Phaser.Scene {
     );
     overlay.add(
       this.add
-        .text(centerX, centerY - 78, this.phase.name.toUpperCase(), {
+        .text(centerX, centerY - 64, this.phase.name.toUpperCase(), {
           color: "#f9fafb",
           fontFamily: "system-ui, sans-serif",
           fontSize: "36px",
@@ -887,24 +873,7 @@ export class RastroEstelarScene extends Phaser.Scene {
       this.add
         .text(
           centerX,
-          centerY - 24,
-          this.phase.description,
-          {
-          color: "#cbd5e1",
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "16px",
-          align: "center",
-          wordWrap: { width: Math.min(this.scale.width - 48, 440) },
-          resolution: this.getTextResolution(),
-          },
-        )
-        .setOrigin(0.5),
-    );
-    overlay.add(
-      this.add
-        .text(
-          centerX,
-          centerY + 12,
+          centerY - 22,
           RASTRO_GAME_CONFIG.texts.startControls,
           {
           color: "#94a3b8",
@@ -919,7 +888,7 @@ export class RastroEstelarScene extends Phaser.Scene {
     );
 
     const startButton = this.add
-      .text(centerX, centerY + 76, RASTRO_GAME_CONFIG.texts.startButton, {
+      .text(centerX, centerY + 40, RASTRO_GAME_CONFIG.texts.startButton, {
         color: "#111827",
         backgroundColor: "#67e8f9",
         fontFamily: "system-ui, sans-serif",
@@ -992,12 +961,10 @@ export class RastroEstelarScene extends Phaser.Scene {
       RASTRO_GAME_CONFIG.perspective.horizonY +
       (this.asteroidRandom() - 0.5) *
         RASTRO_GAME_CONFIG.asteroids.verticalHorizonJitter;
+    const variant = this.pickAsteroidVariant();
+    const isDebris = variant >= 4;
     const image = this.add
-      .image(
-        0,
-        0,
-        `${RASTRO_TEXTURE_KEYS.asteroid}-${Math.floor(this.asteroidRandom() * ASTEROID_VARIANT_COUNT)}`,
-      )
+      .image(0, 0, `${RASTRO_TEXTURE_KEYS.asteroid}-${variant}`)
       .setDepth(0.8)
       .setVisible(false);
 
@@ -1005,8 +972,11 @@ export class RastroEstelarScene extends Phaser.Scene {
       image,
       progress,
       speed: targetSpeed ?? this.randomBetween(RASTRO_GAME_CONFIG.asteroids.speedRange),
-      size: this.randomBetween(RASTRO_GAME_CONFIG.asteroids.sizeRange),
+      size: isDebris
+        ? this.randomBetween([34, 66])
+        : this.randomBetween(RASTRO_GAME_CONFIG.asteroids.sizeRange),
       rotationSpeed: (this.asteroidRandom() - 0.5) * 0.8,
+      solid: isDebris,
       startX,
       startY,
       endX: startX + sideDirection * horizontalTravel,
@@ -1027,8 +997,14 @@ export class RastroEstelarScene extends Phaser.Scene {
     const variants = this.phase.ambientVariants;
     const variant =
       settings?.variant ?? variants[Math.floor(this.asteroidRandom() * variants.length)];
+    if (variant === "satelite" || variant === "sonda") {
+      this.spawnDrone(variant, lane, settings?.speed, settings?.size);
+      return;
+    }
     const isBoss = settings?.bossName !== undefined;
-    const health = settings?.health ?? 1;
+    const isShooter = variant === "atirador" && !isBoss;
+    const health =
+      settings?.health ?? (variant === "atirador" || variant === "fantasma" ? 2 : 1);
     const startX = 0.5 + lane * 0.27;
     const startY =
       RASTRO_GAME_CONFIG.perspective.horizonY +
@@ -1038,7 +1014,7 @@ export class RastroEstelarScene extends Phaser.Scene {
       ? RASTRO_GAME_CONFIG.enemies.bossHoldY
       : this.randomBetween(RASTRO_GAME_CONFIG.enemies.destinationYRange);
     const holdScreenY = Phaser.Math.Clamp(
-      this.getPlayerStartYProgress() - this.randomBetween([0.1, 0.13]),
+      this.getPlayerStartYProgress() - this.randomBetween([0.26, 0.38]),
       startY + 0.04,
       endY - 0.04,
     );
@@ -1048,7 +1024,7 @@ export class RastroEstelarScene extends Phaser.Scene {
       0.9,
     );
     const textureKey = isBoss
-      ? `${RASTRO_TEXTURE_KEYS.bossPrefix}${this.phase.id}`
+      ? `${RASTRO_TEXTURE_KEYS.bossPrefix}${settings?.bossArt ?? this.phase.id}`
       : `${RASTRO_TEXTURE_KEYS.enemyPrefix}${variant}`;
     const image = this.add
       .image(0, 0, textureKey)
@@ -1078,7 +1054,9 @@ export class RastroEstelarScene extends Phaser.Scene {
         ? 1
         : holdProjectedProgress **
           (1 / RASTRO_GAME_CONFIG.enemies.projectionExponent),
-      holdDurationMs: this.randomBetween([850, 2100]),
+      holdDurationMs: isShooter
+        ? this.randomBetween([2800, 4200])
+        : this.randomBetween([850, 2100]),
       holdElapsedMs: 0,
       holdTransitionMs: 750,
       holdX: startX,
@@ -1093,12 +1071,127 @@ export class RastroEstelarScene extends Phaser.Scene {
       diveBlendProgress: isBoss ? 1 : 0,
       diveStartX: startX,
       diveStartY: startY,
+      ghost: false,
+      ghostTimerMs: this.randomBetween([0, 4400]),
+      fireElapsedMs: 0,
+      isFinalBoss: settings?.finalBoss ?? true,
     });
   }
 
-  /** Asteroides só aparecem nas fases 1, 3 e 5. */
-  private hasAsteroids(): boolean {
-    return [1, 3, 5].includes(this.phase.id);
+  /**
+   * Satélites e sondas: seguem uma trajetória fixa (reta, em perspectiva),
+   * bem mais rápida que a dos asteroides. Usam a mesma mecânica dos asteroides.
+   */
+  private fireEnemyShot(enemy: Enemy): void {
+    const image = this.add
+      .image(enemy.image.x, enemy.image.y, RASTRO_TEXTURE_KEYS.enemyShot)
+      .setDepth(1.3)
+      .setScale(0.5);
+    const startX = enemy.image.x;
+    const startY = enemy.image.y;
+    // Mira na posição do jogador no momento do disparo e segue um pouco além.
+    this.enemyShots.push({
+      image,
+      startX,
+      startY,
+      endX: startX + (this.player.x - startX) * 1.25,
+      endY: startY + (this.player.y - startY) * 1.25,
+      progress: 0,
+      durationMs: 1500,
+    });
+  }
+
+  private updateEnemyShots(delta: number): void {
+    for (let index = this.enemyShots.length - 1; index >= 0; index -= 1) {
+      const shot = this.enemyShots[index];
+      shot.progress += delta / shot.durationMs;
+      if (shot.progress >= 1) {
+        shot.image.destroy();
+        this.enemyShots.splice(index, 1);
+        continue;
+      }
+
+      shot.image
+        .setPosition(
+          Phaser.Math.Linear(shot.startX, shot.endX, shot.progress),
+          Phaser.Math.Linear(shot.startY, shot.endY, shot.progress),
+        )
+        .setScale(0.5 + shot.progress * 1.1);
+
+      const hitX = shot.image.displayWidth * 0.5 + this.player.displayWidth * 0.3;
+      const hitY = shot.image.displayHeight * 0.5 + this.player.displayHeight * 0.3;
+      if (
+        !this.debugDamageDisabled &&
+        this.isPlaying &&
+        !this.isColliding &&
+        this.invulnerabilityMsRemaining === 0 &&
+        ((shot.image.x - this.player.x) / hitX) ** 2 +
+          ((shot.image.y - this.player.y) / hitY) ** 2 <=
+          1
+      ) {
+        this.triggerCollision();
+        return;
+      }
+    }
+  }
+
+  private spawnDrone(
+    kind: "satelite" | "sonda",
+    lane: number,
+    speed?: number,
+    size?: number,
+  ): void {
+    const startX = 0.5 + lane * 0.48;
+    const startY = RASTRO_GAME_CONFIG.perspective.horizonY;
+    const isSatellite = kind === "satelite";
+    // Satélite cruza a tela na diagonal; sonda desce quase reta rumo ao jogador.
+    const endX = isSatellite ? 1 - startX : 0.5 + (startX - 0.5) * 0.35;
+    const image = this.add
+      .image(
+        0,
+        0,
+        isSatellite ? RASTRO_TEXTURE_KEYS.satellite : RASTRO_TEXTURE_KEYS.probe,
+      )
+      .setDepth(0.85)
+      .setVisible(false);
+
+    this.asteroids.push({
+      image,
+      progress: 0,
+      speed: speed ?? (isSatellite ? 0.34 : 0.44),
+      size: size ?? (isSatellite ? 76 : 64),
+      rotationSpeed: isSatellite ? 0.9 : 0,
+      solid: true,
+      startX,
+      startY,
+      endX,
+      endY: startY + 1.05,
+    });
+  }
+
+  /**
+   * Sprites de asteroide/destroço: 0 cinza, 1 marrom, 2 gelo, 3 carbono,
+   * 4 placa de casco, 5 asa partida, 6 tanque. O setor atual define quais.
+   */
+  private pickAsteroidVariant(): number {
+    const options = this.asteroidVariants;
+    return options[Math.floor(this.asteroidRandom() * options.length)];
+  }
+
+  /** Aplica as regras do setor: minions, asteroides e perigos de cenário. */
+  private applySectorEnvironment(event: RastroLevelEvent): void {
+    if (event.minionRate !== undefined) {
+      this.minionRate = event.minionRate;
+    }
+    if (event.asteroids) {
+      this.asteroidVariants = event.asteroids.variants;
+      this.asteroidIntervalMs =
+        event.asteroids.intervalMs ?? RASTRO_GAME_CONFIG.asteroids.spawnIntervalMs;
+    }
+    if (event.hazards) {
+      this.ionStorm.intervalMs = event.hazards.ionStormMs ?? 0;
+      this.plasmaWaves.intervalMs = event.hazards.plasmaWaveMs ?? 0;
+    }
   }
 
   private updateAsteroids(delta: number): void {
@@ -1108,8 +1201,8 @@ export class RastroEstelarScene extends Phaser.Scene {
 
     this.asteroidSpawnElapsed += delta;
     if (
-      this.hasAsteroids() &&
-      this.asteroidSpawnElapsed >= RASTRO_GAME_CONFIG.asteroids.spawnIntervalMs &&
+      this.asteroidVariants.length > 0 &&
+      this.asteroidSpawnElapsed >= this.asteroidIntervalMs &&
       this.asteroids.length < RASTRO_GAME_CONFIG.asteroids.maxCount
     ) {
       this.asteroidSpawnElapsed = 0;
@@ -1156,10 +1249,48 @@ export class RastroEstelarScene extends Phaser.Scene {
     }
   }
 
+  /**
+   * Escolhe onde o inimigo vai pairar: o ponto livre mais distante dos outros
+   * inimigos que já estão parados, para as naves não se sobreporem.
+   */
+  private pickHoldX(enemy: Enemy): number {
+    const others = this.enemies.filter(
+      (other) =>
+        other !== enemy &&
+        !other.isBoss &&
+        (other.movementState === "holding" ||
+          other.movementState === "approaching"),
+    );
+    let bestX = 0.5;
+    let bestGap = -1;
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      const candidate = this.randomBetween([0.12, 0.88]);
+      const gap = Math.min(
+        1,
+        ...others.map((other) =>
+          Math.abs(
+            candidate -
+              (other.movementState === "holding"
+                ? other.holdX
+                : other.image.x / this.scale.width),
+          ),
+        ),
+      );
+      if (gap > bestGap) {
+        bestGap = gap;
+        bestX = candidate;
+      }
+    }
+    return bestX;
+  }
+
   private updateEnemies(delta: number): void {
     this.enemySpawnElapsed += delta;
     if (
-      this.enemySpawnElapsed >= RASTRO_GAME_CONFIG.enemies.spawnIntervalMs &&
+      this.phase.ambientVariants.length > 0 &&
+      this.minionRate > 0 &&
+      this.enemySpawnElapsed >=
+        RASTRO_GAME_CONFIG.enemies.spawnIntervalMs / this.minionRate &&
       this.enemies.length < RASTRO_GAME_CONFIG.enemies.maxCount
     ) {
       this.enemySpawnElapsed = 0;
@@ -1187,15 +1318,34 @@ export class RastroEstelarScene extends Phaser.Scene {
             Phaser.Math.Linear(enemy.startX, enemy.endX, approachProgress) +
             this.getEnemyManeuver(enemy);
           enemy.holdEntryX = approachX;
-          enemy.holdX = Phaser.Math.Clamp(
-            this.player.x / this.scale.width +
-              this.randomBetween([-0.1, 0.1]),
-            0.12,
-            0.88,
-          );
+          enemy.holdX =
+            enemy.variant === "atirador" && !enemy.isBoss
+              ? Phaser.Math.Clamp(
+                  this.player.x / this.scale.width +
+                    this.randomBetween([-0.1, 0.1]),
+                  0.12,
+                  0.88,
+                )
+              : this.pickHoldX(enemy);
         }
       } else if (enemy.movementState === "holding") {
         enemy.holdElapsedMs += delta;
+        if (enemy.variant === "atirador" && !enemy.isBoss) {
+          // Acompanha o jogador devagar e dispara a cada ~1,1 s.
+          const targetX = Phaser.Math.Clamp(
+            this.player.x / this.scale.width,
+            0.12,
+            0.88,
+          );
+          enemy.holdX += (targetX - enemy.holdX) * Math.min(1, delta / 900);
+          if (enemy.holdElapsedMs > enemy.holdTransitionMs) {
+            enemy.fireElapsedMs += delta;
+            if (enemy.fireElapsedMs >= 1100) {
+              enemy.fireElapsedMs = 0;
+              this.fireEnemyShot(enemy);
+            }
+          }
+        }
         if (enemy.holdElapsedMs >= enemy.holdDurationMs) {
           const holdBlend = Phaser.Math.Clamp(
             enemy.holdElapsedMs / enemy.holdTransitionMs,
@@ -1285,11 +1435,23 @@ export class RastroEstelarScene extends Phaser.Scene {
       const scale = enemy.size * (minScale + visibleProgress * scaleRange);
       const renderScale = scale * (enemy.isBoss ? 100 / 320 : 1);
 
+      if (enemy.variant === "fantasma" && !enemy.isBoss) {
+        // 2,4 s sólido e vulnerável; 2 s translúcido, só contorno e invulnerável.
+        enemy.ghostTimerMs += delta;
+        const ghost = enemy.ghostTimerMs % 4400 >= 2400;
+        if (ghost !== enemy.ghost || enemy.ghostTimerMs === delta) {
+          enemy.ghost = ghost;
+          const key = `${RASTRO_TEXTURE_KEYS.enemyPrefix}fantasma`;
+          enemy.image.setTexture(ghost ? `${key}-contorno` : key);
+        }
+      }
+
       enemy.image
         .setPosition(x, y)
         .setScale(renderScale)
         .setDepth(scale > 1 ? 1.4 : 0.9 + visibleProgress * 0.4)
         .setVisible(true)
+        .setAlpha(enemy.ghost ? 0.55 : 1)
         .setTint(this.getPerspectiveTint(visibleProgress));
 
       const halfWidth = enemy.image.displayWidth / 2;
@@ -1349,6 +1511,9 @@ export class RastroEstelarScene extends Phaser.Scene {
 
       let hit = false;
       for (const target of [...this.asteroids, ...this.enemies]) {
+        if ("ghost" in target && target.ghost) {
+          continue;
+        }
         const horizontalGap = Math.abs(target.image.x - x);
         const verticalGap = Math.abs(target.image.y - y);
         if (
@@ -1433,11 +1598,13 @@ export class RastroEstelarScene extends Phaser.Scene {
       this.createTargetExplosion(enemy, isBoss);
       enemy.image.destroy();
       this.enemies.splice(enemyIndex, 1);
-      if (isBoss) {
+      if (isBoss && enemy.isFinalBoss) {
         this.isPlaying = false;
         this.isFiring = false;
         this.updateBossHud();
         this.time.delayedCall(2850, () => this.completePhase());
+      } else if (isBoss) {
+        this.updateBossHud();
       }
     }
   }
@@ -1452,98 +1619,59 @@ export class RastroEstelarScene extends Phaser.Scene {
     );
   }
 
+  /**
+   * Fim de fase: sem tela de texto. A nave acelera em direção ao horizonte,
+   * encolhendo e sumindo; depois a próxima fase começa (ou o jogo reinicia).
+   */
   private completePhase(): void {
     this.isPlaying = false;
     this.isFiring = false;
+    this.bossStatusText.setVisible(false);
+    this.bossHealthBar.setVisible(false);
+    this.playerShots.forEach(({ image }) => image.destroy());
+    this.playerShots = [];
+
     const nextPhaseIndex = this.phaseIndex + 1;
-    const centerX = this.scale.width / 2;
-    const centerY = this.scale.height / 2;
-    const overlay = this.add
-      .rectangle(centerX, centerY, this.scale.width, this.scale.height, 0x080d20, 0.9)
-      .setDepth(20);
-    overlay.setInteractive();
+    const horizonY = this.scale.height * RASTRO_GAME_CONFIG.perspective.horizonY;
+    const startX = this.player.x;
+    const startY = this.player.y;
+    const startScale = this.player.scaleX;
+    const targetY = horizonY + this.scale.height * 0.02;
 
-    if (nextPhaseIndex < RASTRO_LEVELS.length) {
-      this.add
-        .text(centerX, centerY - 30, RASTRO_GAME_CONFIG.texts.levelCompleteTitle, {
-          color: "#f9fafb",
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "32px",
-          fontStyle: "bold",
-          resolution: this.getTextResolution(),
-        })
-        .setOrigin(0.5)
-        .setDepth(21);
-      this.add
-        .text(
-          centerX,
-          centerY + 18,
-          `${RASTRO_GAME_CONFIG.texts.levelCompleteDescription}\n` +
-            `${RASTRO_LEVELS[nextPhaseIndex].name}`,
-          {
-            color: "#cbd5e1",
-            fontFamily: "system-ui, sans-serif",
-            fontSize: "18px",
-            align: "center",
-            resolution: this.getTextResolution(),
-          },
-        )
-        .setOrigin(0.5)
-        .setDepth(21);
-      this.time.delayedCall(2200, () => {
-        this.scene.restart({
-          lives: this.lives,
-          hasStarted: true,
-          phaseIndex: nextPhaseIndex,
+    this.tweens.addCounter({
+      from: 0,
+      to: 1,
+      duration: 2200,
+      ease: "Cubic.easeIn",
+      onUpdate: (tween) => {
+        const t = tween.getValue() ?? 0;
+        const y = Phaser.Math.Linear(startY, targetY, t);
+        const perspective = Phaser.Math.Clamp(
+          (y - horizonY) / (this.scale.height - horizonY),
+          0,
+          1,
+        );
+        this.player
+          .setPosition(Phaser.Math.Linear(startX, this.scale.width / 2, t), y)
+          .setScale(Phaser.Math.Linear(startScale, 0.03, t))
+          .setRotation(0);
+        updatePlayerShipVisuals(this.playerVisuals, perspective, this.time.now, -1);
+        const alpha = t < 0.7 ? 1 : 1 - (t - 0.7) / 0.3;
+        this.player.setAlpha(alpha);
+        this.playerVisuals.shadow.setAlpha(alpha);
+      },
+      onComplete: () => {
+        this.time.delayedCall(350, () => {
+          const finished = nextPhaseIndex >= RASTRO_LEVELS.length;
+          this.scene.restart({
+            lives: finished ? RASTRO_GAME_CONFIG.lives : this.lives,
+            // Depois da última fase o jogo volta à tela inicial.
+            hasStarted: !finished,
+            phaseIndex: finished ? 0 : nextPhaseIndex,
+          });
         });
-      });
-      return;
-    }
-
-    this.add
-      .text(centerX, centerY - 44, RASTRO_GAME_CONFIG.texts.missionCompleteTitle, {
-        color: "#f9fafb",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "34px",
-        fontStyle: "bold",
-        resolution: this.getTextResolution(),
-      })
-      .setOrigin(0.5)
-      .setDepth(21);
-    this.add
-      .text(centerX, centerY + 4, RASTRO_GAME_CONFIG.texts.missionCompleteDescription, {
-        color: "#cbd5e1",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "16px",
-        align: "center",
-        wordWrap: { width: Math.min(this.scale.width - 48, 440) },
-        resolution: this.getTextResolution(),
-      })
-      .setOrigin(0.5)
-      .setDepth(21);
-    const restartButton = this.add
-      .text(centerX, centerY + 68, RASTRO_GAME_CONFIG.texts.restartButton, {
-        color: "#111827",
-        backgroundColor: "#67e8f9",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "16px",
-        fontStyle: "bold",
-        padding: { x: 18, y: 12 },
-        resolution: this.getTextResolution(),
-      })
-      .setOrigin(0.5)
-      .setDepth(21)
-      .setInteractive({ useHandCursor: true });
-    const restart = (): void => {
-      this.scene.restart({
-        lives: RASTRO_GAME_CONFIG.lives,
-        hasStarted: true,
-        phaseIndex: 0,
-      });
-    };
-    restartButton.once("pointerdown", restart);
-    this.input.keyboard?.once("keydown-ENTER", restart);
-    this.input.keyboard?.once("keydown-SPACE", restart);
+      },
+    });
   }
 
   private showShotImpact(x: number, y: number): void {
