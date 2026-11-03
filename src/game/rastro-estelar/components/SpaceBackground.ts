@@ -508,7 +508,7 @@ function drawEventHorizonOrbit(
 ): void {
   const radius = Phaser.Math.Clamp(shortestSide * 0.52, 190, 420);
   const x = -radius * 0.28;
-  const y = height * 0.42;
+  const y = height * 0.6;
 
   softGlow(graphics, x, y, radius * 3.2, 0x8a5a48, 0.3, 0.55);
   graphics.fillStyle(0x02030a, 1);
@@ -542,7 +542,7 @@ export function getCygnusBlackHoleGeometry(
     : Phaser.Math.Clamp(shortestSide * 0.105, 46, 86);
   return {
     x: orbitalApproach ? -radius * 0.28 : width * 0.51,
-    y: height * (orbitalApproach ? 0.42 : 0.36),
+    y: height * (orbitalApproach ? 0.6 : 0.36),
     radius,
   };
 }

@@ -2,12 +2,14 @@ import Phaser from "phaser";
 import { RASTRO_TEXTURE_KEYS } from "../constants";
 import { createAsteroidTextures } from "./AsteroidTextures";
 import { createEnemyTextures } from "./EnemyTextures";
+import { createHazardTextures } from "./HazardTextures";
 
 export function createRastroTextures(scene: Phaser.Scene): void {
   createAsteroidTextures(scene);
   createEnemyTextures(scene);
   createBossTextures(scene);
   createShotTexture(scene);
+  createHazardTextures(scene);
 }
 
 function createBossTextures(scene: Phaser.Scene): void {

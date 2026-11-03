@@ -18,10 +18,10 @@ type Streak = {
   lens: boolean;
 };
 
-const PALETTE = [0xfff4d6, 0xffe2a0, 0xf2b865, 0xd98f45, 0xa8602f, 0x6e3a28];
+const PALETTE = [0xffffff, 0xfff4d6, 0xffe6ae, 0xf8cf86, 0xe6ae68, 0xc08650];
 const CREAM = 0xfff4d6;
 const SHADOW = 0x010208;
-const TILT = -0.2;
+const TILT = 0.12;
 const FLATTEN = 0.34;
 
 let streaks: Streak[] | undefined;
@@ -45,7 +45,10 @@ function buildStreaks(): Streak[] {
         span: (0.25 + random() * 1.4) * (1 - t * 0.45),
         width: 0.7 + random() * 1.5,
         drift: 0.5 + random() * 0.5,
-        color: PALETTE[Math.min(PALETTE.length - 1, Math.floor(t * 4.2 + random() * 1.4))],
+        // Cerca de 1 em cada 4 traços é branco puro.
+        color: random() < 0.25
+          ? 0xffffff
+          : PALETTE[Math.min(PALETTE.length - 1, Math.floor(t * 3.6 + random() * 1.4))],
         lens: false,
       });
     }
