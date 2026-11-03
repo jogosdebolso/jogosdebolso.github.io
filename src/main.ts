@@ -100,7 +100,42 @@ function getGameIdFromModulePath(modulePath: string): GameId | undefined {
   )?.[0];
 }
 
+let sizeObserver: ResizeObserver | undefined;
+let sizeFrame: number | undefined;
+
+/**
+ * Rotação de tela, barra de endereço do celular e tela cheia nem sempre
+ * disparam "resize" na janela: observa o contêiner e manda o Phaser reler o
+ * tamanho (no máximo uma vez por quadro).
+ */
+function watchContainerSize(activeGame: Phaser.Game): void {
+  sizeObserver?.disconnect();
+  if (typeof ResizeObserver === "undefined") {
+    return;
+  }
+  sizeObserver = new ResizeObserver(() => {
+    if (sizeFrame !== undefined) {
+      return;
+    }
+    sizeFrame = window.requestAnimationFrame(() => {
+      sizeFrame = undefined;
+      if (game === activeGame) {
+        if (activeGame.scale.getParentBounds()) {
+          activeGame.scale.refresh();
+        }
+      }
+    });
+  });
+  sizeObserver.observe(gameContainerElement);
+}
+
 function destroyActiveGame(): void {
+  sizeObserver?.disconnect();
+  sizeObserver = undefined;
+  if (sizeFrame !== undefined) {
+    window.cancelAnimationFrame(sizeFrame);
+    sizeFrame = undefined;
+  }
   game?.destroy(true);
   game = undefined;
   activeGameId = undefined;
@@ -159,6 +194,7 @@ async function loadGame(gameId: GameId, entry: GameEntry): Promise<void> {
       parent: gameContainerElement,
     });
     activeGameId = gameId;
+    watchContainerSize(game);
   } catch (error) {
     console.error(`Não foi possível carregar ${entry.title}.`, error);
     if (generation === loadGeneration && getGameIdFromRoute() === gameId) {
