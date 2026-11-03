@@ -912,6 +912,42 @@ export class RastroEstelarScene extends Phaser.Scene {
     });
   }
 
+  /** Esmaece tiros, obstáculos e itens restantes (a ação está pausada). */
+  private fadeOutField(): void {
+    const images = [
+      ...this.enemyShots.map(({ image }) => image),
+      ...this.asteroids.map(({ image }) => image),
+      ...this.enemies.map(({ image }) => image),
+      ...this.powerUps.map(({ image }) => image),
+    ];
+    this.enemyShots = [];
+    this.asteroids = [];
+    this.enemies = [];
+    this.powerUps = [];
+    this.tweens.add({
+      targets: images,
+      alpha: 0,
+      duration: 400,
+      onComplete: () => images.forEach((image) => image.destroy()),
+    });
+  }
+
+  /** "+1 VIDA": aparece, sobe perdendo opacidade e some rápido. */
+  private showLifeBonus(onDone: () => void): void {
+    const y = this.scale.height * 0.2;
+    this.tweens.killTweensOf(this.stageAnnouncement);
+    this.stageAnnouncement.setText("+1 VIDA").setPosition(this.scale.width / 2, y).setAlpha(1);
+    this.tweens.add({
+      targets: this.stageAnnouncement,
+      y: y - this.scale.height * 0.1,
+      alpha: 0,
+      delay: 350,
+      duration: 750,
+      ease: "Sine.easeIn",
+      onComplete: onDone,
+    });
+  }
+
   private updateBossHud(): void {
     const boss = this.enemies.find((enemy) => enemy.isBoss);
     if (!boss) {
@@ -2167,15 +2203,18 @@ export class RastroEstelarScene extends Phaser.Scene {
       this.enemies.splice(enemyIndex, 1);
       if (isBoss && enemy.isFinalBoss) {
         // Recompensa: +1 vida ao derrotar o chefe da fase.
+        this.isPlaying = false;
+        this.isFiring = false;
+        this.fadeOutField();
+        this.updateBossHud();
         if (this.lives < RastroEstelarScene.MAX_LIVES) {
           this.lives += 1;
           this.livesText.setText(`${RASTRO_GAME_CONFIG.texts.livesLabel}: ${this.lives}`);
-          this.showStageAnnouncement("+1 VIDA", true);
+          // A nave só parte depois que o aviso some.
+          this.showLifeBonus(() => this.completePhase());
+        } else {
+          this.time.delayedCall(1800, () => this.completePhase());
         }
-        this.isPlaying = false;
-        this.isFiring = false;
-        this.updateBossHud();
-        this.time.delayedCall(2850, () => this.completePhase());
       } else if (isBoss) {
         this.updateBossHud();
       }
